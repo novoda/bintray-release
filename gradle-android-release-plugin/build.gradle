@@ -1,0 +1,41 @@
+apply plugin: 'groovy'
+
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'http://dl.bintray.com/novoda/maven' }
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.13.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'com.novoda:gradle-android-release-plugin:0.0.3'
+    }
+
+}
+
+dependencies {
+    compile localGroovy()
+    compile gradleApi()
+}
+
+repositories {
+    mavenCentral()
+}
+
+//apply from: "../team-props/publish.gradle//"
+
+apply plugin: 'gradle-android-release-plugin'
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'gradle-android-release-plugin'
+    version = project.version
+
+    uploadName = 'gradle-android-release-plugin'
+    description = 'A helper for releasing on bintray'
+    website = 'https://github.com/novoda/gradle-android-release-plugin'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+}
