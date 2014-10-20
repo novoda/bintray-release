@@ -1,15 +1,48 @@
 gradle-android-release-plugin
 =============================
 
-A helper for releasing from gradle on bintray
+A helper for releasing from gradle on bintray.
+This plugin is currently work-in-progress.
 
+Usage
+=============================
+To publish a library on bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published
 
-### Info from the dev team
+```groovy
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+        maven { url 'http://dl.bintray.com/novoda/maven' }
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'com.novoda:gradle-android-release-plugin:0.0.3'
+    }
 
- > I just pushed a branch in merlin to show how to use the plugin https://github.com/novoda/merlin/tree/publish_with_plugin
- > unfortunately we just tried to publish and it creates the repo on bintray but without uploading files
- > as you can see it is the same way we use on the plugin to publish itself using the previous version
- > but with that we used your gist, given that the plugin was not complete
- > to publish with the pugin the command is ./gradlew -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUpload=true publishReleaseToBintray
+}
 
-** TODO: Fixme **
+apply plugin: 'gradle-android-release-plugin'
+```
+
+and add the publish configuration for the specific project:
+
+```groovy
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'artifact-name' // TODO: Use the proper artifact Id
+    version = project.version
+    uploadName = 'artifact-name' // This is the name that will be shown in bintray
+    description = 'Oh hi, this is a nice description for a project right?' // TODO: Use right description
+    website = ''https://github.com/novoda/blah...' // TODO: Use correct URL
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+}
+```
+
+Finally, use the command `publishReleaseToBintray` to publish, specifying the remaining parameters:
+```
+./gradlew publishReleaseToBintray -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUpload=true
+```
+
