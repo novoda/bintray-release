@@ -1,4 +1,4 @@
-gradle-android-release-plugin
+android-bintray-release
 =============================
 
 A helper for releasing from gradle on bintray.
@@ -22,7 +22,7 @@ buildscript {
 
 }
 
-apply plugin: 'gradle-android-release-plugin'
+apply plugin: 'android-bintray-release'
 ```
 
 and add the publish configuration for the specific project:
@@ -45,4 +45,3 @@ Finally, use the command `publishReleaseToBintray` to publish, specifying the re
 ```
 ./gradlew publishReleaseToBintray -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUpload=true
 ```
-
