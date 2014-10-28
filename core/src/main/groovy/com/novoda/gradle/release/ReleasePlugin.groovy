@@ -11,27 +11,32 @@ class ReleasePlugin implements Plugin<Project> {
         project.apply([plugin: 'maven'])
         project.apply([plugin: 'com.jfrog.bintray'])
 
-        def localReleaseDest = "${project.buildDir}/release"
-        project.uploadArchives.repositories.mavenDeployer {
-            repository(url: "file://${localReleaseDest}")
-        }
+        project.uploadArchives.repositories.mavenDeployer {}
 
         attachExtension(project)
     }
 
     void attachExtension(Project project) {
-        def extension = project.extensions.create('publish', PublishExtention)
+        PublishExtension extension = project.extensions.create('publish', PublishExtension)
         def mavenDeployer = project.uploadArchives.repositories.mavenDeployer
 
         def projectAdapter = [
                 projectsEvaluated: { Gradle gradle ->
+                    if (!extension.localReleasePath) {
+                        extension.localReleasePath = "${project.buildDir}/release"
+                    }
+
                     mavenDeployer.with {
                         pom.groupId = extension.groupId
                         pom.artifactId = extension.artifactId
                         pom.version = extension.version
+
+                        repository(url: "file://${extension.localReleasePath}")
                     }
 
                     attachArtifacts(project)
+
+                    new BintrayConfiguration(extension).configure(project)
                 }
         ] as BuildAdapter
         project.gradle.addBuildListener(projectAdapter)

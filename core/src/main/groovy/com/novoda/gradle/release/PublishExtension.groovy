@@ -1,6 +1,6 @@
 package com.novoda.gradle.release
 
-class PublishExtention {
+class PublishExtension {
 
     String repoType = 'maven'
     String userOrg
@@ -10,11 +10,17 @@ class PublishExtention {
     String version
     String[] licences = ['Apache-2.0']
 
-    String uploadName
+    String uploadName = ''
     String description
     String website
     String issueTracker
     String repository
     boolean autoPublish = true
+
+    String localReleasePath
+
+    String bintrayUser = ''
+    String bintrayKey = ''
+    boolean shouldUploadToBintray = false
 
 }

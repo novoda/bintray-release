@@ -1,5 +1,3 @@
 allprojects {
-    repositories {
-        mavenCentral()
-    }
+    version = "0.0.5"
 }
