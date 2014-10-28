@@ -8,9 +8,9 @@ import org.gradle.api.invocation.Gradle
 class ReleasePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        attachArtifacts(project)
-
         project.apply([plugin: 'maven'])
+        project.apply([plugin: 'com.jfrog.bintray'])
+
         def localReleaseDest = "${project.buildDir}/release"
         project.uploadArchives.repositories.mavenDeployer {
             repository(url: "file://${localReleaseDest}")
@@ -19,17 +19,7 @@ class ReleasePlugin implements Plugin<Project> {
         attachExtension(project)
     }
 
-    void attachArtifacts(Project project) {
-        ArtifactAttacher artifactAttacher
-        if (project.plugins.hasPlugin('com.android.library')) {
-            artifactAttacher = new AndroidArtifactAttacher()
-        } else {
-            artifactAttacher = new JavaArtifactAttacher()
-        }
-        artifactAttacher.attachTo(project)
-    }
-
-    void attachExtension(project) {
+    void attachExtension(Project project) {
         def extension = project.extensions.create('publish', PublishExtention)
         def mavenDeployer = project.uploadArchives.repositories.mavenDeployer
 
@@ -40,9 +30,22 @@ class ReleasePlugin implements Plugin<Project> {
                         pom.artifactId = extension.artifactId
                         pom.version = extension.version
                     }
+
+                    attachArtifacts(project)
                 }
         ] as BuildAdapter
         project.gradle.addBuildListener(projectAdapter)
+    }
+
+
+    void attachArtifacts(Project project) {
+        Artifacts artifacts
+        if (project.plugins.hasPlugin('com.android.library')) {
+            artifacts = new AndroidArtifacts()
+        } else {
+            artifacts = new JavaArtifacts()
+        }
+        artifacts.attachTo(project)
     }
 
 }

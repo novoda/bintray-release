@@ -3,7 +3,7 @@ package com.novoda.gradle.release
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar;
 
-class JavaArtifactAttacher implements ArtifactAttacher {
+class JavaArtifacts implements Artifacts {
 
     void attachTo(Project project) {
         def sourcesJar = project.task('sourcesJar', type: Jar) {

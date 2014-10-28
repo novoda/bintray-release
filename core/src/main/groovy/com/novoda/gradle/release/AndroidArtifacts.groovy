@@ -4,7 +4,7 @@ import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.javadoc.Javadoc
 
-class AndroidArtifactAttacher implements ArtifactAttacher {
+class AndroidArtifacts implements Artifacts {
 
     void attachTo(Project project) {
         def androidJavadocs = project.task('androidJavadocs', type: Javadoc) {

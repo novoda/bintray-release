@@ -2,6 +2,6 @@ package com.novoda.gradle.release;
 
 import org.gradle.api.Project
 
-interface ArtifactAttacher {
+interface Artifacts {
     void attachTo(Project project)
 }
