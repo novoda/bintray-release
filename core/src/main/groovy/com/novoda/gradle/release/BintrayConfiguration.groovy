@@ -62,16 +62,16 @@ class BintrayConfiguration {
     }
 
     def shouldBeExecuted(def task, Project project) {
-        !isBintrayTask(task) || shouldPublishToBintray(project)
+        !isBintrayTask(task) || !isDryRun(project)
     }
 
     def isBintrayTask(def task) {
         task.name.equals('bintrayUpload')
     }
 
-    boolean shouldPublishToBintray(Project project) {
-        String propertyName = 'shouldUploadToBintray'
-        boolean defaultValue = extension.shouldUploadToBintray
+    boolean isDryRun(Project project) {
+        String propertyName = 'dryRun'
+        boolean defaultValue = extension.dryRun
         project.hasProperty(propertyName) ? Boolean.valueOf(project.getProperty(propertyName)) : defaultValue
     }
 }
