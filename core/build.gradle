@@ -1,1 +1,29 @@
 apply plugin: 'groovy'
+apply plugin: 'android-bintray-release'
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = rootProject.name
+    version = project.version
+
+    description = 'Super duper easy way to release your Android and other artifacts to bintray'
+    website = 'https://github.com/novoda/android-bintray-release'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+        classpath 'com.novoda:android-bintray-release:0.1.0'
+    }
+}
