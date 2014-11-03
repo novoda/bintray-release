@@ -1,56 +1,39 @@
 package com.novoda.gradle.release
 
-import org.gradle.BuildAdapter
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.invocation.Gradle
+import org.gradle.api.publish.maven.MavenPublication
 
 class ReleasePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        project.apply([plugin: 'maven'])
+        PublishExtension extension = project.extensions.create('publish', PublishExtension)
+
+        project.apply([plugin: 'maven-publish'])
         project.apply([plugin: 'com.jfrog.bintray'])
 
-        project.uploadArchives.repositories.mavenDeployer {}
+        project.afterEvaluate {
+            new BintrayConfiguration(extension).configure(project)
+        }
 
-        attachExtension(project)
+        attachArtifacts(project)
     }
-
-    void attachExtension(Project project) {
-        PublishExtension extension = project.extensions.create('publish', PublishExtension)
-        def mavenDeployer = project.uploadArchives.repositories.mavenDeployer
-
-        def projectAdapter = [
-                projectsEvaluated: { Gradle gradle ->
-                    if (!extension.localReleasePath) {
-                        extension.localReleasePath = "${project.buildDir}/release"
-                    }
-
-                    mavenDeployer.with {
-                        pom.groupId = extension.groupId
-                        pom.artifactId = extension.artifactId
-                        pom.version = extension.version
-
-                        repository(url: "file://${extension.localReleasePath}")
-                    }
-
-                    attachArtifacts(project)
-
-                    new BintrayConfiguration(extension).configure(project)
-                }
-        ] as BuildAdapter
-        project.gradle.addBuildListener(projectAdapter)
-    }
-
 
     void attachArtifacts(Project project) {
-        Artifacts artifacts
-        if (project.plugins.hasPlugin('com.android.library')) {
-            artifacts = new AndroidArtifacts()
-        } else {
-            artifacts = new JavaArtifacts()
+        Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
+        project.publishing {
+            publications {
+                maven(MavenPublication) {
+                    groupId project.publish.groupId
+                    artifactId project.publish.artifactId
+                    version project.publish.version
+
+                    artifact artifacts.mainJar(project)
+                    artifact artifacts.sourcesJar(project)
+                    artifact artifacts.javadocJar(project)
+                }
+            }
         }
-        artifacts.attachTo(project)
     }
 
 }

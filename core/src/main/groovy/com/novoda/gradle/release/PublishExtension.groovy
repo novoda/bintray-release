@@ -17,10 +17,10 @@ class PublishExtension {
     String repository
     boolean autoPublish = true
 
-    String localReleasePath
-
     String bintrayUser = ''
     String bintrayKey = ''
     boolean shouldUploadToBintray = false
+
+    String[] publications = ['maven']
 
 }

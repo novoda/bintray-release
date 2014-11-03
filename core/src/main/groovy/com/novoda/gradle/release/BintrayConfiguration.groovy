@@ -20,11 +20,7 @@ class BintrayConfiguration {
             key = getString(project, 'bintrayKey', extension.bintrayKey)
             publish = extension.autoPublish
 
-            filesSpec {
-                from extension.localReleasePath
-                into "."
-                exclude '**/maven-metadata.*'
-            }
+            publications = extension.publications
 
             pkg {
                 repo = extension.repoType

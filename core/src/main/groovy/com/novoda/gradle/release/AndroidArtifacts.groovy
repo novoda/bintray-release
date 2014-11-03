@@ -6,25 +6,26 @@ import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidArtifacts implements Artifacts {
 
-    void attachTo(Project project) {
+    def sourcesJar(Project project) {
+        project.task('androidSourcesJar', type: Jar) {
+            classifier = 'sources'
+            from project.android.sourceSets.main.java.srcDirs
+        }
+    }
+
+    def javadocJar(Project project) {
         def androidJavadocs = project.task('androidJavadocs', type: Javadoc) {
             source = project.android.sourceSets.main.java.srcDirs
             classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
         }
 
-        def androidJavadocsJar = project.task('androidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
+        project.task('androidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
             classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
+    }
 
-        def androidSourcesJar = project.task('androidSourcesJar', type: Jar) {
-            classifier = 'sources'
-            from project.android.sourceSets.main.java.srcDirs
-        }
-
-        project.artifacts {
-            archives androidSourcesJar
-            archives androidJavadocsJar
-        }
+    def mainJar(Project project) {
+        "$project.buildDir/outputs/aar/$project.name-release.aar" // TODO How can we improve this?
     }
 }
