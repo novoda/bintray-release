@@ -51,7 +51,7 @@ Note that you have to pass in some parameters:
 
  * `bintrayUser`: Specifies the bintray username that will perform the upload
  * `bintrayKey`: Specifies the bintray auth key for `bintrayUser`
- * `shouldUploadToBintray`: Default is `false`. If set to `true`, this will perform the upload, if set to `false` it won't actually upload. This is
+ * `dryRun`: Default is `true`. If set to `false`, this will perform the upload, if set to `true` it won't actually upload. This is
  useful
   to
  set up
