@@ -1,48 +1,67 @@
-gradle-android-release-plugin
+android-bintray-release
 =============================
 
-A helper for releasing from gradle on bintray.
-This plugin is currently work-in-progress.
+Super duper easy way to release your Android and other artifacts to bintray.
+
+This is a helper for releasing libraries to bintray. It is intended to help configuring stuff related to maven and bintray.
+At the moment it works with Android Library projects, plain Java and plain Groovy projects, but our focus is to mainly support Android projects.
+
+Note: This plugin is currently work-in-progress, so some things might not work or it might have bugs.
 
 Usage
 =============================
-To publish a library on bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published
+To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
 
 ```groovy
+apply plugin: 'com.android.library' // Can be java or groovy for non android projects
+apply plugin: 'android-bintray-release'
+
 buildscript {
     repositories {
         jcenter()
-        mavenCentral()
-        maven { url 'http://dl.bintray.com/novoda/maven' }
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'com.novoda:gradle-android-release-plugin:0.0.3'
+        classpath 'com.novoda:android-bintray-release:0.1.0'
     }
-
 }
-
-apply plugin: 'gradle-android-release-plugin'
 ```
 
-and add the publish configuration for the specific project:
+And add the publish configuration for the project:
 
 ```groovy
 publish {
-    userOrg = 'novoda'
-    groupId = 'com.novoda'
-    artifactId = 'artifact-name' // TODO: Use the proper artifact Id
-    version = project.version
-    uploadName = 'artifact-name' // This is the name that will be shown in bintray
-    description = 'Oh hi, this is a nice description for a project right?' // TODO: Use right description
-    website = ''https://github.com/novoda/blah...' // TODO: Use correct URL
+    userOrg = 'myorg'
+    groupId = 'com.myorg'
+    artifactId = 'artifact-name'
+    version = '0.0.1'
+    description = 'Oh hi, this is a nice description for a project right?'
+    website = 'https://github.com/myorg/artifact-name'
     issueTracker = "${website}/issues"
     repository = "${website}.git"
 }
 ```
 
-Finally, use the command `publishReleaseToBintray` to publish, specifying the remaining parameters:
-```
-./gradlew publishReleaseToBintray -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUpload=true
+Finally, use the task `bintrayUpload` to publish (make sure you build the project first!):
+```bash
+$ ./gradlew clean build bintrayUpload -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUploadToBintray=true
 ```
 
+Note that you have to pass in some parameters:
+
+ * `bintrayUser`: Specifies the bintray username that will perform the upload
+ * `bintrayKey`: Specifies the bintray auth key for `bintrayUser`
+ * `shouldUploadToBintray`: Default is `false`. If set to `true`, this will perform the upload, if set to `false` it won't actually upload. This is
+ useful
+  to
+ set up
+ in your CI so that you can upload manually without having the lib published on each merge of a PR for example.
+
+If your project is not open source, you can also specify the credentials in a properties file or in the `publish` closure:
+
+```groovy
+publish {
+    bintrayUser = 'username'
+    bintrayKey = 'thisisareallylonglongkey'
+}
+```
