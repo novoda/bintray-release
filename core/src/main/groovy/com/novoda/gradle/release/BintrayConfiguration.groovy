@@ -17,6 +17,7 @@ class BintrayConfiguration {
             user = getString(project, 'bintrayUser', extension.bintrayUser)
             key = getString(project, 'bintrayKey', extension.bintrayKey)
             publish = extension.autoPublish
+            dryRun = extension.dryRun
 
             publications = extension.publications
 
@@ -37,9 +38,6 @@ class BintrayConfiguration {
         }
 
         project.tasks.bintrayUpload.mustRunAfter(project.tasks.uploadArchives)
-        project.gradle.taskGraph.useFilter { task ->
-            shouldBeExecuted(task, project)
-        }
     }
 
     private void initDefaults() {
@@ -61,17 +59,4 @@ class BintrayConfiguration {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
-    def shouldBeExecuted(def task, Project project) {
-        !isBintrayTask(task) || !isDryRun(project)
-    }
-
-    def isBintrayTask(def task) {
-        task.name.equals('bintrayUpload')
-    }
-
-    boolean isDryRun(Project project) {
-        String propertyName = 'dryRun'
-        boolean defaultValue = extension.dryRun
-        project.hasProperty(propertyName) ? Boolean.valueOf(project.getProperty(propertyName)) : defaultValue
-    }
 }
