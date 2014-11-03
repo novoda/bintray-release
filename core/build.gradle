@@ -14,8 +14,6 @@ publish {
 
     description = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = 'https://github.com/novoda/android-bintray-release'
-    issueTracker = "${website}/issues"
-    repository = "${website}.git"
 }
 
 buildscript {

@@ -12,9 +12,9 @@ class PublishExtension {
 
     String uploadName = ''
     String description
-    String website
-    String issueTracker
-    String repository
+    String website = ''
+    String issueTracker = ''
+    String repository = ''
     boolean autoPublish = true
 
     String bintrayUser = ''

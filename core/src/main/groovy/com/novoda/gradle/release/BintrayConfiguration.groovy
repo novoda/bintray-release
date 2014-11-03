@@ -11,9 +11,7 @@ class BintrayConfiguration {
     }
 
     void configure(Project project) {
-        if (extension.uploadName.isEmpty()) {
-            extension.uploadName = extension.artifactId
-        }
+        initDefaults()
 
         project.bintray {
             user = getString(project, 'bintrayUser', extension.bintrayUser)
@@ -41,6 +39,21 @@ class BintrayConfiguration {
         project.tasks.bintrayUpload.mustRunAfter(project.tasks.uploadArchives)
         project.gradle.taskGraph.useFilter { task ->
             shouldBeExecuted(task, project)
+        }
+    }
+
+    private void initDefaults() {
+        if (extension.uploadName.isEmpty()) {
+            extension.uploadName = extension.artifactId
+        }
+
+        if (extension.website.contains('github.com')) {
+            if (extension.issueTracker.isEmpty()) {
+                extension.issueTracker = "${extension.website}/issues"
+            }
+            if (extension.repository.isEmpty()) {
+                extension.repository = "${extension.website}.git"
+            }
         }
     }
 
