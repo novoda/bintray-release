@@ -27,9 +27,11 @@ class ReleasePlugin implements Plugin<Project> {
                     artifactId project.publish.artifactId
                     version project.publish.version
 
-                    artifact artifacts.mainJar(project)
-                    artifact artifacts.sourcesJar(project)
-                    artifact artifacts.javadocJar(project)
+                    artifacts.all(project).each {
+                        delegate.artifact it
+                    }
+
+                    from artifacts.from(project)
                 }
             }
         }

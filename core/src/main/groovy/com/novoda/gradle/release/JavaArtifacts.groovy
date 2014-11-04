@@ -19,7 +19,12 @@ class JavaArtifacts implements Artifacts {
         }
     }
 
-    def mainJar(Project project) {
-        "$project.buildDir/libs/$project.name-${project.version}.jar" // TODO How can we improve this?
+    def from(Project project) {
+        project.components.java
+    }
+
+
+    def all(Project project) {
+        [sourcesJar(project), javadocJar(project)]
     }
 }
