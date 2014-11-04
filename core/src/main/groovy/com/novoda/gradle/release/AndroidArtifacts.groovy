@@ -30,12 +30,8 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def from(Project project) {
-        project.getConfigurations().getAll().each {
-            if (it.getDependencies()) {
-                project.getComponents().add(new AndroidLibrary(it.getDependencies()))
-            }
-        }
-
+        def configuration = project.configurations.getAll().find { it.dependencies }
+        project.components.add(new AndroidLibrary(configuration.dependencies))
         project.components.android
     }
 

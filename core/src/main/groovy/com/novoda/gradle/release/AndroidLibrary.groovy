@@ -8,11 +8,12 @@ import org.gradle.api.internal.component.Usage
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
-    final Usage runtimeUsage = new RuntimeUsage()
+    final Usage runtimeUsage
     final DependencySet runtimeDependencies
 
     AndroidLibrary(DependencySet runtimeDependencies) {
         this.runtimeDependencies = runtimeDependencies
+        runtimeUsage = new RuntimeUsage()
     }
 
     public String getName() {
