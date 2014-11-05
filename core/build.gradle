@@ -2,6 +2,7 @@ apply plugin: 'groovy'
 apply plugin: 'android-bintray-release'
 
 dependencies {
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
     compile gradleApi()
     compile localGroovy()
 }
@@ -21,7 +22,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
         classpath 'com.novoda:android-bintray-release:0.1.0'
     }
 }
