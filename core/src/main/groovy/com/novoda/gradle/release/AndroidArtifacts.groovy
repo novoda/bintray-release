@@ -1,6 +1,7 @@
 package com.novoda.gradle.release
 
 import org.gradle.api.Project
+import org.gradle.api.internal.artifacts.DefaultDependencySet
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.javadoc.Javadoc
 
@@ -30,8 +31,7 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def from(Project project) {
-        def configuration = project.configurations.getAll().find { it.dependencies }
-        project.components.add(new AndroidLibrary(configuration.dependencies))
+        project.components.add(AndroidLibrary.newInstance(project))
         project.components.android
     }
 
