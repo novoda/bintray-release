@@ -14,10 +14,7 @@ class ReleasePlugin implements Plugin<Project> {
         attachArtifacts(project)
 
         new BintrayPlugin().apply(project)
-
-        project.afterEvaluate {
-            new BintrayConfiguration(extension).configure(project)
-        }
+        delayBintrayConfigurationUntilPublishExtensionIsEvaluated(project, extension)
     }
 
     void attachArtifacts(Project project) {
@@ -36,6 +33,12 @@ class ReleasePlugin implements Plugin<Project> {
                     from artifacts.from(project)
                 }
             }
+        }
+    }
+
+    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, extension) {
+        project.afterEvaluate {
+            new BintrayConfiguration(extension).configure(project)
         }
     }
 
