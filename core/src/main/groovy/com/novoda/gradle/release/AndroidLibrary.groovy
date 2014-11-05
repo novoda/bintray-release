@@ -12,7 +12,6 @@ import org.gradle.api.internal.component.Usage
 class AndroidLibrary implements SoftwareComponentInternal {
 
     private final Usage runtimeUsage
-    private final DomainObjectSet<Dependency> runtimeDependencies
 
     public static AndroidLibrary newInstance(Project project) {
         def configuration = project.configurations.getAll().find { it.dependencies }
@@ -20,19 +19,16 @@ class AndroidLibrary implements SoftwareComponentInternal {
     }
 
     static AndroidLibrary from(def configuration) {
-        new AndroidLibrary(configuration.dependencies)
+        def usage = new RuntimeUsage(configuration.dependencies)
+        new AndroidLibrary(usage)
     }
 
     static AndroidLibrary empty() {
-        new AndroidLibrary(new DefaultDomainObjectSet(Dependency))
+        def usage = new RuntimeUsage(new DefaultDomainObjectSet(Dependency))
+        new AndroidLibrary(usage)
     }
 
-    AndroidLibrary(DomainObjectSet<Dependency> runtimeDependencies) {
-        this(runtimeDependencies, new RuntimeUsage())
-    }
-
-    AndroidLibrary(DomainObjectSet<Dependency> runtimeDependencies, Usage runtimeUsage) {
-        this.runtimeDependencies = runtimeDependencies
+    AndroidLibrary(Usage runtimeUsage) {
         this.runtimeUsage = runtimeUsage
     }
 
@@ -44,7 +40,14 @@ class AndroidLibrary implements SoftwareComponentInternal {
         return Collections.singleton(runtimeUsage);
     }
 
-    private class RuntimeUsage implements Usage {
+    private static class RuntimeUsage implements Usage {
+
+        final DomainObjectSet<Dependency> runtimeDependencies
+
+        RuntimeUsage(DomainObjectSet<Dependency> runtimeDependencies) {
+            this.runtimeDependencies = runtimeDependencies
+        }
+
         public String getName() {
             "runtime"
         }
