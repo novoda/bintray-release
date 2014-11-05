@@ -8,8 +8,8 @@ import org.gradle.api.internal.component.Usage
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
-    final Usage runtimeUsage
-    final DependencySet runtimeDependencies
+    private final Usage runtimeUsage
+    private final DependencySet runtimeDependencies
 
     AndroidLibrary(DependencySet runtimeDependencies) {
         this.runtimeDependencies = runtimeDependencies
