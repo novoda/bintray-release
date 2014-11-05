@@ -17,7 +17,7 @@ class BintrayConfiguration {
             user = getString(project, 'bintrayUser', extension.bintrayUser)
             key = getString(project, 'bintrayKey', extension.bintrayKey)
             publish = extension.autoPublish
-            dryRun = extension.dryRun
+            dryRun = getBoolean(project, 'dryRun', extension.dryRun)
 
             publications = extension.publications
 
@@ -57,6 +57,10 @@ class BintrayConfiguration {
 
     String getString(Project project, String propertyName, String defaultValue) {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
+    }
+
+    boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
+        project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
     }
 
 }

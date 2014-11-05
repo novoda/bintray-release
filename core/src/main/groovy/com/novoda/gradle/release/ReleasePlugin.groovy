@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
@@ -12,7 +13,8 @@ class ReleasePlugin implements Plugin<Project> {
         project.apply([plugin: 'maven-publish'])
         attachArtifacts(project)
 
-        project.apply([plugin: 'com.jfrog.bintray'])
+        new BintrayPlugin().apply(project)
+
         project.afterEvaluate {
             new BintrayConfiguration(extension).configure(project)
         }
