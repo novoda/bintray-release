@@ -12,7 +12,8 @@ class ReleasePlugin implements Plugin<Project> {
         project.apply([plugin: 'maven-publish'])
         attachArtifacts(project)
 
-        project.apply([plugin: 'com.jfrog.bintray'])
+        new com.jfrog.bintray.gradle.BintrayPlugin().apply(project)
+
         project.afterEvaluate {
             new BintrayConfiguration(extension).configure(project)
         }
