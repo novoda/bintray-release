@@ -21,8 +21,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-        classpath 'com.novoda:android-bintray-release:0.1.0'
+        classpath 'com.novoda:android-bintray-release:0.2.1'
     }
 }
 ```
