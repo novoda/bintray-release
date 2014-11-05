@@ -24,7 +24,7 @@ class AndroidLibrary implements SoftwareComponentInternal {
     }
 
     static AndroidLibrary empty() {
-        def usage = new RuntimeUsage(new DefaultDomainObjectSet(Dependency))
+        def usage = new RuntimeUsage(new DefaultDomainObjectSet<Dependency>(Dependency))
         new AndroidLibrary(usage)
     }
 
