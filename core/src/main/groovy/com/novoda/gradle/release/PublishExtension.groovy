@@ -19,7 +19,7 @@ class PublishExtension {
 
     String bintrayUser = ''
     String bintrayKey = ''
-    boolean shouldUploadToBintray = false
+    boolean dryRun = true
 
     String[] publications = ['maven']
 

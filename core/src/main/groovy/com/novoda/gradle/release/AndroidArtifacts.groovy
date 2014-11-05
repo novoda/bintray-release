@@ -28,4 +28,14 @@ class AndroidArtifacts implements Artifacts {
     def mainJar(Project project) {
         "$project.buildDir/outputs/aar/$project.name-release.aar" // TODO How can we improve this?
     }
+
+    def from(Project project) {
+        def configuration = project.configurations.getAll().find { it.dependencies }
+        project.components.add(new AndroidLibrary(configuration.dependencies))
+        project.components.android
+    }
+
+    def all(Project project) {
+        [sourcesJar(project), javadocJar(project), mainJar(project)]
+    }
 }
