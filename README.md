@@ -21,7 +21,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:android-bintray-release:0.2.1'
+        classpath 'com.novoda:android-bintray-release:0.2.3'
     }
 }
 ```
