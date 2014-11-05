@@ -35,10 +35,6 @@ class AndroidArtifacts implements Artifacts {
         project.components.android
     }
 
-    def getFrom(def configuration) {
-        configuration == null ? new DefaultDependencySet() : configuration.dependencies
-    }
-
     def all(Project project) {
         [sourcesJar(project), javadocJar(project), mainJar(project)]
     }
