@@ -36,8 +36,8 @@ publish {
     version = '0.0.1'
     description = 'Oh hi, this is a nice description for a project right?'
     website = 'https://github.com/myorg/artifact-name'
-    issueTracker = "${website}/issues"
-    repository = "${website}.git"
+    issueTracker = "${website}/issues"   (optional - this is automatically setup for github websites)
+    repository = "${website}.git"        (optional - this is automatically setup for github websites)
 }
 ```
 
