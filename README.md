@@ -82,7 +82,7 @@ The `publish` colsure contains all these properties:
  * `bintrayUser`: The username to be used to upload. Empty by default.
  * `bintrayKey`: The bintray API key for the user account. Empty by default. Explanation of where to find this value can be found here https://bintray.com/docs/interacting/interacting_apikeys.html
  * `dryRun`: If set to `true` this will run everything but it won't upload the package to bintray. If `false` then it will upload normally.
-* `publications`: A list of publication names to use for the upload. The default value is `['maven']`. At the moment the bintray gradle plugin only understands publications of type `MavenPublication`. You can override this to use your own publications. The default `maven` publication is created by this plugin and is defined as:
+ * `publications`: A list of publication names to use for the upload. The default value is `['maven']`. At the moment the bintray gradle plugin only understands publications of type `MavenPublication`. You can override this to use your own publications. The default `maven` publication is created by this plugin and is defined as:
 
 ```groovy
 project.publishing {
@@ -112,7 +112,7 @@ If you want to define your own publication in an Android library project, you co
 
 License
 =================================
-
+```
 (c) Copyright 2014 Novoda
 
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,3 +126,4 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
+```
