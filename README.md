@@ -65,50 +65,24 @@ publish {
 Configuration
 ---
 
-The `publish` colsure contains all these properties:
+The `publish` colsure contains all these properties. The default value is empty unless specified otherwise:
 
  * `repoType`: The repo type. Set to `'maven'` by default.
- * `userOrg`: Contains the organisation name to use for upload. By default this is empty.
- * `groupId`: The group id to use for the upload. Empty by default.
- * `artifactId`: The artifact id to use. Empty by default.
- * `version`: A string with the version to use. Can't end with `-SNAPSHOT` because bintray doesn't accept snapshots. Empty by default.
+ * `userOrg`: Contains the organisation name to use for upload.
+ * `groupId`: The group id to use for the upload.
+ * `artifactId`: The artifact id to use.
+ * `version`: A string with the version to use. Can't end with `-SNAPSHOT` because bintray doesn't accept snapshots.
  * `licences`: A list of license identifiers for the project. Identifiers can be found here: http://spdx.org/licenses/ and default value is `['Apache-2.0']`.
  * `uploadName`: The display name for this package in bintray. If not set, the `artifactId` will be used for this.
- * `description`: A short description for this package in bintray. Empty by default.
- * `website`: A string with the url for the website of this project. The Github repo can be used here. Empty by default.
+ * `description`: A short description for this package in bintray.
+ * `website`: A string with the url for the website of this project. The Github repo can be used here.
  * `issueTracker`: The url of the issue tracker for the project. If the `website` contains `'github.com'` then this property is set to `"${website}/issues"` by default.
  * `repository`: The url of the vcs for this project. If the `website` contains `'github.com'` then this is set to `"${website}.git"` by default.
  * `autoPublish`: This boolean defines if the package will be published when uploaded. If this is `false`, the package will still be uploaded to bintray but you'll have to publish it manually. Default value is `true`.
- * `bintrayUser`: The username to be used to upload. Empty by default.
- * `bintrayKey`: The bintray API key for the user account. Empty by default. Explanation of where to find this value can be found here https://bintray.com/docs/interacting/interacting_apikeys.html
+ * `bintrayUser`: The username to be used to upload.
+ * `bintrayKey`: The bintray API key for the user account. Explanation of where to find this value can be found here https://bintray.com/docs/interacting/interacting_apikeys.html
  * `dryRun`: If set to `true` this will run everything but it won't upload the package to bintray. If `false` then it will upload normally.
- * `publications`: A list of publication names to use for the upload. The default value is `['maven']`. At the moment the bintray gradle plugin only understands publications of type `MavenPublication`. You can override this to use your own publications. The default `maven` publication is created by this plugin and is defined as:
-
-```groovy
-project.publishing {
-  publications {
-    maven(MavenPublication) {
-      groupId project.publish.groupId
-      artifactId project.publish.artifactId
-      version project.publish.version
-
-      artifacts.all(project).each {
-        delegate.artifact it
-      }
-
-      from artifacts.from(project)
-    }
-  }
-}
-```
-
-The artifacts that are uploaded by default are:
-
- * A `jar` or an `aar` with the compiled version of the library.
- * A `jar` with the sources of the library.
- * Another `jar` with the javadoc from the sources.
-
-If you want to define your own publication in an Android library project, you could make use of the `AndroidArtifacts` class. This will add the dependencies of your package to the pom. There's also a `JavaArtifacts` class that can be used for projects that use the `java` gradle plugin. These 2 classes provide methods to generate the 3 artifacts mentioned above.
+ * `publications`: A list of publication names to use for the upload. The default value is `['maven']`, which is a publication that this plugin creates for you. **You can define your own publications**, more info [in the wiki page](https://github.com/novoda/android-bintray-release/wiki/Defining-a-custom-Publication)
 
 License
 =================================
