@@ -43,7 +43,7 @@ publish {
 
 Finally, use the task `bintrayUpload` to publish (make sure you build the project first!):
 ```bash
-$ ./gradlew clean build bintrayUpload -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PshouldUploadToBintray=true
+$ ./gradlew clean build bintrayUpload -PbintrayUser=USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
 
 Note that you have to pass in some parameters:
@@ -51,10 +51,7 @@ Note that you have to pass in some parameters:
  * `bintrayUser`: Specifies the bintray username that will perform the upload
  * `bintrayKey`: Specifies the bintray auth key for `bintrayUser`
  * `dryRun`: Default is `true`. If set to `false`, this will perform the upload, if set to `true` it won't actually upload. This is
- useful
-  to
- set up
- in your CI so that you can upload manually without having the lib published on each merge of a PR for example.
+ useful to set up in your CI so that you can upload manually without having the lib published on each merge of a PR for example.
 
 If your project is not open source, you can also specify the credentials in a properties file or in the `publish` closure:
 
