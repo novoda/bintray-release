@@ -65,7 +65,7 @@ publish {
 Configuration
 ---
 
-The `publish` colsure contains all these properties. The default values are empty unless specified otherwise:
+The `publish` closure contains all these properties. The default values are empty unless specified otherwise:
 
  * `repoType`: The repo type. Set to `'maven'` by default.
  * `userOrg`: Contains the organisation name to use for upload.
