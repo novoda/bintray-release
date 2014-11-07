@@ -1,4 +1,4 @@
-android-bintray-release ![](http://ci.novoda.com/buildStatus/icon?job=android-bintray-release)
+android-bintray-release [![](http://ci.novoda.com/buildStatus/icon?job=android-bintray-release)](http://ci.novoda.com/job/android-bintray-release/lastSuccessfulBuild/console)
 =============================
 
 Super duper easy way to release your Android and other artifacts to bintray.
