@@ -30,12 +30,12 @@ And add the publish configuration for the project:
 
 ```groovy
 publish {
-    userOrg = 'myorg'
-    groupId = 'com.myorg'
-    artifactId = 'artifact-name'
-    version = '0.0.1'
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = 'android-bintray-release'
+    version = '0.2.3'
     description = 'Oh hi, this is a nice description for a project right?'
-    website = 'https://github.com/myorg/artifact-name'
+    website = 'https://github.com/novoda/android-bintray-release'
 }
 ```
 
