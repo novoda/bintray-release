@@ -48,11 +48,7 @@ Finally, use the task `bintrayUpload` to publish (make sure you build the projec
 $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
 
-Note that you have to pass in some parameters:
-
- * `bintrayUser`: Specifies the bintray username that will perform the upload
- * `bintrayKey`: Specifies the bintray auth key for `bintrayUser`
- * `dryRun`: Default is `true`. If set to `false`, this will perform the upload, if set to `true` it won't actually upload. This is useful to set up in your CI so that you can upload manually without having the lib published on each merge of a PR for example. These values can be set in the `publish` closure too or you can set them in your global `gradle.properties` file.
+More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/android-bintray-release/wiki).
 
 
 ## Links
