@@ -1,4 +1,4 @@
-# android-bintray-release [![](http://ci.novoda.com/buildStatus/icon?job=android-bintray-release)](http://ci.novoda.com/job/android-bintray-release/lastSuccessfulBuild/console)
+# jarjaar-binks [![](http://ci.novoda.com/buildStatus/icon?job=jarjaar-binks)](http://ci.novoda.com/job/jarjaar-binks/lastSuccessfulBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Super duper easy way to release your Android and other artifacts to bintray.
 
@@ -14,14 +14,14 @@ At the moment it works with Android Library projects, plain Java and plain Groov
 To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
 
 ```groovy
-apply plugin: 'android-bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+apply plugin: 'jarjaar-binks' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:android-bintray-release:0.2.3'
+        classpath 'com.novoda:jarjaar-binks:0.2.4'
     }
 }
 ```
@@ -35,10 +35,10 @@ Use the `publish` closure to set the info of your package:
 publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
-    artifactId = 'android-bintray-release'
-    version = '0.2.3'
+    artifactId = 'jarjaar-binks'
+    version = '0.2.4'
     description = 'Oh hi, this is a nice description for a project right?'
-    website = 'https://github.com/novoda/android-bintray-release'
+    website = 'https://github.com/novoda/jarjaar-binkse'
 }
 ```
 
@@ -48,19 +48,14 @@ Finally, use the task `bintrayUpload` to publish (make sure you build the projec
 $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
 ```
 
-More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/android-bintray-release/wiki).
+More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/jarjaar-binks/wiki).
 
 
 ## Links
 
 Here are a list of useful links:
 
- * Contributing `// TODO`
- * [Github Issues](https://github.com/novoda/android-bintray-release/issues)
- * [Github Wiki](https://github.com/novoda/android-bintray-release/wiki)
- * Stack Overflow Tag: `// TODO`
-
-
-## License
-
-Copyright &copy; 2014 [Novoda](http://novoda.com/blog/) Ltd. Released under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+ * [Contributing](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
+ * [Github Issues](https://github.com/novoda/jarjaar-binks/issues)
+ * [Github Wiki](https://github.com/novoda/jarjaar-binks/wiki)
+ * Stack Overflow Tag: `support-jarjaar`
