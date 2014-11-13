@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'android-bintray-release'
+apply plugin: 'android-bintray-release' // TODO change this
 
 repositories {
     jcenter()
@@ -22,7 +22,7 @@ publish {
     version = project.version
 
     description = 'Super duper easy way to release your Android and other artifacts to bintray'
-    website = 'https://github.com/novoda/android-bintray-release'
+    website = "https://github.com/novoda/${rootProject.name}"
 }
 
 buildscript {
@@ -30,6 +30,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:android-bintray-release:0.2.3'
+        classpath 'com.novoda:android-bintray-release:0.2.3' // TODO CHANGE
     }
 }

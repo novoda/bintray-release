@@ -1,4 +1,4 @@
-android-bintray-release [![](http://ci.novoda.com/buildStatus/icon?job=android-bintray-release)](http://ci.novoda.com/job/android-bintray-release/lastSuccessfulBuild/console)
+jarjaar-binks [![](http://ci.novoda.com/buildStatus/icon?job=jarjaar-binks)](http://ci.novoda.com/job/jarjaar-binks/lastSuccessfulBuild/console)
 =============================
 
 Super duper easy way to release your Android and other artifacts to bintray.
@@ -14,14 +14,14 @@ Usage
 To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
 
 ```groovy
-apply plugin: 'android-bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+apply plugin: 'jarjaar-binks' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:android-bintray-release:0.2.3'
+        classpath 'com.novoda:jarjaar-binks:0.2.4'
     }
 }
 ```
@@ -32,10 +32,10 @@ And add the publish configuration for the project:
 publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
-    artifactId = 'android-bintray-release'
-    version = '0.2.3'
+    artifactId = 'jarjaar-binks'
+    version = '0.2.4'
     description = 'Oh hi, this is a nice description for a project right?'
-    website = 'https://github.com/novoda/android-bintray-release'
+    website = 'https://github.com/novoda/jarjaar-binks'
 }
 ```
 
@@ -80,7 +80,7 @@ The `publish` closure contains all these properties. The default values are empt
  * `bintrayUser`: The username to be used to upload.
  * `bintrayKey`: The bintray API key for the user account. Explanation of where to find this value can be found here https://bintray.com/docs/interacting/interacting_apikeys.html
  * `dryRun`: If set to `true` this will run everything but it won't upload the package to bintray. If `false` then it will upload normally.
- * `publications`: A list of publication names to use for the upload. The default value is `['maven']`, which is a publication that this plugin creates for you. **You can define your own publications**, more info [in the wiki page](https://github.com/novoda/android-bintray-release/wiki/Defining-a-custom-Publication)
+ * `publications`: A list of publication names to use for the upload. The default value is `['maven']`, which is a publication that this plugin creates for you. **You can define your own publications**, more info [in the wiki page](https://github.com/novoda/jarjaar-binks/wiki/Defining-a-custom-Publication)
 
 License
 =================================
