@@ -58,4 +58,4 @@ Here are a list of useful links:
  * [Contributing](https://github.com/novoda/novoda/blob/master/CONTRIBUTING.md)
  * [Github Issues](https://github.com/novoda/bintray-release/issues)
  * [Github Wiki](https://github.com/novoda/bintray-release/wiki)
- * Stack Overflow Tag: `support-bintray-release`
+ * [Stack Overflow Tag](http://stackoverflow.com/questions/tagged/support-bintray-release) use: `support-bintray-release`
