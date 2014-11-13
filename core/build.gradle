@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'jarjaar-binks'
+apply plugin: 'jarjaar-binks' // TODO CHANGE
 
 repositories {
     jcenter()
@@ -30,6 +30,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:jarjaar-binks:0.2.4'
+        classpath 'com.novoda:jarjaar-binks:0.2.4' // TODO CHANGE
     }
 }

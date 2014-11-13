@@ -1,2 +1,2 @@
-rootProject.name = 'jarjaar-binks'
+rootProject.name = 'bintray-release'
 include 'core'
