@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'android-bintray-release' // TODO change this
+apply plugin: 'jarjaar-binks'
 
 repositories {
     jcenter()
@@ -30,6 +30,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:android-bintray-release:0.2.3' // TODO CHANGE
+        classpath 'com.novoda:jarjaar-binks:0.2.4'
     }
 }
