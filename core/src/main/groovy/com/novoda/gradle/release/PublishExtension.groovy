@@ -2,7 +2,7 @@ package com.novoda.gradle.release
 
 class PublishExtension {
 
-    String repoType = 'maven'
+    String repoName = 'maven'
     String userOrg
 
     String groupId
