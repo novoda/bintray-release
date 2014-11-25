@@ -22,7 +22,7 @@ class BintrayConfiguration {
             publications = extension.publications
 
             pkg {
-                repo = extension.repoType
+                repo = extension.repoName
                 userOrg = extension.userOrg
                 name = extension.uploadName
                 desc = extension.description
