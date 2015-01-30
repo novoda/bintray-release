@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
     compile gradleApi()
 }
 
@@ -30,6 +30,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.2.4'
+        classpath 'com.novoda:bintray-release:0.2.5'
     }
 }
