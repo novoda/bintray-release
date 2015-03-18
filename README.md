@@ -1,4 +1,4 @@
-# bintray-release [![](http://ci.novoda.com/buildStatus/icon?job=bintray-release)](http://ci.novoda.com/job/bintray-release/lastBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
+# bintray-release [![](https://ci.novoda.com/buildStatus/icon?job=bintray-release)](https://ci.novoda.com/job/bintray-release/lastBuild/console) [![](https://raw.githubusercontent.com/novoda/novoda/master/assets/btn_apache_lisence.png)](LICENSE.txt)
 
 Super duper easy way to release your Android and other artifacts to bintray.
 
