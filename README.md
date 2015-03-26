@@ -36,8 +36,8 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = 'bintray-release'
-    version = '0.2.8'
-    description = 'Oh hi, this is a nice description for a project right?'
+    version = '0.2.8'             // since 0.2.8, version can also be supplied on the command line. [See here](https://github.com/novoda/bintray-release/pull/23)
+    description = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/novoda/bintray-release'
 }
 ```
