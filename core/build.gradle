@@ -30,6 +30,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.2.6'
+        classpath 'com.novoda:bintray-release:0.2.7'
     }
 }

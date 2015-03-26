@@ -32,7 +32,7 @@ class BintrayConfiguration {
 
                 licenses = extension.licences
                 version {
-                    name = extension.version
+                    name = getString(project, 'version', extension.version)
                 }
             }
         }
