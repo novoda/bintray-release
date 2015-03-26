@@ -19,12 +19,13 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(Project project) {
         Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
+        String projectVersion = getString(project, 'version', project.publish.version)
         project.publishing {
             publications {
                 maven(MavenPublication) {
                     groupId project.publish.groupId
                     artifactId project.publish.artifactId
-                    version project.publish.version
+                    version projectVersion
 
                     artifacts.all(project).each {
                         delegate.artifact it
@@ -40,6 +41,10 @@ class ReleasePlugin implements Plugin<Project> {
         project.afterEvaluate {
             new BintrayConfiguration(extension).configure(project)
         }
+    }
+
+    private String getString(Project project, String propertyName, String defaultValue) {
+        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
 
 }
