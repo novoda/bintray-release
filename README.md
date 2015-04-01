@@ -21,7 +21,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.2.8'
+        classpath 'com.novoda:bintray-release:0.2.7'
     }
 }
 ```
@@ -41,7 +41,6 @@ publish {
     website = 'https://github.com/novoda/bintray-release'
 }
 ```
-(note, since 0.2.8, publish.version can also be supplied on the command line. [See here](https://github.com/novoda/bintray-release/pull/23))
 
 Finally, use the task `bintrayUpload` to publish (make sure you build the project first!):
 
