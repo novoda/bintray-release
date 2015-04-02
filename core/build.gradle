@@ -6,7 +6,7 @@ repositories {
 }
 
 dependencies {
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
     compile gradleApi()
 }
 
