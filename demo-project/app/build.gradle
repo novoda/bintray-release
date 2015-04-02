@@ -1,0 +1,24 @@
+apply plugin: 'com.android.library'
+apply plugin: 'bintray-release'
+
+android {
+    compileSdkVersion 22
+    buildToolsVersion "22.0.1"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+}
+
+publish {
+    userOrg = 'example'
+    groupId = 'com.example'
+    artifactId = 'myapplication'
+    version = '1.0.0'
+
+    description = 'An example library that uses the bintray-release plugin'
+    website = "https://github.com/novoda/bintray-release"
+}
