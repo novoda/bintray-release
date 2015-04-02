@@ -8,18 +8,24 @@ import org.junit.Test
 import static junit.framework.TestCase.assertFalse
 
 public class ReleasePluginTest {
-    Project project
+    Project projectJava
+    Project projectAndroidLibrary
 
     @Before
     public void setupProject() {
-        project = ProjectBuilder.builder().withProjectDir(new File("testProject")).build()
-        def plugin = project.plugins.apply(ReleasePlugin)
-        project.apply plugin:'java'
+        projectJava = ProjectBuilder.builder().withProjectDir(new File("testProjectJava")).build()
+        def pluginJava = projectJava.plugins.apply(ReleasePlugin)
+        projectJava.publish.version = "1.0"
+        projectJava.apply plugin:'java'
+
+        projectAndroidLibrary = ProjectBuilder.builder().withProjectDir(new File("testProjectAndroidLibrary")).build()
+        def pluginAndroidLibrary = projectAndroidLibrary.plugins.apply(ReleasePlugin)
+        projectAndroidLibrary.apply plugin: 'com.android.library'
     }
 
     @Test
     public void shouldAddBintrayUploadTask() {
-        def tasks = project.tasks.getByName("bintrayUpload").findAll { true }
+        def tasks = projectJava.tasks.getByName("bintrayUpload").findAll { true }
         assertFalse tasks.isEmpty()
     }
 }

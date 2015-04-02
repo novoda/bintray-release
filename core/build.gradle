@@ -8,6 +8,7 @@ repositories {
 dependencies {
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
     compile gradleApi()
+    testCompile 'com.android.tools.build:gradle:1.1.0'
 }
 
 compileGroovy {
