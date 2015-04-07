@@ -14,7 +14,7 @@ class AndroidLibrary implements SoftwareComponentInternal {
     private final Usage runtimeUsage
 
     public static AndroidLibrary newInstance(Project project) {
-        def configuration = project.configurations.getAll().find { it.dependencies }
+        def configuration = project.configurations.getByName("compile")
         return configuration ? from(configuration) : empty()
     }
 
