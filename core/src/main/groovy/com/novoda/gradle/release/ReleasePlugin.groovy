@@ -19,13 +19,12 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(Project project) {
         Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
-        String projectVersion = getString(project, 'version', project.publish.version)
         project.publishing {
             publications {
                 maven(MavenPublication) {
                     groupId project.publish.groupId
                     artifactId project.publish.artifactId
-                    version projectVersion
+                    version getProjectProperty(project, 'version', project.publish.version)
 
                     artifacts.all(project).each {
                         delegate.artifact it
@@ -43,8 +42,16 @@ class ReleasePlugin implements Plugin<Project> {
         }
     }
 
-    private String getString(Project project, String propertyName, String defaultValue) {
-        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
+    private String getProjectProperty(Project project, String propertyName, String defaultValue) {
+        if (isPropertySet(project, propertyName)) {
+            return project.getProperty(propertyName)
+        } else {
+            return defaultValue
+        }
+    }
+
+    private boolean isPropertySet(Project project, String propertyName) {
+        project.hasProperty(propertyName) && project.getProperty(propertyName) != 'unspecified'
     }
 
 }
