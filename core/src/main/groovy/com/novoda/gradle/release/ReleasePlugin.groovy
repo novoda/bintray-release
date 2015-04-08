@@ -43,11 +43,15 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     private String getProjectProperty(Project project, String propertyName, String defaultValue) {
-        if (project.hasProperty(propertyName) && project.getProperty(propertyName) != 'unspecified') {
+        if (isPropertySet(project, propertyName)) {
             return project.getProperty(propertyName)
         } else {
             return defaultValue
         }
+    }
+
+    private boolean isPropertySet(Project project, String propertyName) {
+        project.hasProperty(propertyName) && project.getProperty(propertyName) != 'unspecified'
     }
 
 }
