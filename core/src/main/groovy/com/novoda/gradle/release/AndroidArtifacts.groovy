@@ -17,6 +17,8 @@ class AndroidArtifacts implements Artifacts {
         def androidJavadocs = project.task('androidJavadocs', type: Javadoc) {
             source = project.android.sourceSets.main.java.srcDirs
             classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+            classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+            classpath += project.android.libraryVariants.toList().first().javaCompile.outputs.files
         }
 
         project.task('androidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
