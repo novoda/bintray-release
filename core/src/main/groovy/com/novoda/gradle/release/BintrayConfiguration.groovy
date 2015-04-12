@@ -13,11 +13,13 @@ class BintrayConfiguration {
     void configure(Project project) {
         initDefaults()
 
+        PropertyFinder propertyFinder = new PropertyFinder(project, extension)
+
         project.bintray {
-            user = getString(project, 'bintrayUser', extension.bintrayUser)
-            key = getString(project, 'bintrayKey', extension.bintrayKey)
+            user = propertyFinder.getBintrayUser()
+            key = propertyFinder.getBintrayKey()
             publish = extension.autoPublish
-            dryRun = getBoolean(project, 'dryRun', extension.dryRun)
+            dryRun = propertyFinder.getDryRun()
 
             publications = extension.publications
 
@@ -32,7 +34,7 @@ class BintrayConfiguration {
 
                 licenses = extension.licences
                 version {
-                    name = getString(project, 'version', extension.version)
+                    name = propertyFinder.getPublishVersion()
                 }
             }
         }
@@ -53,14 +55,6 @@ class BintrayConfiguration {
                 extension.repository = "${extension.website}.git"
             }
         }
-    }
-
-    String getString(Project project, String propertyName, String defaultValue) {
-        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
-    }
-
-    boolean getBoolean(Project project, String propertyName, boolean defaultValue) {
-        project.hasProperty(propertyName) ? Boolean.parseBoolean(project.getProperty(propertyName)) : defaultValue
     }
 
 }
