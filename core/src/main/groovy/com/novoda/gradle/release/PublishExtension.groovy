@@ -10,6 +10,7 @@ class PublishExtension {
 
     @Deprecated
     String version
+    String publishVersion;
 
     String[] licences = ['Apache-2.0']
 
