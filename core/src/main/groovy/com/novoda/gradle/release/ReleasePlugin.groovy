@@ -24,7 +24,7 @@ class ReleasePlugin implements Plugin<Project> {
                 maven(MavenPublication) {
                     groupId project.publish.groupId
                     artifactId project.publish.artifactId
-                    version getProjectProperty(project, 'version', project.publish.version)
+                    version getString(project, "publishVersion", project.publish.version)
 
                     artifacts.all(project).each {
                         delegate.artifact it
@@ -42,16 +42,7 @@ class ReleasePlugin implements Plugin<Project> {
         }
     }
 
-    private String getProjectProperty(Project project, String propertyName, String defaultValue) {
-        if (isPropertySet(project, propertyName)) {
-            return project.getProperty(propertyName)
-        } else {
-            return defaultValue
-        }
+    String getString(Project project, String propertyName, String defaultValue) {
+        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
-
-    private boolean isPropertySet(Project project, String propertyName) {
-        project.hasProperty(propertyName) && project.getProperty(propertyName) != 'unspecified'
-    }
-
 }
