@@ -7,7 +7,10 @@ class PublishExtension {
 
     String groupId
     String artifactId
+
+    @Deprecated
     String version
+
     String[] licences = ['Apache-2.0']
 
     String uploadName = ''

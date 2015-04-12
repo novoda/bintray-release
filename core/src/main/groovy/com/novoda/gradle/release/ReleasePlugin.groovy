@@ -19,12 +19,13 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(Project project) {
         Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
+        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
         project.publishing {
             publications {
                 maven(MavenPublication) {
                     groupId project.publish.groupId
                     artifactId project.publish.artifactId
-                    version getString(project, "publishVersion", project.publish.version)
+                    version propertyFinder.getPublishVersion()
 
                     artifacts.all(project).each {
                         delegate.artifact it
@@ -42,7 +43,4 @@ class ReleasePlugin implements Plugin<Project> {
         }
     }
 
-    String getString(Project project, String propertyName, String defaultValue) {
-        project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
-    }
 }
