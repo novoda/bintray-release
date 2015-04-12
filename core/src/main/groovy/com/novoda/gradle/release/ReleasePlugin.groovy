@@ -18,15 +18,17 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     void attachArtifacts(Project project) {
-        Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
         project.publishing {
             publications {
+                Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
+
                 maven(MavenPublication) {
+
                     groupId project.publish.groupId
                     artifactId project.publish.artifactId
                     version getProjectProperty(project, 'version', project.publish.version)
 
-                    artifacts.all(project).each {
+                    artifacts.all(it.name, project).each {
                         delegate.artifact it
                     }
 

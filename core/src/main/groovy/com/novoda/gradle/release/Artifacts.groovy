@@ -4,6 +4,6 @@ import org.gradle.api.Project
 
 interface Artifacts {
 
-    def all(Project project)
+    def all(String publicationName, Project project)
 
 }
