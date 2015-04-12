@@ -25,7 +25,7 @@ class PropertyFinder {
     }
 
     def getPublishVersion() {
-        getString(project, 'publishVersion', extension.publishVersion == null ? extension.version : extension.publishVersion)
+        getString(project, 'publishVersion', extension.publishVersion ?: extension.version)
     }
 
     private String getString(Project project, String propertyName, String defaultValue) {
