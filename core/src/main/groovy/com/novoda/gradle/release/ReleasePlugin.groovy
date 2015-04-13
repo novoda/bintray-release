@@ -11,33 +11,32 @@ class ReleasePlugin implements Plugin<Project> {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
 
         project.apply([plugin: 'maven-publish'])
-        attachArtifacts(project)
+        attachArtifacts(project, extension)
 
         new BintrayPlugin().apply(project)
         delayBintrayConfigurationUntilPublishExtensionIsEvaluated(project, extension)
     }
 
-    void attachArtifacts(Project project) {
-        Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+    void attachArtifacts(Project project, PublishExtension extension) {
+        def artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts(project) : new JavaArtifacts(project)
         project.publishing {
             publications {
                 maven(MavenPublication) {
-                    groupId project.publish.groupId
-                    artifactId project.publish.artifactId
-                    version propertyFinder.getPublishVersion()
+                    groupId extension.groupId
+                    artifactId extension.artifactId
+                    version extension.publishVersion
 
-                    artifacts.all(it.name, project).each {
+                    artifacts.all(it.name).each {
                         delegate.artifact it
                     }
 
-                    from artifacts.from(project)
+                    from artifacts.components()
                 }
             }
         }
     }
 
-    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, extension) {
+    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, PublishExtension extension) {
         project.afterEvaluate {
             new BintrayConfiguration(extension).configure(project)
         }
