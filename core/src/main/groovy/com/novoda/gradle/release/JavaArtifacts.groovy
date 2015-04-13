@@ -5,15 +5,19 @@ import org.gradle.api.tasks.bundling.Jar
 
 class JavaArtifacts implements Artifacts {
 
-    def sourcesJar(Project project) {
-        project.task('sourcesJar', type: Jar) {
+    def all(String publicationName, Project project) {
+        [sourcesJar(publicationName, project), javadocJar(publicationName, project)]
+    }
+
+    def sourcesJar(String publicationName, Project project) {
+        project.task(publicationName + 'SourcesJar', type: Jar) {
             classifier = 'sources'
             from project.sourceSets.main.allSource
         }
     }
 
-    def javadocJar(Project project) {
-        project.task('javadocJar', type: Jar) {
+    def javadocJar(String publicationName, Project project) {
+        project.task(publicationName + 'JavadocJar', type: Jar) {
             classifier = 'javadoc'
             from project.javadoc.destinationDir
         }
@@ -23,8 +27,4 @@ class JavaArtifacts implements Artifacts {
         project.components.java
     }
 
-
-    def all(Project project) {
-        [sourcesJar(project), javadocJar(project)]
-    }
 }

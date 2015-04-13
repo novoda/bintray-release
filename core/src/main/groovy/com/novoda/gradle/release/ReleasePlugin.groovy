@@ -27,7 +27,7 @@ class ReleasePlugin implements Plugin<Project> {
                     artifactId project.publish.artifactId
                     version propertyFinder.getPublishVersion()
 
-                    artifacts.all(project).each {
+                    artifacts.all(it.name, project).each {
                         delegate.artifact it
                     }
 

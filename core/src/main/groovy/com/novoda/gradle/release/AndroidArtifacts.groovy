@@ -6,22 +6,26 @@ import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidArtifacts implements Artifacts {
 
-    def sourcesJar(Project project) {
-        project.task('androidSourcesJar', type: Jar) {
+    def all(String publicationName, Project project) {
+        [sourcesJar(publicationName, project), javadocJar(publicationName, project), mainJar(project)]
+    }
+
+    def sourcesJar(String publicationName, Project project) {
+        project.task(publicationName + 'AndroidSourcesJar', type: Jar) {
             classifier = 'sources'
             from project.android.sourceSets.main.java.srcDirs
         }
     }
 
-    def javadocJar(Project project) {
-        def androidJavadocs = project.task('androidJavadocs', type: Javadoc) {
+    def javadocJar(String publicationName, Project project) {
+        def androidJavadocs = project.task(publicationName + 'AndroidJavadocs', type: Javadoc) {
             source = project.android.sourceSets.main.java.srcDirs
             classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
             classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
             classpath += project.android.libraryVariants.toList().first().javaCompile.outputs.files
         }
 
-        project.task('androidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
+        project.task(publicationName + 'AndroidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
             classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
@@ -36,7 +40,4 @@ class AndroidArtifacts implements Artifacts {
         project.components.android
     }
 
-    def all(Project project) {
-        [sourcesJar(project), javadocJar(project), mainJar(project)]
-    }
 }
