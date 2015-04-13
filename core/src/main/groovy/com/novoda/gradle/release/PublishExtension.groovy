@@ -7,7 +7,15 @@ class PublishExtension {
 
     String groupId
     String artifactId
+
+    /**
+     *  @deprecated due to conflicts with gradle project.version. replaced by {@link #publishVersion}
+     *  https://github.com/novoda/bintray-release/issues/43
+     */
+    @Deprecated
     String version
+    String publishVersion;
+
     String[] licences = ['Apache-2.0']
 
     String uploadName = ''
