@@ -13,13 +13,11 @@ class BintrayConfiguration {
     void configure(Project project) {
         initDefaults()
 
-        PropertyFinder propertyFinder = new PropertyFinder(project, extension)
-
         project.bintray {
-            user = propertyFinder.getBintrayUser()
-            key = propertyFinder.getBintrayKey()
+            user = extension.bintrayUser
+            key = extension.bintrayKey
             publish = extension.autoPublish
-            dryRun = propertyFinder.getDryRun()
+            dryRun = extension.dryRun
 
             publications = extension.publications
 
@@ -34,7 +32,7 @@ class BintrayConfiguration {
 
                 licenses = extension.licences
                 version {
-                    name = propertyFinder.getPublishVersion()
+                    name = extension.publishVersion
                 }
             }
         }

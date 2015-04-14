@@ -8,36 +8,31 @@ import org.gradle.api.publish.maven.MavenPublication
 class ReleasePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        PublishExtension extension = project.extensions.create('publish', PublishExtension)
+        PublishExtension extension = project.extensions.create('publish', PublishExtension, project)
 
         project.apply([plugin: 'maven-publish'])
-        attachArtifacts(project)
+        attachArtifacts(project, extension)
 
         new BintrayPlugin().apply(project)
         delayBintrayConfigurationUntilPublishExtensionIsEvaluated(project, extension)
     }
 
-    void attachArtifacts(Project project) {
-        Artifacts artifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts() : new JavaArtifacts()
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+    void attachArtifacts(Project project, PublishExtension extension) {
+        def projectArtifacts = project.plugins.hasPlugin('com.android.library') ? new AndroidArtifacts(project) : new JavaArtifacts(project)
         project.publishing {
             publications {
                 maven(MavenPublication) {
-                    groupId project.publish.groupId
-                    artifactId project.publish.artifactId
-                    version propertyFinder.getPublishVersion()
-
-                    artifacts.all(it.name, project).each {
-                        delegate.artifact it
-                    }
-
-                    from artifacts.from(project)
+                    groupId extension.groupId
+                    artifactId extension.artifactId
+                    version extension.publishVersion ?: extension.version
+                    artifacts = projectArtifacts.all(it.name)
+                    from projectArtifacts.components()
                 }
             }
         }
     }
 
-    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, extension) {
+    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, PublishExtension extension) {
         project.afterEvaluate {
             new BintrayConfiguration(extension).configure(project)
         }
