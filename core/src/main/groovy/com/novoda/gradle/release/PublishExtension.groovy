@@ -9,14 +9,16 @@ class PublishExtension {
     String groupId
 
     String artifactId
-    @Deprecated
-    String version
 
     /**
      *  @deprecated due to conflicts with gradle project.version. replaced by {@link #publishVersion}
      *  https://github.com/novoda/bintray-release/issues/43
      */
-    String publishVersion;
+    @Deprecated
+    String version
+
+    def publishVersion
+
     String[] licences = ['Apache-2.0']
 
     String uploadName = ''
@@ -38,24 +40,9 @@ class PublishExtension {
         this.project = project
     }
 
-    def getBintrayUser() {
-        prop('bintrayUser')
-    }
-
-    def getBintrayKey() {
-        prop('bintrayKey')
-    }
-
-    def getDryRun() {
-        prop('dryRun')
-    }
-
-    def getPublishVersion() {
-        prop('publishVersion') ?: version
-    }
-
-    private String prop(String propertyName) {
-        project.hasProperty(propertyName) ? project.property(propertyName) : this.@"__${propertyName}__"
+    @Override
+    Object getProperty(final String property) {
+        return project.hasProperty(property) ? project.property(property) : super.getProperty(property)
     }
 
 }
