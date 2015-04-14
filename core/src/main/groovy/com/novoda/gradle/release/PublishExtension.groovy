@@ -17,7 +17,7 @@ class PublishExtension {
     @Deprecated
     String version
 
-    def publishVersion
+    String publishVersion
 
     String[] licences = ['Apache-2.0']
 
