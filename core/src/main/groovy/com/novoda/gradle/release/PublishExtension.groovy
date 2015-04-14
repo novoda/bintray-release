@@ -26,9 +26,9 @@ class PublishExtension {
     String issueTracker = ''
     String repository = ''
     boolean autoPublish = true
-    String bintrayUser = ''
+    String bintrayUser
 
-    String bintrayKey = ''
+    String bintrayKey
     boolean dryRun = true
     String[] publications = ['maven']
 
@@ -55,7 +55,7 @@ class PublishExtension {
     }
 
     private String prop(String propertyName) {
-        project.hasProperty(propertyName) ? project.property(propertyName) : getProperty(propertyName)
+        project.hasProperty(propertyName) ? project.property(propertyName) : this.@"__${propertyName}__"
     }
 
 }
