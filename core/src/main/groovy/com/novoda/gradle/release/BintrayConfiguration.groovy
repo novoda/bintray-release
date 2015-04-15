@@ -14,10 +14,10 @@ class BintrayConfiguration {
         initDefaults()
 
         project.bintray {
-            user = extension.bintrayUser
-            key = extension.bintrayKey
+            user = prop(project, 'bintrayUser')
+            key = prop(project, 'bintrayKey')
             publish = extension.autoPublish
-            dryRun = extension.dryRun
+            dryRun = prop(project, 'dryRun')
 
             publications = extension.publications
 
@@ -38,6 +38,10 @@ class BintrayConfiguration {
         }
 
         project.tasks.bintrayUpload.mustRunAfter(project.tasks.uploadArchives)
+    }
+
+    private Object prop(project, property) {
+        return project.hasProperty(property) ? project.property(property) : extension[property]
     }
 
     private void initDefaults() {

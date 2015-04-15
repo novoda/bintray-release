@@ -40,9 +40,4 @@ class PublishExtension {
         this.project = project
     }
 
-    @Override
-    Object getProperty(final String property) {
-        return project.hasProperty(property) ? project.property(property) : super.getProperty(property)
-    }
-
 }
