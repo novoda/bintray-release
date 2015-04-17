@@ -8,7 +8,7 @@ import org.gradle.api.publish.maven.MavenPublication
 class ReleasePlugin implements Plugin<Project> {
 
     void apply(Project project) {
-        PublishExtension extension = project.extensions.create('publish', PublishExtension, project)
+        PublishExtension extension = project.extensions.create(PublishExtension.NAME, PublishExtension, project)
 
         project.apply([plugin: 'maven-publish'])
         attachArtifacts(project, extension)
