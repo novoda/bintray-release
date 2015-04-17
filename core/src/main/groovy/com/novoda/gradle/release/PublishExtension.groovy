@@ -19,7 +19,15 @@ class PublishExtension {
     String[] licences = ['Apache-2.0']
 
     String uploadName = ''
+
+    /**
+     *  @deprecated due to conflicts with gradle project.description. replaced by {@link #desc}
+     *  https://github.com/novoda/bintray-release/issues/46
+     */
+    @Deprecated
     String description
+    String desc
+
     String website = ''
     String issueTracker = ''
     String repository = ''
