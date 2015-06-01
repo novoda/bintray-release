@@ -12,6 +12,7 @@ class BintrayConfiguration {
 
     void configure(Project project) {
         initDefaults()
+        deriveDefaultsFromProject(project)
 
         PropertyFinder propertyFinder = new PropertyFinder(project, extension)
 
@@ -35,10 +36,10 @@ class BintrayConfiguration {
                 licenses = extension.licences
                 version {
                     name = propertyFinder.getPublishVersion()
+                    attributes = extension.versionAttributes
                 }
             }
         }
-
         project.tasks.bintrayUpload.mustRunAfter(project.tasks.uploadArchives)
     }
 
@@ -57,4 +58,9 @@ class BintrayConfiguration {
         }
     }
 
+    private void deriveDefaultsFromProject(Project project) {
+        if (!project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins').isEmpty()) {
+            extension.versionAttributes << ['gradle-plugins': '${extension.userOrg}:${extension.groupId}:${extension.artifactId}']
+        }
+    }
 }

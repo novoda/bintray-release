@@ -16,6 +16,8 @@ class PublishExtension {
     String version
     String publishVersion;
 
+    Map<String, String> versionAttributes = [:]
+
     String[] licences = ['Apache-2.0']
 
     String uploadName = ''
