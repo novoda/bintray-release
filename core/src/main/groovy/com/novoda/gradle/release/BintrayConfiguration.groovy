@@ -1,6 +1,7 @@
 package com.novoda.gradle.release
 
 import org.gradle.api.Project
+import org.gradle.api.file.FileTree
 
 class BintrayConfiguration {
 
@@ -59,8 +60,17 @@ class BintrayConfiguration {
     }
 
     private void deriveDefaultsFromProject(Project project) {
-        if (!project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins').isEmpty()) {
-            extension.versionAttributes << ['gradle-plugins': '${extension.userOrg}:${extension.groupId}:${extension.artifactId}']
+        if (extension.versionAttributes.isEmpty()) {
+            FileTree pluginFiles = project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins')
+            if (!pluginFiles.isEmpty()) {
+                File bestPluginFile = pluginFiles.filter {
+                    it.name.endsWith(".properties") &&
+                            it.name.substring(0, it.name.length() - 11).contains('.')
+                }.first()
+                String pluginId = bestPluginFile.name.substring(0, bestPluginFile.name.length() - 11)
+                extension.versionAttributes << ['gradle-plugins': "$pluginId:$extension.groupId:$extension.artifactId"]
+            }
+            println "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
         }
     }
 }
