@@ -14,14 +14,14 @@ At the moment it works with Android Library projects, plain Java and plain Groov
 To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
 
 ```groovy
-apply plugin: 'bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
+apply plugin: 'com.novoda.bintray-release' // must be applied after your artifact generating plugin (eg. java / com.android.library)
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.2.11'
+        classpath 'com.novoda:bintray-release:0.3.0'
     }
 }
 ```
@@ -36,7 +36,7 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = 'bintray-release'
-    publishVersion = '0.2.11'
+    publishVersion = '0.3.0'
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/novoda/bintray-release'
 }
