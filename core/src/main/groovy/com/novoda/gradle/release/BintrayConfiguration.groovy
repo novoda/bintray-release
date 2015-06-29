@@ -1,8 +1,5 @@
 package com.novoda.gradle.release
-
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
-import org.gradle.api.file.FileTree
 
 class BintrayConfiguration {
 
@@ -62,18 +59,11 @@ class BintrayConfiguration {
 
     private void deriveDefaultsFromProject(Project project) {
         if (extension.versionAttributes.isEmpty()) {
-            FileTree pluginFiles = project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins')
-            if (!pluginFiles.isEmpty()) {
-                FileCollection filteredPluginFiles  = pluginFiles.filter {
-                    it.name.endsWith(".properties") &&
-                            it.name.substring(0, it.name.length() - 11).contains('.')
-                }
-                if (!filteredPluginFiles.isEmpty()) {
-                    File bestPluginFile = filteredPluginFiles.first()
-                    String pluginId = bestPluginFile.name.substring(0, bestPluginFile.name.length() - 11)
-                    extension.versionAttributes << ['gradle-plugins': "$pluginId:$extension.groupId:$extension.artifactId"]
-                    println "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
-                }
+            def gradlePluginPropertyFinder = new GradlePluginPropertyFinder(project)
+            String bestPluginId = gradlePluginPropertyFinder.findBestGradlePluginId()
+            if (bestPluginId != null) {
+                extension.versionAttributes << ['gradle-plugins': "$bestPluginId:$extension.groupId:$extension.artifactId"]
+                println "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
             }
         }
     }
