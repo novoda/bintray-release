@@ -13,18 +13,19 @@ class GradlePluginPropertyFinder {
     }
 
     public String findBestGradlePluginId() {
-        FileTree pluginFiles = project.fileTree(dir:'src/main/resources/META-INF/gradle-plugins')
-        if (!pluginFiles.isEmpty()) {
-            FileCollection filteredPluginFiles = pluginFiles.filter {
-                it.name.endsWith(FILE_EXTENSION_PROPERTIES) &&
-                        isNamespacedPropertyFile(it)
-            }
-            if (!filteredPluginFiles.isEmpty()) {
-                File bestPluginFile = filteredPluginFiles.first()
-                return removePropertyFileExtension(bestPluginFile)
-            }
+        FileTree pluginFiles = project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins')
+        if (pluginFiles.isEmpty()) {
+            return null
         }
-        return null;
+        FileCollection filteredPluginFiles = pluginFiles.filter {
+            it.name.endsWith(FILE_EXTENSION_PROPERTIES) &&
+                    isNamespacedPropertyFile(it)
+        }
+        if (filteredPluginFiles.isEmpty()) {
+            return null
+        }
+        File bestPluginFile = filteredPluginFiles.first()
+        return removePropertyFileExtension(bestPluginFile)
     }
 
     private boolean isNamespacedPropertyFile(File file) {
