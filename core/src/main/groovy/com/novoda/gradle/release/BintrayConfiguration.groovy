@@ -62,7 +62,7 @@ class BintrayConfiguration {
             def gradlePluginPropertyFinder = new GradlePluginPropertyFinder(project)
             String bestPluginId = gradlePluginPropertyFinder.findBestGradlePluginId()
             if (bestPluginId != null) {
-                extension.versionAttributes << ['gradle-plugins': "$bestPluginId:$extension.groupId:$extension.artifactId"]
+                extension.versionAttributes << ['gradle-plugin': "$bestPluginId:$extension.groupId:$extension.artifactId"]
                 println "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
             }
         }
