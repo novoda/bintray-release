@@ -1,4 +1,5 @@
 package com.novoda.gradle.release
+
 import org.gradle.api.Project
 
 class BintrayConfiguration {
@@ -63,7 +64,7 @@ class BintrayConfiguration {
             String bestPluginId = gradlePluginPropertyFinder.findBestGradlePluginId()
             if (bestPluginId != null) {
                 extension.versionAttributes << ['gradle-plugin': "$bestPluginId:$extension.groupId:$extension.artifactId"]
-                println "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
+                project.logger.info "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
             }
         }
     }
