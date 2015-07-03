@@ -12,7 +12,7 @@ class GradlePluginPropertyFinder {
         this.project = project
     }
 
-    public String findBestGradlePluginId() {
+    String findBestGradlePluginId() {
         FileTree pluginFiles = project.fileTree(dir: 'src/main/resources/META-INF/gradle-plugins')
         if (pluginFiles.isEmpty()) {
             return null
