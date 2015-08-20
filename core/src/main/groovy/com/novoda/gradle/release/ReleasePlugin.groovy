@@ -9,12 +9,12 @@ class ReleasePlugin implements Plugin<Project> {
 
     void apply(Project project) {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
-
-        project.apply([plugin: 'maven-publish'])
-        attachArtifacts(project)
-
-        new BintrayPlugin().apply(project)
-        delayBintrayConfigurationUntilPublishExtensionIsEvaluated(project, extension)
+        project.afterEvaluate {
+            project.apply([plugin: 'maven-publish'])
+            attachArtifacts(project)
+            new BintrayPlugin().apply(project)
+            new BintrayConfiguration(extension).configure(project)
+        }
     }
 
     void attachArtifacts(Project project) {
@@ -36,11 +36,4 @@ class ReleasePlugin implements Plugin<Project> {
             }
         }
     }
-
-    private delayBintrayConfigurationUntilPublishExtensionIsEvaluated(Project project, extension) {
-        project.afterEvaluate {
-            new BintrayConfiguration(extension).configure(project)
-        }
-    }
-
 }
