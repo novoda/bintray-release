@@ -1,2 +1,2 @@
-include ':core', ':sample'
+include ':core'
 rootProject.name = 'bintray-release'

@@ -2,10 +2,6 @@ apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile gradleApi()
     compile localGroovy()

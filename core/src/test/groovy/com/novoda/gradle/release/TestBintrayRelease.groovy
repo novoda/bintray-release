@@ -4,7 +4,6 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
 import org.junit.AfterClass
-import org.junit.BeforeClass
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -17,10 +16,6 @@ class TestBintrayRelease {
 
     static final String FIXTURE_WORKING_DIR = "$PATH_PREFIX/src/test/fixtures/android_app"
 
-    @BeforeClass
-    static void setup() {
-    }
-
     @AfterClass
     static void tearDown() {
         // I don't know why this gets generated, but toss it
@@ -30,7 +25,7 @@ class TestBintrayRelease {
 
     @Test
     public void testConfiguration() {
-        Project project = TestHelper.evaluatableLibProject()
+        Project project = LibProjectFactory.createFromFixture()
         ReleasePlugin plugin = new ReleasePlugin()
         plugin.apply(project)
         project.publish {
