@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.novoda.gradle.test.IntegrationTest
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 import org.junit.Test
