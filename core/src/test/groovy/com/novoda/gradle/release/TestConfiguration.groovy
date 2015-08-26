@@ -54,12 +54,12 @@ class TestConfiguration {
 
     @Test
     public void testGeneratedPomFileForMavenPublicationTask() {
-
         Task task = project.getTasks().findByPath(":generatePomFileForMavenPublication")
         assertThat(task).isNotNull()
 
         GenerateMavenPom generatePomTask = task as GenerateMavenPom
         generatePomTask.execute()
+
         File pomFile = new File(project.buildDir, "/publications/maven/pom-default.xml")
         assertThat(pomFile.exists())
         NodeList nodes = new XmlParser().parse(pomFile).depthFirst()
@@ -89,5 +89,4 @@ class TestConfiguration {
         // there is nothing to unit test because all the magic happens in a build listener
         //    that is added in the BintrayPlugin
     }
-
 }

@@ -12,11 +12,12 @@ public class TestBintrayUploadTask {
 
     @Test
     public void testBintrayUploadTask() {
-        String output = runTasks(['-PbintrayUser=U', '-PbintrayKey=K'], "bintrayUpload")
-        assertThat(output).contains("BUILD SUCCESSFUL")
+        String standardOutput = runTasksOnBintrayReleasePlugin(['-PbintrayUser=U', '-PbintrayKey=K'], "bintrayUpload")
+
+        assertThat(standardOutput).contains("BUILD SUCCESSFUL")
     }
 
-    String runTasks(List<String> arguments = [], String... tasks) {
+    String runTasksOnBintrayReleasePlugin(List<String> arguments = [], String... tasks) {
         ProjectConnection conn
 
         try {
