@@ -1,11 +1,9 @@
 package com.novoda.gradle.release
-import com.jfrog.bintray.gradle.BintrayUploadTask
+
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.publish.maven.tasks.GenerateMavenPom
-import org.junit.After
 import org.junit.AfterClass
-import org.junit.Before
 import org.junit.BeforeClass
 import org.junit.Test
 
@@ -84,18 +82,12 @@ class TestConfiguration {
     }
 
     @Test
-    public void testBintrayUploadTask() {
+    public void testProjectHasBintrayUploadTask() {
         Task task = project.getTasks().findByPath(":bintrayUpload")
         assertThat(task).isNotNull()
 
-        BintrayUploadTask uploadTask = task as BintrayUploadTask
-        uploadTask.user = "user"
-        uploadTask.apiKey = "apiKey"
-
-        uploadTask.repoName = "maven"
-        uploadTask.packageName = "test"
-        uploadTask.executeWithoutThrowingTaskFailure()
-
-        assertThat(uploadTask.dryRun).isFalse()
+        // there is nothing to unit test because all the magic happens in a build listener
+        //    that is added in the BintrayPlugin
     }
+
 }
