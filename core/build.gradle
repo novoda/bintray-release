@@ -1,3 +1,7 @@
+plugins {
+    id "org.ysb33r.gradletest" version "0.5.4"
+}
+
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
 apply plugin: 'maven'
@@ -25,4 +29,8 @@ publish {
     version = project.version
     description = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/novoda/${rootProject.name}"
+}
+
+gradleTest {
+    versions '2.2', '2.4','2.6'
 }
