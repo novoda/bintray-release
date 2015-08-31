@@ -21,7 +21,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.3.0'
+        classpath 'com.novoda:bintray-release:0.3.4'
     }
 }
 ```
@@ -36,7 +36,7 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = 'bintray-release'
-    publishVersion = '0.3.0'
+    publishVersion = '0.3.4'
     desc = 'Oh hi, this is a nice description for a project, right?'
     website = 'https://github.com/novoda/bintray-release'
 }
