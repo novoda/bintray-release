@@ -25,7 +25,7 @@ class ReleasePlugin implements Plugin<Project> {
                     if (variant.productFlavors.size() > 0) {
                         artifactId += '-' + variant.productFlavors.collect { it.name }.join("-")
                     }
-                    addArtifact(project, variant.name, artifactId, new AndroidArtifacts());
+                    addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant));
                 }
             }
         } else {

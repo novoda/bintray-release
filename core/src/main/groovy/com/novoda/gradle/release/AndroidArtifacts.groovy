@@ -6,33 +6,43 @@ import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidArtifacts implements Artifacts {
 
+    def variant
+
+    AndroidArtifacts(variant) {
+        this.variant = variant
+    }
+
     def all(String publicationName, Project project) {
-        [sourcesJar(publicationName, project), javadocJar(publicationName, project), mainJar(project)]
+        [sourcesJar(project), javadocJar(project), mainJar(project)]
     }
 
-    def sourcesJar(String publicationName, Project project) {
-        project.task(publicationName + 'AndroidSourcesJar', type: Jar) {
+    def sourcesJar(Project project) {
+        project.task(variant.name + 'AndroidSourcesJar', type: Jar) {
             classifier = 'sources'
-            from project.android.sourceSets.main.java.srcDirs
+            variant.sourceSets.each {
+                from it.java.srcDirs
+            }
         }
     }
 
-    def javadocJar(String publicationName, Project project) {
-        def androidJavadocs = project.task(publicationName + 'AndroidJavadocs', type: Javadoc) {
-            source = project.android.sourceSets.main.java.srcDirs
+    def javadocJar(Project project) {
+        def androidJavadocs = project.task(variant.name + 'AndroidJavadocs', type: Javadoc) {
+            variant.sourceSets.each {
+                delegate.source it.java.srcDirs
+            }
             classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
-            classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
-            classpath += project.android.libraryVariants.toList().first().javaCompile.outputs.files
+            classpath += variant.javaCompile.classpath
+            classpath += variant.javaCompile.outputs.files
         }
 
-        project.task(publicationName + 'AndroidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
+        project.task(variant.name + 'AndroidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
             classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
     }
 
     def mainJar(Project project) {
-        "$project.buildDir/outputs/aar/$project.name-release.aar" // TODO How can we improve this?
+        "$project.buildDir/outputs/aar/${project.name}-${variant.baseName}.aar"
     }
 
     def from(Project project) {
