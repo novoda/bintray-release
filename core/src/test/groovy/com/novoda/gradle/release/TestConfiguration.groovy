@@ -17,6 +17,7 @@ class TestConfiguration {
 
     static final String FIXTURE_WORKING_DIR = "$PATH_PREFIX/src/test/fixtures/android_app"
     static Project project
+    static Project flavorProject
 
     @BeforeClass
     public static void setup() {
@@ -27,11 +28,23 @@ class TestConfiguration {
             userOrg = 'novoda'
             groupId = 'com.novoda.demo'
             artifactId = "test"
-            version = project.version
+            publishVersion = project.version
             description = 'Sample library'
             dryRun = true
         }
         project.evaluate()
+
+        flavorProject = LibProjectFactory.createFromFixtureWithFlavors()
+        plugin.apply(flavorProject)
+        flavorProject.publish {
+            userOrg = 'novoda'
+            groupId = 'com.novoda.demo'
+            artifactId = "test-flavors"
+            publishVersion = project.version
+            description = 'Sample library'
+            dryRun = true
+        }
+        flavorProject.evaluate()
 
     }
 
@@ -54,13 +67,18 @@ class TestConfiguration {
 
     @Test
     public void testGeneratedPomFileForMavenPublicationTask() {
-        Task task = project.getTasks().findByPath(":generatePomFileForMavenPublication")
+        testGeneratedPomFileForVariantPublicationTask(project, "Release", "test", "release");
+        testGeneratedPomFileForVariantPublicationTask(flavorProject, "Flavor1Release", "test-flavor1", "flavor1Release");
+    }
+
+    private static void testGeneratedPomFileForVariantPublicationTask(Project project, String variantName, String artifactId, String publicationName) {
+        Task task = project.getTasks().findByPath(":generatePomFileFor${variantName}Publication")
         assertThat(task).isNotNull()
 
         GenerateMavenPom generatePomTask = task as GenerateMavenPom
         generatePomTask.execute()
 
-        File pomFile = new File(project.buildDir, "/publications/maven/pom-default.xml")
+        File pomFile = new File(project.buildDir, "/publications/${publicationName}/pom-default.xml")
         assertThat(pomFile.exists())
         NodeList nodes = new XmlParser().parse(pomFile).depthFirst()
         assertThat(nodes).isNotNull()
@@ -72,7 +90,7 @@ class TestConfiguration {
         assertThat(groupIdNode.value()[0]).isEqualTo "com.novoda.demo"
         Node artifactIdNode = nodes[3]
         assertThat(artifactIdNode.name().localPart).isEqualTo "artifactId"
-        assertThat(artifactIdNode.value()[0]).isEqualTo "test"
+        assertThat(artifactIdNode.value()[0]).isEqualTo artifactId
         Node versionNode = nodes[4]
         assertThat(versionNode.name().localPart).isEqualTo "version"
         assertThat(versionNode.value()[0]).isEqualTo "1.0"
