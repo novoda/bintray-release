@@ -13,13 +13,23 @@ class AndroidLibrary implements SoftwareComponentInternal {
 
     private final Usage runtimeUsage
 
-    public static AndroidLibrary newInstance(Project project) {
+    public static AndroidLibrary newInstance(Project project, variant) {
+        DefaultDomainObjectSet<Dependency> dependencies = new DefaultDomainObjectSet<Dependency>(Dependency)
         def configuration = project.configurations.getByName("compile")
-        return configuration ? from(configuration) : empty()
+        if (configuration != null) dependencies.addAll(configuration.dependencies);
+        variant.productFlavors.each { flavor ->
+            configuration = project.configurations.getByName(flavor.name+"Compile")
+            if (configuration != null)
+                dependencies.addAll(configuration.dependencies)
+        }
+        configuration = project.configurations.getByName(variant.buildType.name+"Compile")
+        if (configuration != null)
+            dependencies.addAll(configuration.dependencies)
+        return configuration ? from(dependencies) : empty()
     }
 
-    static AndroidLibrary from(def configuration) {
-        def usage = new RuntimeUsage(configuration.dependencies)
+    static AndroidLibrary from(dependencies) {
+        def usage = new RuntimeUsage(dependencies)
         new AndroidLibrary(usage)
     }
 
