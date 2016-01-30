@@ -67,11 +67,12 @@ class TestConfiguration {
 
     @Test
     public void testGeneratedPomFileForMavenPublicationTask() {
-        testGeneratedPomFileForVariantPublicationTask(project, "Release", "test", "release");
-        testGeneratedPomFileForVariantPublicationTask(flavorProject, "Flavor1Release", "test-flavor1", "flavor1Release");
+        testGeneratedPomFileForVariantPublicationTask(project, "Release", "test", "release", "com.novoda:download-manager:0.2.38", "com.google.code.gson:gson:2.5");
+        testGeneratedPomFileForVariantPublicationTask(flavorProject, "Flavor1Release", "test-flavor1", "flavor1Release", "com.novoda:download-manager:0.2.38", "com.google.code.gson:gson:2.5");
+        testGeneratedPomFileForVariantPublicationTask(flavorProject, "Flavor2Release", "test-flavor2", "flavor2Release", "com.novoda:download-manager:0.2.38");
     }
 
-    private static void testGeneratedPomFileForVariantPublicationTask(Project project, String variantName, String artifactId, String publicationName) {
+    private static void testGeneratedPomFileForVariantPublicationTask(Project project, String variantName, String artifactId, String publicationName, String... dependencies) {
         Task task = project.getTasks().findByPath(":generatePomFileFor${variantName}Publication")
         assertThat(task).isNotNull()
 
@@ -82,7 +83,7 @@ class TestConfiguration {
         assertThat(pomFile.exists())
         NodeList nodes = new XmlParser().parse(pomFile).depthFirst()
         assertThat(nodes).isNotNull()
-        assertThat(nodes).hasSize 6
+        assertThat(nodes).hasSize 6 + (dependencies.length > 0 ? 1 : 0) + dependencies.length * 5
 
         // Skip the first two since they're boilerplate xml stuff
         Node groupIdNode = nodes[2]
@@ -97,6 +98,31 @@ class TestConfiguration {
         Node packagingNode = nodes[5]
         assertThat(packagingNode.name().localPart).isEqualTo "packaging"
         assertThat(packagingNode.value()[0]).isEqualTo "aar"
+
+        // Dependencies
+        Node dependenciesNode = nodes[6];
+        assertThat(dependenciesNode.name().localPart).isEqualTo "dependencies"
+
+        // check gson
+        for (int i = 0; i < dependencies.length; i++) {
+            assertDependency(nodes, 7 + i * 5, dependencies[i]);
+        }
+
+    }
+
+    private static void assertDependency(NodeList nodes, Integer startIndex, String dependency) {
+        String[] parts = dependency.split(":")
+        assertNode(nodes[startIndex], "dependency", null)
+        assertNode(nodes[startIndex + 1], "groupId", parts[0])
+        assertNode(nodes[startIndex + 2], "artifactId", parts[1])
+        assertNode(nodes[startIndex + 3], "version", parts[2])
+        assertNode(nodes[startIndex + 4], "scope", "runtime")
+    }
+
+    private static void assertNode(node, String localName, String value) {
+        assertThat(node.name().localPart).isEqualTo localName
+        if (value)
+            assertThat(node.value()[0]).isEqualTo value
     }
 
     @Test
