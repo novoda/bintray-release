@@ -22,6 +22,15 @@ final class LibProjectFactory {
             }
         }
 
+        project.repositories {
+            jcenter()
+        }
+
+        project.dependencies {
+            compile 'com.novoda:download-manager:0.2.38'
+            releaseCompile 'com.google.code.gson:gson:2.5'
+        }
+
         return project
     }
 
@@ -45,6 +54,16 @@ final class LibProjectFactory {
                 flavor1{}
                 flavor2{}
             }
+        }
+
+        project.repositories {
+            jcenter()
+        }
+
+        project.dependencies {
+            compile 'com.novoda:download-manager:0.2.38'
+            flavor1Compile 'com.google.code.gson:gson:2.5'
+
         }
 
         return project
