@@ -11,22 +11,17 @@ class ReleasePlugin implements Plugin<Project> {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
         project.afterEvaluate {
             project.apply([plugin: 'maven-publish'])
-            attachArtifacts(project)
+            attachArtifacts(extension, project)
             new BintrayPlugin().apply(project)
             new BintrayConfiguration(extension).configure(project)
         }
     }
 
-    void attachArtifacts(Project project) {
+    void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.each { variant ->
-                if (!variant.buildType.debuggable) {
-                    def artifactId = project.name;
-                    if (variant.productFlavors.size() > 0) {
-                        artifactId += '-' + variant.productFlavors.collect { it.name }.join("-")
-                    }
-                    addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant));
-                }
+                def artifactId = extension.artifactId;
+                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
             }
         } else {
             addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())

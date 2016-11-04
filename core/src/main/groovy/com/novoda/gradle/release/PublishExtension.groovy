@@ -39,6 +39,6 @@ class PublishExtension {
     String bintrayKey = ''
     boolean dryRun = true
 
-    String[] publications = ['maven']
+    String[] publications
 
 }
