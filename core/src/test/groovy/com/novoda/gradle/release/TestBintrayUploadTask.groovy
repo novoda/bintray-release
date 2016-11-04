@@ -4,7 +4,6 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Test
 
-import static com.google.common.truth.Truth.assertThat
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 public class TestBintrayUploadTask {
@@ -13,8 +12,8 @@ public class TestBintrayUploadTask {
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")
 
-        assertThat(result.tasks(SUCCESS).collect {it.path}).contains(":core:bintrayUpload")
-        assertThat(result.getStandardOutput()).contains("BUILD SUCCESSFUL")
+        assert result.tasks(SUCCESS).collect { it.path } .contains(":core:bintrayUpload")
+        assert result.getStandardOutput().contains("BUILD SUCCESSFUL")
     }
 
     BuildResult runTasksOnBintrayReleasePlugin(String... arguments) {
