@@ -13,7 +13,7 @@ public class TestBintrayUploadTask {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")
 
         assert result.tasks(SUCCESS).collect { it.path } .contains(":core:bintrayUpload")
-        assert result.getStandardOutput().contains("BUILD SUCCESSFUL")
+        assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
 
     BuildResult runTasksOnBintrayReleasePlugin(String... arguments) {
