@@ -18,7 +18,7 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     void attachArtifacts(Project project) {
-        if (project.plugins.findPlugin('com.android.library')) {
+        if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.each { variant ->
                 def artifactId = project.extension.artifactId;
                 addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))

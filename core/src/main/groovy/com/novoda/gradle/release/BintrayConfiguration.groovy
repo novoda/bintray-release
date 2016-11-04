@@ -22,7 +22,7 @@ class BintrayConfiguration {
             publish = extension.autoPublish
             dryRun = propertyFinder.getDryRun()
 
-            publications = extension.publications ?: project.plugins.findPlugin('com.android.library') ? ['release'] : [ 'maven' ]
+            publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : [ 'maven' ]
 
             pkg {
                 repo = extension.repoName
