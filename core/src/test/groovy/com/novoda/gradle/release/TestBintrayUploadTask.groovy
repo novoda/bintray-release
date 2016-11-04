@@ -1,16 +1,12 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.test.IntegrationTest
 import org.gradle.testkit.runner.BuildResult
-import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Test
-import org.junit.experimental.categories.Category
 
 import static com.google.common.truth.Truth.assertThat
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS;
+import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
-@Category(IntegrationTest.class)
 public class TestBintrayUploadTask {
 
     @Test
