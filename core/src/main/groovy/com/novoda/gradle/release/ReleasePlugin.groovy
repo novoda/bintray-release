@@ -4,6 +4,7 @@ import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
+import org.gradle.util.GradleVersion
 
 class ReleasePlugin implements Plugin<Project> {
 
@@ -19,6 +20,28 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
+            def current = GradleVersion.current()
+            def version3_3 = GradleVersion.version("3.3")
+
+            if ((current <=> version3_3) <= 0) {
+                // detected Gradle 3.3 or smaller
+                // show message for required gradle upgrade
+                // details: https://github.com/novoda/bintray-release/issues/112
+                System.err.println("""
+                        |**************************************
+                        |WARNING: $current not supported by bintray-release plugin. Update required!
+                        |
+                        |The bintray-release plugin doesn't support version of Gradle below 3.4 for Android libraries. Please upgrade to Gradle 3.4 or later.
+                        |The last bintray-release plugin supporting Gradle 3.3 is 'com.novoda:bintray-release:4.0'
+                        |
+                        |Upgrade Gradle:
+                        |./gradlew wrapper --gradle-version 3.5 --distribution-type all
+                        |
+                        |The bintray-release plugin can't create a Publication for your Android Library with $current!
+                        |**************************************
+                        """.stripMargin());
+                return;
+            }
             project.android.libraryVariants.each { variant ->
                 def artifactId = extension.artifactId;
                 addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
