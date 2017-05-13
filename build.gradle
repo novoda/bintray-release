@@ -11,6 +11,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven { url "https://dl.bintray.com/stefma/maven" }
     }
     version = "0.5.0"
 }

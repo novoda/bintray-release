@@ -6,6 +6,7 @@ dependencies {
     compile gradleApi()
     compile localGroovy()
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
+    compile 'guru.stefma.androidartifacts:androidartifacts:0.0.1'
 
     testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'

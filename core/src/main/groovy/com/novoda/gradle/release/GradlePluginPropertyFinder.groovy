@@ -28,11 +28,11 @@ class GradlePluginPropertyFinder {
         return removePropertyFileExtension(bestPluginFile)
     }
 
-    private boolean isNamespacedPropertyFile(File file) {
+    private static boolean isNamespacedPropertyFile(File file) {
         return file.name.substring(0, file.name.length() - FILE_EXTENSION_PROPERTIES.length()).contains('.')
     }
 
-    private String removePropertyFileExtension(File bestPluginFile) {
+    private static String removePropertyFileExtension(File bestPluginFile) {
         bestPluginFile.name.substring(0, bestPluginFile.name.length() - FILE_EXTENSION_PROPERTIES.length())
     }
 }
