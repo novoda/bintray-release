@@ -1,11 +1,11 @@
 package com.novoda.gradle.release
 
 import com.jfrog.bintray.gradle.BintrayPlugin
+import guru.stefma.androidartifacts.AndroidArtifactsPlugin
 import guru.stefma.androidartifacts.ArtifactsExtension
-import guru.stefma.androidartifacts.CreateAndroidArtifactsExtensions
 import org.gradle.api.Project
 
-class ReleasePlugin extends CreateAndroidArtifactsExtensions {
+class ReleasePlugin extends AndroidArtifactsPlugin {
 
     PublishExtension mPublishExtension
 
