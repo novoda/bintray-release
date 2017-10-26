@@ -19,7 +19,8 @@ apply plugin: 'com.novoda.bintray-release' // must be applied after your artifac
 buildscript {
     repositories {
         jcenter()
-    }
+        maven { url 'https://dl.bintray.com/werbhelius/maven/' }
+    }
     dependencies {
         classpath 'com.novoda:bintray-release:<latest-version>'
     }
