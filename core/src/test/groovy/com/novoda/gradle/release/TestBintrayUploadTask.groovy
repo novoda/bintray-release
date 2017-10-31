@@ -19,11 +19,6 @@ public class TestBintrayUploadTask {
         for (BuildTask task : tasks) {
             successfulTaskPaths.add(task.path)
         }
-//        List<BuildTask> successfulTasks = tasks.collect {
-//            BuildTask buildTask = it
-//            String path = buildTask.path
-//            return path
-//        }
         assert successfulTaskPaths.contains(":bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
