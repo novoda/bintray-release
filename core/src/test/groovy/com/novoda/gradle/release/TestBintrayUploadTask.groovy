@@ -14,7 +14,11 @@ public class TestBintrayUploadTask {
 
         TaskOutcome success = TaskOutcome.SUCCESS
         List<BuildTask> tasks = result.tasks(success)
-        def successfulTasks = tasks.collect { it.path }
+        List<BuildTask> successfulTasks = tasks.collect {
+            BuildTask buildTask = it
+            String path = buildTask.path
+            return path
+        }
         assert successfulTasks.contains(":bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
