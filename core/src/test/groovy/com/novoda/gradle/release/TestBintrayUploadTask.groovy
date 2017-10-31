@@ -12,16 +12,27 @@ public class TestBintrayUploadTask {
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")
 
-        assert result.tasks(SUCCESS).collect { it.path } .contains(":core:bintrayUpload")
+        assert result.tasks(SUCCESS).collect { it.path }.contains(":core:bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
 
     BuildResult runTasksOnBintrayReleasePlugin(String... arguments) {
+        File file = getAbsoluteDirectoryOfOurProjectBase()
+
         GradleRunner runner = GradleRunner.create()
-                .withProjectDir(new File(".."))
+                .withProjectDir(file)
+
         if (arguments) {
             runner.withArguments(arguments)
         }
         return runner.build()
+    }
+
+    /**
+     * Get a path that is absolute when running this test from the IDE or the CMD line and work back from there
+     */
+    private File getAbsoluteDirectoryOfOurProjectBase() {
+        def fileDir = getClass().protectionDomain.codeSource.location.path
+        return new File(fileDir + "../../../..")
     }
 }
