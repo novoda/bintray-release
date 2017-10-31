@@ -14,16 +14,11 @@ public class TestBintrayUploadTask {
 
         TaskOutcome success = TaskOutcome.SUCCESS
         List<BuildTask> tasks = result.tasks(success)
-
         List<String> successfulTaskPaths = new ArrayList<>();
         for (BuildTask task : tasks) {
             successfulTaskPaths.add(task.path)
         }
-//        List<BuildTask> successfulTasks = tasks.collect {
-//            BuildTask buildTask = it
-//            String path = buildTask.path
-//            return path
-//        }
+
         assert successfulTaskPaths.contains(":bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
