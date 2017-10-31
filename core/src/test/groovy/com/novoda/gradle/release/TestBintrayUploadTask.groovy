@@ -12,7 +12,8 @@ public class TestBintrayUploadTask {
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")
 
-        assert result.tasks(SUCCESS).collect { it.path }.contains(":bintrayUpload")
+        def successfulTasks = result.tasks(SUCCESS).collect { it.path }
+        assert successfulTasks.contains(":bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
 
