@@ -9,19 +9,25 @@ import org.gradle.api.attributes.Usage
 import org.gradle.api.internal.DefaultDomainObjectSet
 import org.gradle.api.internal.component.SoftwareComponentInternal
 import org.gradle.api.internal.component.UsageContext
+import org.gradle.api.model.ObjectFactory
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
     private final UsageContext runtimeUsage
 
     public static AndroidLibrary newInstance(Project project) {
+
+        ObjectFactory objectFactory = project.getObjects();
+        Usage usage = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME);
+
+
         def configuration = project.configurations.getByName("compile")
-        return configuration ? from(configuration) : empty()
+        return configuration ? from(configuration, usage) : empty()
     }
 
-    static AndroidLibrary from(def configuration) {
-        def usage = new RuntimeUsage(configuration.dependencies)
-        new AndroidLibrary(usage)
+    static AndroidLibrary from(def configuration, Usage usage) {
+        def runtimeUsage = new RuntimeUsage(configuration.dependencies, usage)
+        new AndroidLibrary(runtimeUsage)
     }
 
     static AndroidLibrary empty() {
@@ -44,13 +50,15 @@ class AndroidLibrary implements SoftwareComponentInternal {
     private static class RuntimeUsage implements UsageContext {
 
         private final DomainObjectSet<Dependency> runtimeDependencies
+        private final Usage usage;
 
-        RuntimeUsage(DomainObjectSet<Dependency> runtimeDependencies) {
+        RuntimeUsage(DomainObjectSet<Dependency> runtimeDependencies, Usage usage) {
+            this.usage = usage;
             this.runtimeDependencies = runtimeDependencies
         }
 
         Usage getUsage() {
-            return Usage.FOR_RUNTIME
+            return usage;
         }
 
         public Set<PublishArtifact> getArtifacts() {
