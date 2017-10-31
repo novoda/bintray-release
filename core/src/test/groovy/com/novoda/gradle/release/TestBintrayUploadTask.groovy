@@ -1,10 +1,10 @@
 package com.novoda.gradle.release
 
 import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Test
-
-import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 public class TestBintrayUploadTask {
 
@@ -12,7 +12,19 @@ public class TestBintrayUploadTask {
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")
 
-        assert result.tasks(SUCCESS).collect { it.path }.contains(":core:bintrayUpload")
+        TaskOutcome success = TaskOutcome.SUCCESS
+        List<BuildTask> tasks = result.tasks(success)
+
+        List<String> successfulTaskPaths = new ArrayList<>();
+        for (BuildTask task : tasks) {
+            successfulTaskPaths.add(task.path)
+        }
+//        List<BuildTask> successfulTasks = tasks.collect {
+//            BuildTask buildTask = it
+//            String path = buildTask.path
+//            return path
+//        }
+        assert successfulTaskPaths.contains(":bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
 
