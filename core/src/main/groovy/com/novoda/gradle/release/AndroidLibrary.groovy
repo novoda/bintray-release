@@ -2,6 +2,7 @@ package com.novoda.gradle.release
 
 import org.gradle.api.DomainObjectSet
 import org.gradle.api.Project
+import org.gradle.api.UnknownDomainObjectException
 import org.gradle.api.artifacts.Dependency
 import org.gradle.api.artifacts.ModuleDependency
 import org.gradle.api.artifacts.PublishArtifact
@@ -20,13 +21,22 @@ class AndroidLibrary implements SoftwareComponentInternal {
         ObjectFactory objectFactory = project.getObjects();
         Usage usage = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME);
 
-
         def configuration = project.configurations.getByName("compile")
-        return configuration ? from(configuration, usage) : empty()
+
+        try {
+            def implementationConfiguration = project.configurations.getByName("implementation")
+            configuration.dependencies.addAll(implementationConfiguration.dependencies)
+            def apiConfiguration = project.configurations.getByName("api")
+            configuration.dependencies.addAll(apiConfiguration.dependencies)
+        } catch (UnknownDomainObjectException ignore) {
+            // no implementation or api configuration
+        }
+
+        return configuration ? from(configuration.dependencies, usage) : empty()
     }
 
-    static AndroidLibrary from(def configuration, Usage usage) {
-        def runtimeUsage = new RuntimeUsage(configuration.dependencies, usage)
+    static AndroidLibrary from(def dependencies, Usage usage) {
+        def runtimeUsage = new RuntimeUsage(dependencies, usage)
         new AndroidLibrary(runtimeUsage)
     }
 
