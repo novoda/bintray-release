@@ -17,12 +17,13 @@ class TestGeneratePomTask {
     @Before
     void setup() {
         if (pluginClasspath == null) {
-            buildFile = testProjectDir.newFile('build.gradle')
             def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
             if (pluginClasspathResource == null) {
                 throw new IllegalStateException("Did not find plugin classpath resource, run `testClasses` build task.")
             }
             pluginClasspath = pluginClasspathResource.readLines().collect { new File(it) }
+
+            buildFile = testProjectDir.newFile('build.gradle')
         }
     }
 
@@ -56,5 +57,14 @@ class TestGeneratePomTask {
 
         print(testProjectDir)
         assert result.task(":generatePomFileForMavenPublication").outcome == SUCCESS
+
+        File pomFile = new File(testProjectDir.root, '/build/publications/maven/pom-default.xml')
+        def nodes = new XmlSlurper().parse(pomFile)
+        def dependencies = nodes.dependencies.dependency
+
+        assert dependencies.size() == 3
+        assert dependencies.find { dep -> dep.artifactId == "hello" && dep.scope == "compile" } != null
+        assert dependencies.find { dep -> dep.artifactId == "haha" && dep.scope == "compile" } != null
+        assert dependencies.find { dep -> dep.artifactId == "world" && dep.scope == "runtime" } != null
     }
 }
