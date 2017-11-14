@@ -14,69 +14,61 @@ import org.gradle.api.model.ObjectFactory
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
-    private final UsageContext runtimeUsage
+    private final Set<UsageContext> usages
 
-    public static AndroidLibrary newInstance(Project project) {
+    AndroidLibrary(Project project) {
+        this.usages = new DefaultDomainObjectSet<UsageContext>(UsageContext)
 
-        ObjectFactory objectFactory = project.getObjects();
-        Usage usage = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME);
+        ObjectFactory objectFactory = project.getObjects()
+        Usage api = objectFactory.named(Usage.class, Usage.JAVA_API)
+        Usage runtime = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME)
 
-        def configuration = project.configurations.getByName("compile")
-
-        try {
-            def implementationConfiguration = project.configurations.getByName("implementation")
-            configuration.dependencies.addAll(implementationConfiguration.dependencies)
-            def apiConfiguration = project.configurations.getByName("api")
-            configuration.dependencies.addAll(apiConfiguration.dependencies)
-        } catch (UnknownDomainObjectException ignore) {
-            // no implementation or api configuration
-        }
-
-        return configuration ? from(configuration.dependencies, usage) : empty()
+        addUsageContextFromConfiguration(project, "compile", api)
+        addUsageContextFromConfiguration(project, "api", api)
+        addUsageContextFromConfiguration(project, "implementation", runtime)
     }
 
-    static AndroidLibrary from(def dependencies, Usage usage) {
-        def runtimeUsage = new RuntimeUsage(dependencies, usage)
-        new AndroidLibrary(runtimeUsage)
-    }
-
-    static AndroidLibrary empty() {
-        def usage = new RuntimeUsage(new DefaultDomainObjectSet<Dependency>(Dependency))
-        new AndroidLibrary(usage)
-    }
-
-    AndroidLibrary(UsageContext runtimeUsage) {
-        this.runtimeUsage = runtimeUsage
-    }
-
-    public String getName() {
+    String getName() {
         return "android"
     }
 
-    public Set<UsageContext> getUsages() {
-        return Collections.singleton(runtimeUsage);
+    Set<UsageContext> getUsages() {
+        return usages
     }
 
-    private static class RuntimeUsage implements UsageContext {
+    private addUsageContextFromConfiguration(Project project, String configuration, Usage usage) {
+        try {
+            def configurationObj = project.configurations.getByName(configuration)
+            def dependency = configurationObj.dependencies
+            if (!dependency.isEmpty()) {
+                def libraryUsage = new LibraryUsage(dependency, usage)
+                usages.add(libraryUsage)
+            }
+        } catch (UnknownDomainObjectException ignore) {
+            // cannot find configuration
+        }
+    }
 
-        private final DomainObjectSet<Dependency> runtimeDependencies
-        private final Usage usage;
+    private static class LibraryUsage implements UsageContext {
 
-        RuntimeUsage(DomainObjectSet<Dependency> runtimeDependencies, Usage usage) {
-            this.usage = usage;
-            this.runtimeDependencies = runtimeDependencies
+        private final DomainObjectSet<Dependency> dependencies
+        private final Usage usage
+
+        LibraryUsage(DomainObjectSet<Dependency> dependencies, Usage usage) {
+            this.usage = usage
+            this.dependencies = dependencies
         }
 
         Usage getUsage() {
-            return usage;
+            return usage
         }
 
-        public Set<PublishArtifact> getArtifacts() {
+        Set<PublishArtifact> getArtifacts() {
             new LinkedHashSet<PublishArtifact>()
         }
 
-        public Set<ModuleDependency> getDependencies() {
-            runtimeDependencies.withType(ModuleDependency)
+        Set<ModuleDependency> getDependencies() {
+            dependencies.withType(ModuleDependency)
         }
     }
 }

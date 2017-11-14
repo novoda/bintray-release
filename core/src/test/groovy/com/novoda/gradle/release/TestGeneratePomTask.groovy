@@ -133,5 +133,8 @@ class TestGeneratePomTask {
         def dependencies = nodes.dependencies.dependency
 
         assert dependencies.size() == 3
+        assert dependencies.find { dep -> dep.artifactId == "hello" && dep.scope == "compile" } != null
+        assert dependencies.find { dep -> dep.artifactId == "haha" && dep.scope == "compile" } != null
+        assert dependencies.find { dep -> dep.artifactId == "world" && dep.scope == "runtime" } != null
     }
 }
