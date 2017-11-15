@@ -11,6 +11,7 @@ import org.gradle.api.internal.DefaultDomainObjectSet
 import org.gradle.api.internal.component.SoftwareComponentInternal
 import org.gradle.api.internal.component.UsageContext
 import org.gradle.api.model.ObjectFactory
+import org.gradle.util.GradleVersion
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
@@ -22,8 +23,10 @@ class AndroidLibrary implements SoftwareComponentInternal {
 
     AndroidLibrary(Project project) {
         ObjectFactory objectFactory = project.getObjects()
-        Usage api = objectFactory.named(Usage.class, Usage.JAVA_API)
-        Usage runtime = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME)
+
+        def newVersion = GradleVersion.current() > GradleVersion.version("4.1")
+        Usage api = objectFactory.named(Usage.class, newVersion ? Usage.JAVA_API : "for compile")
+        Usage runtime = objectFactory.named(Usage.class, newVersion ? Usage.JAVA_RUNTIME : "for runtime")
 
         addUsageContextFromConfiguration(project, CONF_COMPILE, api)
         addUsageContextFromConfiguration(project, CONF_API, api)
