@@ -14,18 +14,20 @@ import org.gradle.api.model.ObjectFactory
 
 class AndroidLibrary implements SoftwareComponentInternal {
 
-    private final Set<UsageContext> usages
+    private final String CONF_COMPILE = "compile"
+    private final String CONF_API = "api"
+    private final String CONF_IMPLEMENTATION = "implementation"
+
+    private final Set<UsageContext> usages = new DefaultDomainObjectSet<UsageContext>(UsageContext)
 
     AndroidLibrary(Project project) {
-        this.usages = new DefaultDomainObjectSet<UsageContext>(UsageContext)
-
         ObjectFactory objectFactory = project.getObjects()
         Usage api = objectFactory.named(Usage.class, Usage.JAVA_API)
         Usage runtime = objectFactory.named(Usage.class, Usage.JAVA_RUNTIME)
 
-        addUsageContextFromConfiguration(project, "compile", api)
-        addUsageContextFromConfiguration(project, "api", api)
-        addUsageContextFromConfiguration(project, "implementation", runtime)
+        addUsageContextFromConfiguration(project, CONF_COMPILE, api)
+        addUsageContextFromConfiguration(project, CONF_API, api)
+        addUsageContextFromConfiguration(project, CONF_IMPLEMENTATION, runtime)
     }
 
     String getName() {
