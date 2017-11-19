@@ -1,5 +1,6 @@
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 
 buildscript {
@@ -18,19 +19,6 @@ repositories {
     jcenter()
 }
 
-// Write the plugin's classpath to a file to share with the tests
-task createClasspathManifest {
-    def outputDir = file("$buildDir/$name")
-
-    inputs.files sourceSets.main.runtimeClasspath
-    outputs.dir outputDir
-
-    doLast {
-        outputDir.mkdirs()
-        file("$outputDir/plugin-classpath.txt").text = sourceSets.main.runtimeClasspath.join("\n")
-    }
-}
-
 dependencies {
     compile gradleApi()
     compile localGroovy()
@@ -38,7 +26,6 @@ dependencies {
 
     testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
-    testRuntime files(createClasspathManifest)
 }
 
 compileGroovy {

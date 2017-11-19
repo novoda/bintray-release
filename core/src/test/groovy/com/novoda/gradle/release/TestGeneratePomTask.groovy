@@ -11,36 +11,20 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class TestGeneratePomTask {
 
     @Rule public TemporaryFolder testProjectDir = new TemporaryFolder()
-    private String pluginClasspath
     private File buildFile
 
     @Before
     void setup() {
-        if (pluginClasspath == null) {
-            def pluginClasspathResource = getClass().classLoader.findResource("plugin-classpath.txt")
-            if (pluginClasspathResource == null) {
-                throw new IllegalStateException("Did not find plugin classpath resource, run `testClasses` build task.")
-            }
-            def classpath = pluginClasspathResource.readLines().collect { new File(it) }
-            pluginClasspath = classpath
-                .collect { it.absolutePath.replace('\\', '\\\\') } // escape backslashes in Windows paths
-                .collect { "'$it'" }
-                .join(", ")
-        }
         buildFile = testProjectDir.newFile('build.gradle')
     }
 
     @Test
     void testGeneratePomTaskForJavaLib() {
-        buildFile << """
-            buildscript {
-                dependencies {
-                    classpath files($pluginClasspath)
-                }
+        buildFile << """            
+            plugins {
+                id 'java-library'
+                id 'bintray-release'
             }
-            
-            apply plugin: "java-library"
-            apply plugin: "bintray-release"
             
             publish {
                 userOrg = 'novoda'
@@ -59,6 +43,7 @@ class TestGeneratePomTask {
         def result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("generatePomFileForMavenPublication")
+            .withPluginClasspath()
             .build()
 
         assert result.task(":generatePomFileForMavenPublication").outcome == SUCCESS
@@ -89,10 +74,14 @@ class TestGeneratePomTask {
                     google()
                 }
                 dependencies {
-                    classpath files($pluginClasspath)
                     classpath 'com.android.tools.build:gradle:3.0.0'
                 }
             }
+            
+            plugins {
+                id 'bintray-release' apply false
+            }
+            
             apply plugin: "com.android.library"
             apply plugin: "bintray-release"
             
@@ -124,6 +113,7 @@ class TestGeneratePomTask {
         def result = GradleRunner.create()
             .withProjectDir(testProjectDir.root)
             .withArguments("generatePomFileForReleasePublication")
+            .withPluginClasspath()
             .build()
 
         assert result.task(":generatePomFileForReleasePublication").outcome == SUCCESS
