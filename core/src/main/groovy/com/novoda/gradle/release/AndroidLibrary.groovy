@@ -24,9 +24,13 @@ class AndroidLibrary implements SoftwareComponentInternal {
     AndroidLibrary(Project project) {
         ObjectFactory objectFactory = project.getObjects()
 
-        def newVersion = GradleVersion.current() > GradleVersion.version("4.1")
-        Usage api = objectFactory.named(Usage.class, newVersion ? Usage.JAVA_API : "for compile")
-        Usage runtime = objectFactory.named(Usage.class, newVersion ? Usage.JAVA_RUNTIME : "for runtime")
+        // Using the new Usage in 4.1 will make the plugin crash
+        // as comparing logic is still using the old Usage.
+        // 4.1 : https://git.io/vFAnQ
+        // 4.2 : https://git.io/vFAnd
+        def isNewerThan4_1 = GradleVersion.current() > GradleVersion.version("4.1")
+        Usage api = objectFactory.named(Usage.class, isNewerThan4_1 ? Usage.JAVA_API : "for compile")
+        Usage runtime = objectFactory.named(Usage.class, isNewerThan4_1 ? Usage.JAVA_RUNTIME : "for runtime")
 
         addUsageContextFromConfiguration(project, CONF_COMPILE, api)
         addUsageContextFromConfiguration(project, CONF_API, api)
