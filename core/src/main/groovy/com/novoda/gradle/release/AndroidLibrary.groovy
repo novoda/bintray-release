@@ -26,8 +26,7 @@ class AndroidLibrary implements SoftwareComponentInternal {
 
         // Using the new Usage in 4.1 will make the plugin crash
         // as comparing logic is still using the old Usage.
-        // 4.1 : https://git.io/vFAnQ
-        // 4.2 : https://git.io/vFAnd
+        // For more details: https://github.com/novoda/bintray-release/pull/147
         def isNewerThan4_1 = GradleVersion.current() > GradleVersion.version("4.1")
         Usage api = objectFactory.named(Usage.class, isNewerThan4_1 ? Usage.JAVA_API : "for compile")
         Usage runtime = objectFactory.named(Usage.class, isNewerThan4_1 ? Usage.JAVA_RUNTIME : "for runtime")
