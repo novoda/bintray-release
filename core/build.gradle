@@ -1,5 +1,6 @@
 apply plugin: 'com.novoda.bintray-release'
 apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 
 buildscript {
@@ -17,7 +18,6 @@ repositories {
     google()
     jcenter()
 }
-
 
 dependencies {
     compile gradleApi()

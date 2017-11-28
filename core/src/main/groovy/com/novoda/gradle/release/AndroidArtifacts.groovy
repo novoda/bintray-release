@@ -46,7 +46,7 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def from(Project project) {
-        project.components.add(AndroidLibrary.newInstance(project))
+        project.components.add(new AndroidLibrary(project))
         project.components.android
     }
 
