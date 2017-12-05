@@ -8,13 +8,38 @@ compileGroovy {
     targetCompatibility = '1.6'
 }
 
+configurations {
+    // configuration that holds jars to include in the jar
+    // but not their transitive dependencies
+    extraLibs
+}
+
+// extraLibs behaves like compileOnly
+configurations.compileOnly.extendsFrom(configurations.extraLibs)
+
 dependencies {
+    extraLibs project(':artifacts')
     compile gradleApi()
     compile localGroovy()
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
     testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
+}
+
+jar {
+    from {
+        def collect = configurations.extraLibs.collect {
+            // Include only our artifacts classes
+            if (it.toString().contains("bintray-release/artifacts")) {
+                return zipTree(it)
+            }
+            return ""
+        }
+        // Remove all empty strings
+        collect.removeAll("")
+        return collect
+    }
 }
 
 publish {
