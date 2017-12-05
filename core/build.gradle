@@ -3,20 +3,9 @@ apply plugin: 'groovy'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 
-buildscript {
-    repositories {
-        jcenter()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
-        classpath 'com.novoda:bintray-release:0.6.0'
-    }
-}
-
-repositories {
-    google()
-    jcenter()
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
 }
 
 dependencies {
@@ -26,11 +15,6 @@ dependencies {
 
     testCompile gradleTestKit()
     testCompile 'junit:junit:4.12'
-}
-
-compileGroovy {
-    sourceCompatibility = '1.6'
-    targetCompatibility = '1.6'
 }
 
 publish {
