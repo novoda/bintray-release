@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.novoda.gradle.release.artifacts.PublishExtension
 import org.gradle.api.Project
 
 class BintrayConfiguration {

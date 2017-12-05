@@ -1,6 +1,10 @@
 package com.novoda.gradle.release
 
 import com.jfrog.bintray.gradle.BintrayPlugin
+import com.novoda.gradle.release.artifacts.AndroidArtifacts
+import com.novoda.gradle.release.artifacts.Artifacts
+import com.novoda.gradle.release.artifacts.JavaArtifacts
+import com.novoda.gradle.release.artifacts.PublishExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.publish.maven.MavenPublication
