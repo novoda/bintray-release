@@ -19,7 +19,7 @@ public class TestBintrayUploadTask {
             successfulTaskPaths.add(task.path)
         }
 
-        assert successfulTaskPaths.contains(":bintrayUpload")
+        assert successfulTaskPaths.contains(":core:bintrayUpload")
         assert result.getOutput().contains("BUILD SUCCESSFUL")
     }
 
@@ -40,6 +40,6 @@ public class TestBintrayUploadTask {
      */
     private File getAbsoluteDirectoryOfOurProjectBase() {
         def fileDir = getClass().protectionDomain.codeSource.location.path
-        return new File(fileDir + "../../../..")
+        return new File(fileDir + "../../../../..")
     }
 }
