@@ -17,6 +17,12 @@ configurations {
 // extraLibs behaves like compileOnly
 configurations.compileOnly.extendsFrom(configurations.extraLibs)
 
+sourceSets {
+    main {
+        runtimeClasspath += project(':artifacts').sourceSets.main.runtimeClasspath
+    }
+}
+
 dependencies {
     extraLibs project(':artifacts')
     compile gradleApi()
