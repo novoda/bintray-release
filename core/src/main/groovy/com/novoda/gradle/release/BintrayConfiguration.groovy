@@ -21,6 +21,7 @@ class BintrayConfiguration {
             key = propertyFinder.getBintrayKey()
             publish = extension.autoPublish
             dryRun = propertyFinder.getDryRun()
+            override = propertyFinder.getOverride()
 
             publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : [ 'maven' ]
 

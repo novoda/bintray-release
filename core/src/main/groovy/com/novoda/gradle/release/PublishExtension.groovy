@@ -38,6 +38,7 @@ class PublishExtension {
     String bintrayUser = ''
     String bintrayKey = ''
     boolean dryRun = true
+    boolean override = false
 
     String[] publications
 
