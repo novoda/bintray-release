@@ -3,23 +3,28 @@ apply plugin: 'groovy'
 apply plugin: 'java-gradle-plugin'
 apply plugin: 'maven'
 
-buildscript {
-    repositories {
-        jcenter()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.0'
-        classpath 'com.novoda:bintray-release:0.6.0'
-    }
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
 }
 
-repositories {
-    google()
-    jcenter()
+configurations {
+    // configuration that holds jars to include in the jar
+    // but not their transitive dependencies
+    extraLibs
+}
+
+// extraLibs behaves like compileOnly
+configurations.compileOnly.extendsFrom(configurations.extraLibs)
+
+sourceSets {
+    main {
+        runtimeClasspath += project(':artifacts').sourceSets.main.runtimeClasspath
+    }
 }
 
 dependencies {
+    extraLibs project(':artifacts')
     compile gradleApi()
     compile localGroovy()
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
@@ -28,9 +33,19 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-compileGroovy {
-    sourceCompatibility = '1.6'
-    targetCompatibility = '1.6'
+jar {
+    from {
+        def collect = configurations.extraLibs.collect {
+            // Include only our artifacts classes
+            if (it.toString().contains("bintray-release/artifacts")) {
+                return zipTree(it)
+            }
+            return ""
+        }
+        // Remove all empty strings
+        collect.removeAll("")
+        return collect
+    }
 }
 
 publish {
