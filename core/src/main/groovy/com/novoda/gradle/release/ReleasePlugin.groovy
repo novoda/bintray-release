@@ -42,7 +42,7 @@ class ReleasePlugin implements Plugin<Project> {
                         """.stripMargin());
                 return;
             }
-            project.android.libraryVariants.each { variant ->
+            project.android.libraryVariants.all { variant ->
                 def artifactId = extension.artifactId;
                 addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
             }
