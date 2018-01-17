@@ -24,6 +24,10 @@ class PropertyFinder {
         getBoolean(project, 'dryRun', extension.dryRun)
     }
 
+    def getOverride() {
+        getBoolean(project, 'override', extension.override)
+    }
+
     def getPublishVersion() {
         getString(project, 'publishVersion', extension.publishVersion ?: extension.version)
     }
