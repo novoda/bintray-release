@@ -1,15 +1,8 @@
-apply plugin: 'com.novoda.bintray-release'
-apply plugin: 'groovy'
-apply plugin: 'java-gradle-plugin'
-apply plugin: 'maven'
-
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.6.0'
-    }
+plugins {
+    id 'com.novoda.bintray-release' version "0.6.0"
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'maven'
 }
 
 repositories {
