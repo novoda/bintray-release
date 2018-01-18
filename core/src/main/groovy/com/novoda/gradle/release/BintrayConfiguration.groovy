@@ -17,11 +17,11 @@ class BintrayConfiguration {
         PropertyFinder propertyFinder = new PropertyFinder(project, extension)
 
         project.bintray {
-            user = propertyFinder.getBintrayUser()
-            key = propertyFinder.getBintrayKey()
+            user = propertyFinder.bintrayUser
+            key = propertyFinder.bintrayKey
             publish = extension.autoPublish
-            dryRun = propertyFinder.getDryRun()
-            override = propertyFinder.getOverride()
+            dryRun = propertyFinder.dryRun
+            override = propertyFinder.override
 
             publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : [ 'maven' ]
 
@@ -36,7 +36,7 @@ class BintrayConfiguration {
 
                 licenses = extension.licences
                 version {
-                    name = propertyFinder.getPublishVersion()
+                    name = propertyFinder.publishVersion
                     attributes = extension.versionAttributes
                 }
             }
