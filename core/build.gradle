@@ -1,5 +1,5 @@
 plugins {
-    id 'com.novoda.bintray-release' version "0.6.0"
+    id 'com.novoda.bintray-release' version "0.8.0"
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven'
