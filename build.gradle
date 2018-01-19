@@ -1,9 +1,0 @@
-
-
-allprojects {
-    repositories {
-        google()
-        jcenter()
-    }
-    version = "0.8.0"
-}

@@ -28,6 +28,7 @@ public class TestBintrayUploadTask {
 
         GradleRunner runner = GradleRunner.create()
                 .withProjectDir(file)
+                .withPluginClasspath()
 
         if (arguments) {
             runner.withArguments(arguments)
