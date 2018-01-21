@@ -1,4 +1,4 @@
-apply plugin: "java-library"
+apply plugin: 'java-library'
 apply plugin: com.novoda.gradle.release.ReleasePlugin
 
 publish {
