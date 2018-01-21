@@ -1,0 +1,21 @@
+plugins {
+    id("groovy")
+}
+
+repositories {
+    jcenter()
+}
+
+// We have to make sure that we are using the same dependencies as in our 'core' project
+dependencies {
+    compile gradleApi()
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+}
+
+sourceSets {
+    main {
+        groovy {
+            srcDir '../../core/src/main/groovy'
+        }
+    }
+}
