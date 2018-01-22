@@ -1,0 +1,2 @@
+include ':jvm'
+rootProject.name = 'bintray-release-samples'
