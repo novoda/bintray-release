@@ -6,6 +6,6 @@ publish {
     groupId = 'com.novoda'
     artifactId = 'bintray-release.jvm.sample'
     publishVersion = '0.0.1'
-    desc = 'Just a simple java lib sample'
+    thisIsNotAvailable = 'Just a simple java lib sample'
     website = 'https://github.com/novoda/bintray-release'
 }
