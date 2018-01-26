@@ -8,6 +8,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 This is a helper for releasing libraries to bintray. It is intended to help configuring stuff related to maven and bintray.
 At the moment it works with Android Library projects, plain Java and plain Groovy projects, but our focus is to mainly support Android projects.
 
+> **Note:** At least **Gradle 4.0** is required!
 
 ## Adding to project
 
