@@ -1,6 +1,10 @@
 apply plugin: 'java-library'
 apply plugin: com.novoda.gradle.release.ReleasePlugin
 
+dependencies {
+    implementation "junit:junit:4.12"
+}
+
 publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
