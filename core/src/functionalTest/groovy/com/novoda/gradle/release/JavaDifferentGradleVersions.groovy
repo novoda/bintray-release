@@ -27,7 +27,7 @@ class JavaDifferentGradleVersions {
         buildFile.write(
                 """            
             plugins { 
-                id 'java'
+                id 'java-library'
                 id 'com.novoda.bintray-release' version '0.8.0' 
             }
             
