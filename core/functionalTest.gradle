@@ -1,0 +1,21 @@
+// Stolen from
+// https://github.com/gradle-guides/testing-gradle-plugins/blob/master/samples/code/url-verifier-plugin/gradle/functional-test.gradle
+
+sourceSets {
+    functionalTest {
+        groovy.srcDir file('src/functionalTest/groovy')
+        resources.srcDir file('src/functionalTest/resources')
+        compileClasspath += sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+task functionalTest(type: Test) {
+    description = 'Runs the functional tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.functionalTest.output.classesDirs
+    classpath = sourceSets.functionalTest.runtimeClasspath
+    mustRunAfter test
+}
+
+check.dependsOn functionalTest

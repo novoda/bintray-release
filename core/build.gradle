@@ -4,6 +4,7 @@ plugins {
     id 'java-gradle-plugin'
     id 'maven'
 }
+apply from: "functionalTest.gradle"
 
 repositories {
     jcenter()
@@ -14,6 +15,7 @@ dependencies {
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.9.0'
 }
 
 compileGroovy {
