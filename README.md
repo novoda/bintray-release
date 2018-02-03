@@ -8,8 +8,6 @@ Super duper easy way to release your Android and other artifacts to bintray.
 This is a helper for releasing libraries to bintray. It is intended to help configuring stuff related to maven and bintray.
 At the moment it works with Android Library projects, plain Java and plain Groovy projects, but our focus is to mainly support Android projects.
 
-> **Note:** At least **Gradle 4.0** is required!
-
 ## Adding to project
 
 To publish a library to bintray using this plugin, add these dependencies to the `build.gradle` of the module that will be published:
@@ -65,6 +63,10 @@ $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKe
 
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/bintray-release/wiki).
 
+## Gradle compatibility
+| bintray-release version | Required Gradle version for | Notes                                        |
+|-------------------------|-----------------------------|----------------------------------------------|
+| 0.8.0                   | Java: 4.0 <br> Android: 4.1 | Gradle 4.5 doesn't work with Android libraries |
 
 ## Links
 
