@@ -1,10 +1,12 @@
 package com.novoda.gradle.release
 
+import com.novoda.gradle.release.rule.TestProjectRule
 import org.assertj.core.api.Assertions
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.*
-import org.junit.rules.TemporaryFolder
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
@@ -12,51 +14,16 @@ import org.junit.runners.JUnit4
 class JavaDifferentGradleVersions {
 
     @Rule
-    public TemporaryFolder temporaryFolder = new TemporaryFolder()
+    public TestProjectRule projectRule = new TestProjectRule(TestProjectRule.Project.JAVA)
 
     private GradleRunner runner
 
     @Before
     void setUp() throws Exception {
         runner = GradleRunner.create()
-                .withProjectDir(temporaryFolder.root)
+                .withProjectDir(projectRule.projectDir)
                 .withArguments("build", "bintrayUpload", "-PbintrayKey=key", "-PbintrayUser=user")
                 .withPluginClasspath()
-
-        def buildFile = temporaryFolder.newFile("build.gradle")
-        buildFile.write(
-                """            
-            plugins { 
-                id 'java-library'
-                id 'com.novoda.bintray-release' version '0.8.0' 
-            }
-            
-            repositories {
-                jcenter()
-            }
-            
-            dependencies {
-                implementation "junit:junit:4.12"
-            }
-            
-            publish {
-                userOrg = 'novoda'
-                groupId = 'com.novoda'
-                artifactId = 'test'
-                publishVersion = '1.0'
-            }
-                    """
-        )
-
-        def fakeSourceCode = new File(temporaryFolder.root, "src/main/java/HelloWorld.java")
-        fakeSourceCode.getParentFile().mkdirs()
-        fakeSourceCode.createNewFile()
-        fakeSourceCode.write(" public class HelloWorld {} ")
-    }
-
-    @After
-    void tearDown() throws Exception {
-        temporaryFolder.delete()
     }
 
     @Test
