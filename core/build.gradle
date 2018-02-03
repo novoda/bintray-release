@@ -4,7 +4,6 @@ plugins {
     id 'java-gradle-plugin'
     id 'maven'
 }
-apply from: "functionalTest.gradle"
 
 repositories {
     jcenter()
