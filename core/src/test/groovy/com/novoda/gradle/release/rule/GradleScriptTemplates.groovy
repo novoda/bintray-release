@@ -60,7 +60,7 @@ class GradleScriptTemplates {
                 }    
                 
                 lintOptions {
-                   abortOnError false
+                   tasks.lint.enabled = false
                 }
             }
             
