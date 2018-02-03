@@ -1,73 +1,51 @@
 package com.novoda.gradle.release
 
 import com.novoda.gradle.release.rule.TestProjectRule
-import org.assertj.core.api.Assertions
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
-import org.junit.Before
-import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.junit.runners.Parameterized
 
-@RunWith(JUnit4.class)
+import static org.assertj.core.api.Assertions.assertThat
+
+@RunWith(Parameterized.class)
 class AndroidDifferentGradleVersions {
 
     @Rule
     public TestProjectRule projectRule = new TestProjectRule(TestProjectRule.Project.ANDROID)
 
-    private GradleRunner runner
+    @Parameterized.Parameters(name = "{index}: test Gradle version {0}")
+    static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {
+        return [
+                new GradleVerionsParams("4.0", true),
+                new GradleVerionsParams("4.1", TaskOutcome.SUCCESS),
+                new GradleVerionsParams("4.2", TaskOutcome.SUCCESS),
+                new GradleVerionsParams("4.3", TaskOutcome.SUCCESS),
+                new GradleVerionsParams("4.4", TaskOutcome.SUCCESS),
+                new GradleVerionsParams("4.5", true),
+        ]
+    }
 
-    @Before
-    void setUp() throws Exception {
-        runner = GradleRunner.create()
+    private GradleVerionsParams testParams
+
+    AndroidDifferentGradleVersions(GradleVerionsParams testParams) {
+        this.testParams = testParams
+    }
+
+    @Test
+    void testDifferentGradleVersionsAndOutcome() {
+        def runner = GradleRunner.create()
                 .withProjectDir(projectRule.projectDir)
                 .withArguments("build", "bintrayUpload", "-PbintrayKey=key", "-PbintrayUser=user")
                 .withPluginClasspath()
+                .withGradleVersion(testParams.gradleVersion)
+        if (testParams.expectedGradleBuildFailure) {
+            runner.buildAndFail()
+        } else {
+            assertThat(runner.build().task(":bintrayUpload").outcome).isEqualTo(testParams.expectedTaskOutcome)
+        }
     }
 
-    /**
-     * Android don't support only gradle 4.1 and up with plugin 3.0
-     */
-    @Test
-    void test_withGradle40_shouldFail() {
-        runner.withGradleVersion("4.0").buildAndFail()
-    }
-
-    @Test
-    void test_withGradle41_shouldSucceed() {
-        def result = runner.withGradleVersion("4.1").build()
-
-        Assertions.assertThat(result.task(":bintrayUpload").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
-
-    @Test
-    void test_withGradle42_shouldSucceed() {
-        def result = runner.withGradleVersion("4.2").build()
-
-        Assertions.assertThat(result.task(":bintrayUpload").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
-
-    @Test
-    void test_withGradle43_shouldSucceed() {
-        def result = runner.withGradleVersion("4.3").build()
-
-        Assertions.assertThat(result.task(":bintrayUpload").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
-
-    @Test
-    void test_withGradle44_shouldSucceed() {
-        def result = runner.withGradleVersion("4.4").build()
-
-        Assertions.assertThat(result.task(":bintrayUpload").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
-
-    @Test
-    @Ignore("Plugin is currently broken with 4.5. UsageContext have changed...")
-    void test_withGradle45_shouldSucceed() {
-        def result = runner.withGradleVersion("4.5").build()
-
-        Assertions.assertThat(result.task(":bintrayUpload").outcome).isEqualTo(TaskOutcome.SUCCESS)
-    }
 }
