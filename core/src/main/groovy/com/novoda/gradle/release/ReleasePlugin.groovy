@@ -8,6 +8,7 @@ import org.gradle.util.GradleVersion
 
 class ReleasePlugin implements Plugin<Project> {
 
+    @Override
     void apply(Project project) {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
         project.afterEvaluate {
