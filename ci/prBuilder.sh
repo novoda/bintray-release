@@ -10,8 +10,8 @@ function exitIfCommandFailed {
 
 # Testing the core plugin
 cd $BASEDIR/../ && ./gradlew clean build bintrayUpload -PdryRun=true --info
-exitIfCommandfailed $?
+exitIfCommandFailed $?
 
 # Testing the samples
 cd $BASEDIR/../samples/ && ./gradlew clean build bintrayUpload -PdryRun=true --info
-exitIfCommandfailed $?
+exitIfCommandFailed $?
