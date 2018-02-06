@@ -14,6 +14,7 @@ dependencies {
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 
     testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.9.0'
 }
 
 compileGroovy {
@@ -38,7 +39,7 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = rootProject.name
-    version = '0.8.0'
-    description = 'Super duper easy way to release your Android and other artifacts to bintray'
+    publishVersion = '0.8.0'
+    desc = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/novoda/${rootProject.name}"
 }
