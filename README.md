@@ -68,7 +68,7 @@ More info on the available properties and other usages in the [Github Wiki](http
 |-------------------------|---------------|------------------|
 | 0.8.0                   | Gradle 4.0+   | Gradle 4.1+      |
 
-> **Notes: ** Currently Gradle 4.5 doesn't work with Android projects
+**Notes:** Currently Gradle 4.5 doesn't work with Android projects
 
 ## Links
 
