@@ -25,7 +25,6 @@ class GradleScriptTemplates {
                 groupId = 'com.novoda'
                 artifactId = 'test'
                 publishVersion = '1.0'
-                desc = 'description'
             }
                """
     }
