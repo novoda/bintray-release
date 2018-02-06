@@ -38,7 +38,7 @@ class AndroidDifferentGradleVersions {
     }
 
     @Test
-    void testDifferentGradleVersionsAndOutcome() {
+    void givenGradleVersion_WhenProjectBuild_ShouldHaveExpectedOutcome() {
         def runner = GradleRunner.create()
                 .withProjectDir(projectRule.projectDir)
                 .withArguments("build", "bintrayUpload", "-PbintrayKey=key", "-PbintrayUser=user")
