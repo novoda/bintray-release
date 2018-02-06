@@ -64,9 +64,11 @@ $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKe
 More info on the available properties and other usages in the [Github Wiki](https://github.com/novoda/bintray-release/wiki).
 
 ## Gradle compatibility
-| bintray-release version | Required Gradle version for | Notes                                        |
-|-------------------------|-----------------------------|----------------------------------------------|
-| 0.8.0                   | Java: 4.0 <br> Android: 4.1 | Gradle 4.5 doesn't work with Android libraries |
+| bintray-release version | Java Projects | Android Projects |
+|-------------------------|---------------|------------------|
+| 0.8.0                   | Gradle 4.0+   | Gradle 4.1+      |
+
+> **Notes: ** Currently Gradle 4.5 doesn't work with Android projects
 
 ## Links
 
