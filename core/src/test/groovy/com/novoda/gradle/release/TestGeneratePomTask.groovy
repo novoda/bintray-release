@@ -31,7 +31,6 @@ class TestGeneratePomTask {
                 groupId = 'com.novoda'
                 artifactId = 'test'
                 publishVersion = '1.0'
-                desc = 'description'
             }
         
             dependencies {
@@ -102,7 +101,6 @@ class TestGeneratePomTask {
                 groupId = 'com.novoda'
                 artifactId = 'test'
                 publishVersion = '1.0'
-                desc = 'description'
             }
         
             dependencies {
