@@ -20,14 +20,14 @@ class AndroidDifferentGradleVersions {
     static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {
         return [
                 // Gradle 4.0 is not support by the Android Gradle Plugin 3.x
-                new GradleVerionsParams("4.0", true),
-                new GradleVerionsParams("4.1", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.2", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.3", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.4", TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.0", expectedGradleBuildFailure: true),
+                new GradleVerionsParams(gradleVersion: "4.1", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.2", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.3", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.4", expectedTaskOutcome: TaskOutcome.SUCCESS),
                 // TODO: Failure on Gradle 4.5. is **not** expected. It's failing because of changes in
                 // the UsageContext in our AndroidLibrary class
-                new GradleVerionsParams("4.5", true),
+                new GradleVerionsParams(gradleVersion: "4.5", expectedGradleBuildFailure: true),
         ]
     }
 

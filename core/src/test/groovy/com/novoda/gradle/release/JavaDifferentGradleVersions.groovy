@@ -19,12 +19,12 @@ class JavaDifferentGradleVersions {
     @Parameterized.Parameters(name = "{index}: test Gradle version {0}")
     static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {
         return [
-                new GradleVerionsParams("4.0", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.1", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.2", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.3", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.4", TaskOutcome.SUCCESS),
-                new GradleVerionsParams("4.5", TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.0", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.1", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.2", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.3", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.4", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.5", expectedTaskOutcome: TaskOutcome.SUCCESS),
         ]
     }
 
