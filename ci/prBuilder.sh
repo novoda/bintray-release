@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 BASEDIR=$(dirname "$0")
 
 # Testing the core plugin
