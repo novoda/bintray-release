@@ -29,7 +29,7 @@ class BintrayConfiguration {
                 repo = extension.repoName
                 userOrg = extension.userOrg
                 name = extension.uploadName
-                desc = extension.desc ?: extension.description
+                desc = extension.desc
                 websiteUrl = extension.website
                 issueTrackerUrl = extension.issueTracker
                 vcsUrl = extension.repository
