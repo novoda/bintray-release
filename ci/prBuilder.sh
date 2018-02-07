@@ -1,17 +1,11 @@
 #!/bin/sh
 
-BASEDIR=$(dirname "$0")
+set -e
 
-function exitIfCommandFailed {
-    if [ $1 -ne 0 ]
-        then exit $1
-    fi
-}
+BASEDIR=$(dirname "$0")
 
 # Testing the core plugin
 cd $BASEDIR/../ && ./gradlew clean build bintrayUpload -PdryRun=true --info
-exitIfCommandFailed $?
 
 # Testing the samples
 cd $BASEDIR/../samples/ && ./gradlew clean build bintrayUpload -PdryRun=true --info
-exitIfCommandFailed $?
