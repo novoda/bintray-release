@@ -67,7 +67,7 @@ class ReleasePlugin implements Plugin<Project> {
             artifacts.all(it.name, project).each {
                 delegate.artifact it
             }
-            publication.from = artifacts.from(project)
+            publication.from(artifacts.from(project))
         }
     }
 }

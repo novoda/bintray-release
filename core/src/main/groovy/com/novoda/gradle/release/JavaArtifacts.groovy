@@ -1,6 +1,7 @@
 package com.novoda.gradle.release
 
 import org.gradle.api.Project
+import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.tasks.bundling.Jar
 
 class JavaArtifacts implements Artifacts {
@@ -25,7 +26,7 @@ class JavaArtifacts implements Artifacts {
     }
 
     @Override
-    def from(Project project) {
+    SoftwareComponent from(Project project) {
         project.components.java
     }
 
