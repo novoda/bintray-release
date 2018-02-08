@@ -12,14 +12,14 @@ class JavaArtifacts implements Artifacts {
 
     def sourcesJar(String publicationName, Project project) {
         project.task(publicationName + 'SourcesJar', type: Jar) {
-            classifier = 'sources'
+            (it as Jar).classifier = 'sources'
             from project.sourceSets.main.allSource
         }
     }
 
     def javadocJar(String publicationName, Project project) {
         project.task(publicationName + 'JavadocJar', type: Jar) {
-            classifier = 'javadoc'
+            (it as Jar).classifier = 'javadoc'
             from project.javadoc.destinationDir
         }
     }
