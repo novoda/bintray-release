@@ -2,6 +2,17 @@ package com.novoda.gradle.release
 
 import groovy.transform.PackageScope
 
+/**
+ * A gradle extension which will be used to configure the plugin.
+ *
+ * Most of the properties will be used to setup the `bintray-Extension` in BintrayConfiguration.
+ * See also: https://github.com/bintray/gradle-bintray-plugin#plugin-dsl
+ *
+ * Some properties are mandatory and have to be validated before any action on it happen.
+ * The other ones are all optional or provide a default value.
+ *
+ * Optional doesn't mean they aren't needed but that they will handled correctly by the plugin!
+ */
 class PublishExtension {
 
     String repoName = 'maven'
