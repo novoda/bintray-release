@@ -5,6 +5,7 @@ import org.gradle.api.tasks.bundling.Jar
 
 class JavaArtifacts implements Artifacts {
 
+    @Override
     def all(String publicationName, Project project) {
         [sourcesJar(publicationName, project), javadocJar(publicationName, project)]
     }
@@ -23,6 +24,7 @@ class JavaArtifacts implements Artifacts {
         }
     }
 
+    @Override
     def from(Project project) {
         project.components.java
     }

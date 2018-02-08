@@ -15,6 +15,7 @@ class AndroidArtifacts implements Artifacts {
         this.variant = variant
     }
 
+    @Override
     def all(String publicationName, Project project) {
         [sourcesJar(project), javadocJar(project), mainJar(project)]
     }
@@ -54,6 +55,7 @@ class AndroidArtifacts implements Artifacts {
         "$project.buildDir/outputs/aar/${project.name}-${variant.baseName}.aar"
     }
 
+    @Override
     def from(Project project) {
         project.components.add(new AndroidLibrary(project))
         project.components.android
