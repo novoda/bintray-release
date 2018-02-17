@@ -23,8 +23,8 @@ class AndroidArtifacts implements Artifacts {
 
     def sourcesJar(Project project) {
         String taskName = variant.name + 'AndroidSourcesJar'
-        project.task(taskName, type: Jar) {
-            (it as Jar).classifier = 'sources'
+        project.tasks.create(taskName, Jar) {
+            it.classifier = 'sources'
             variant.sourceSets.each {
                 from it.java.srcDirs
             }
@@ -33,19 +33,19 @@ class AndroidArtifacts implements Artifacts {
 
     def javadocJar(Project project) {
         String taskName = variant.name + 'AndroidJavadocs'
-        Task androidJavadocs = project.task(taskName, type: Javadoc) {
+        Task androidJavadocs = project.tasks.create(taskName, Javadoc) {
             variant.sourceSets.each {
                 delegate.source it.java.srcDirs
             }
-            def javadoc = it as Javadoc
-            javadoc.classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
-            javadoc.classpath += variant.javaCompile.classpath
-            javadoc.classpath += variant.javaCompile.outputs.files
+            it.classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+            it.classpath += variant.javaCompile.classpath
+            it.classpath += variant.javaCompile.outputs.files
         }
 
         String taskNameJar = variant.name + 'AndroidJavadocsJar'
-        project.task(taskNameJar, type: Jar, dependsOn: androidJavadocs) {
-            (it as Jar).classifier = 'javadoc'
+        project.tasks.create(taskNameJar, Jar) {
+            it.dependsOn(androidJavadocs)
+            it.classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
     }
