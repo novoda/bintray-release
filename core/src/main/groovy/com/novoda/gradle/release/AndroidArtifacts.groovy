@@ -1,24 +1,28 @@
 package com.novoda.gradle.release
 
+import com.android.build.gradle.api.LibraryVariant
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidArtifacts implements Artifacts {
 
-    def variant
+    private LibraryVariant variant
 
-    AndroidArtifacts(variant) {
+    AndroidArtifacts(LibraryVariant variant) {
         this.variant = variant
     }
 
+    @Override
     def all(String publicationName, Project project) {
         [sourcesJar(project), javadocJar(project), mainJar(project)]
     }
 
     def sourcesJar(Project project) {
-        project.task(variant.name + 'AndroidSourcesJar', type: Jar) {
-            classifier = 'sources'
+        project.tasks.create("${variant.name}AndroidSourcesJar", Jar) {
+            it.classifier = 'sources'
             variant.sourceSets.each {
                 from it.java.srcDirs
             }
@@ -26,17 +30,18 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def javadocJar(Project project) {
-        def androidJavadocs = project.task(variant.name + 'AndroidJavadocs', type: Javadoc) {
+        Task androidJavadocs = project.tasks.create("${variant.name}AndroidJavadocs", Javadoc) {
             variant.sourceSets.each {
                 delegate.source it.java.srcDirs
             }
-            classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
-            classpath += variant.javaCompile.classpath
-            classpath += variant.javaCompile.outputs.files
+            it.classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+            it.classpath += variant.javaCompile.classpath
+            it.classpath += variant.javaCompile.outputs.files
         }
 
-        project.task(variant.name + 'AndroidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
-            classifier = 'javadoc'
+        project.tasks.create("${variant.name}AndroidJavadocsJar", Jar) {
+            it.dependsOn(androidJavadocs)
+            it.classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
     }
@@ -45,7 +50,8 @@ class AndroidArtifacts implements Artifacts {
         "$project.buildDir/outputs/aar/${project.name}-${variant.baseName}.aar"
     }
 
-    def from(Project project) {
+    @Override
+    SoftwareComponent from(Project project) {
         project.components.add(new AndroidLibrary(project))
         project.components.android
     }

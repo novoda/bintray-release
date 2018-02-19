@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.Project
 
 class BintrayConfiguration {
@@ -16,16 +17,17 @@ class BintrayConfiguration {
 
         PropertyFinder propertyFinder = new PropertyFinder(project, extension)
 
-        project.bintray {
+        def bintrayExtension = project.extensions.findByName("bintray") as BintrayExtension
+        bintrayExtension.with {
             user = propertyFinder.bintrayUser
             key = propertyFinder.bintrayKey
             publish = extension.autoPublish
             dryRun = propertyFinder.dryRun
             override = propertyFinder.override
 
-            publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : [ 'maven' ]
+            publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : ['maven']
 
-            pkg {
+            pkg.with {
                 repo = extension.repoName
                 userOrg = extension.userOrg
                 name = extension.uploadName
@@ -35,7 +37,7 @@ class BintrayConfiguration {
                 vcsUrl = extension.repository
 
                 licenses = extension.licences
-                version {
+                version.with {
                     name = propertyFinder.publishVersion
                     attributes = extension.versionAttributes
                 }

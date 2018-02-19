@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.android.build.gradle.LibraryExtension
 import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -21,27 +22,26 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
-            project.android.libraryVariants.all { variant ->
-                def artifactId = extension.artifactId;
-                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
+            def libraryExtension = project.extensions.findByName("android") as LibraryExtension
+            libraryExtension.libraryVariants.all {
+                addArtifact(project, it.name, extension, new AndroidArtifacts(it))
             }
         } else {
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
+            addArtifact(project, 'maven', extension, new JavaArtifacts())
         }
     }
 
 
-    void addArtifact(Project project, String name, String artifact, Artifacts artifacts) {
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-        project.publishing.publications.create(name, MavenPublication) {
-            groupId project.publish.groupId
-            artifactId artifact
-            version = propertyFinder.publishVersion
+    void addArtifact(Project project, String name, PublishExtension extension, Artifacts artifacts) {
+        project.publishing.publications.create(name, MavenPublication) { MavenPublication publication ->
+            publication.groupId = extension.groupId
+            publication.artifactId = extension.artifactId
+            publication.version = new PropertyFinder(project, extension).publishVersion
 
-            artifacts.all(it.name, project).each {
+            artifacts.all(publication.name, project).each {
                 delegate.artifact it
             }
-            from artifacts.from(project)
+            publication.from(artifacts.from(project))
         }
     }
 }
