@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.android.build.gradle.api.LibraryVariant
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
@@ -8,11 +9,9 @@ import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidArtifacts implements Artifacts {
 
-    def variant
+    private LibraryVariant variant
 
-    // TODO: Declare that variant is
-    // https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.LibraryExtension.html#com.android.build.gradle.LibraryExtension:libraryVariants
-    AndroidArtifacts(variant) {
+    AndroidArtifacts(LibraryVariant variant) {
         this.variant = variant
     }
 
@@ -22,8 +21,7 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def sourcesJar(Project project) {
-        String taskName = variant.name + 'AndroidSourcesJar'
-        project.tasks.create(taskName, Jar) {
+        project.tasks.create("${variant.name}AndroidSourcesJar", Jar) {
             it.classifier = 'sources'
             variant.sourceSets.each {
                 from it.java.srcDirs
@@ -32,8 +30,7 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def javadocJar(Project project) {
-        String taskName = variant.name + 'AndroidJavadocs'
-        Task androidJavadocs = project.tasks.create(taskName, Javadoc) {
+        Task androidJavadocs = project.tasks.create("${variant.name}AndroidJavadocs", Javadoc) {
             variant.sourceSets.each {
                 delegate.source it.java.srcDirs
             }
@@ -42,8 +39,7 @@ class AndroidArtifacts implements Artifacts {
             it.classpath += variant.javaCompile.outputs.files
         }
 
-        String taskNameJar = variant.name + 'AndroidJavadocsJar'
-        project.tasks.create(taskNameJar, Jar) {
+        project.tasks.create("${variant.name}AndroidJavadocsJar", Jar) {
             it.dependsOn(androidJavadocs)
             it.classifier = 'javadoc'
             from androidJavadocs.destinationDir

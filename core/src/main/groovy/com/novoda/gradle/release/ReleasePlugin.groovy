@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.android.build.gradle.LibraryExtension
 import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -48,8 +49,9 @@ class ReleasePlugin implements Plugin<Project> {
 
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
-            project.android.libraryVariants.all { variant ->
-                addArtifact(project, variant.name as String, extension, new AndroidArtifacts(variant))
+            def libraryExtension = project.extensions.findByName("android") as LibraryExtension
+            libraryExtension.libraryVariants.all {
+                addArtifact(project, it.name, extension, new AndroidArtifacts(it))
             }
         } else {
             addArtifact(project, 'maven', extension, new JavaArtifacts())
