@@ -42,8 +42,8 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def mainJar(Project project) {
-        def artifactBaseName = project.getProperty("archivesBaseName")
-        "$project.buildDir/outputs/aar/$artifactBaseName-${variant.baseName}.aar"
+        def archiveBaseName = project.hasProperty("archivesBaseName") ? project.getProperty("archivesBaseName") : project.name
+        "$project.buildDir/outputs/aar/$archiveBaseName-${variant.baseName}.aar"
     }
 
     def from(Project project) {
