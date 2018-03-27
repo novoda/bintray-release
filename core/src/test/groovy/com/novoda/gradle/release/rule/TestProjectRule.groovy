@@ -15,8 +15,21 @@ class TestProjectRule implements TestRule {
 
     private final Project project
 
+    private String buildScript
+
+    /**
+     * Creates a new TestProjectRule with a default/valid BuildScript-Template.
+     */
     TestProjectRule(Project project) {
         this.project = project
+    }
+
+    /**
+     * Creates a new TestProjectRule with a given buildScript.
+     */
+    TestProjectRule(Project project, String buildScript) {
+        this.project = project
+        this.buildScript = buildScript
     }
 
     @Override
@@ -59,6 +72,14 @@ class TestProjectRule implements TestRule {
 
     private void createBuildScript() {
         File gradleScript = new File(tempFolder.root, "build.gradle")
+
+        // If custom buildScript provided. Use it
+        if (buildScript != null) {
+            gradleScript.text = buildScript
+            return
+        }
+
+        // ... otherwise use the Templates
         switch (project) {
             case Project.JAVA:
                 gradleScript.text = GradleScriptTemplates.java()
@@ -70,6 +91,5 @@ class TestProjectRule implements TestRule {
                 throw new IllegalArgumentException("$project should be a valid value!")
         }
     }
-
 
 }
