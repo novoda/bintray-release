@@ -10,8 +10,6 @@ class AndroidArtifacts implements Artifacts {
 
     def variant
 
-    // TODO: Declare that variant is
-    // https://google.github.io/android-gradle-dsl/current/com.android.build.gradle.LibraryExtension.html#com.android.build.gradle.LibraryExtension:libraryVariants
     AndroidArtifacts(variant) {
         this.variant = variant
     }
