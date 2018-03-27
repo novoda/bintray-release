@@ -62,7 +62,7 @@ class ReleasePlugin implements Plugin<Project> {
         project.publishing.publications.create(name, MavenPublication) { MavenPublication publication ->
             publication.groupId = extension.groupId
             publication.artifactId = extension.artifactId
-            publication.version = new PropertyFinder(project, extension).publishVersion
+            publication.version = propertyFinder.publishVersion
 
             artifacts.all(publication.name, project).each {
                 delegate.artifact it
