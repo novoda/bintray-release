@@ -20,27 +20,27 @@ class AndroidArtifacts implements Artifacts {
     }
 
     def sourcesJar(Project project) {
-        project.tasks.create("${variant.name}AndroidSourcesJar", Jar) {
-            it.classifier = 'sources'
-            variant.sourceSets.each {
-                from it.java.srcDirs
+        project.tasks.create("${variant.name}AndroidSourcesJar", Jar) { task ->
+            task.classifier = 'sources'
+            variant.sourceSets.each { sourceSet ->
+                from sourceSet.java.srcDirs
             }
         }
     }
 
     def javadocJar(Project project) {
-        Task androidJavadocs = project.tasks.create("${variant.name}AndroidJavadocs", Javadoc) {
+        Task androidJavadocs = project.tasks.create("${variant.name}AndroidJavadocs", Javadoc) { task ->
             variant.sourceSets.each {
                 delegate.source it.java.srcDirs
             }
-            it.classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
-            it.classpath += variant.javaCompile.classpath
-            it.classpath += variant.javaCompile.outputs.files
+            task.classpath += project.files(project.android.getBootClasspath().join(File.pathSeparator))
+            task.classpath += variant.javaCompile.classpath
+            task.classpath += variant.javaCompile.outputs.files
         }
 
-        project.tasks.create("${variant.name}AndroidJavadocsJar", Jar) {
-            it.dependsOn(androidJavadocs)
-            it.classifier = 'javadoc'
+        project.tasks.create("${variant.name}AndroidJavadocsJar", Jar) { task ->
+            task.dependsOn(androidJavadocs)
+            task.classifier = 'javadoc'
             from androidJavadocs.destinationDir
         }
     }
