@@ -39,7 +39,7 @@ publish {
     userOrg = 'novoda'
     groupId = 'com.novoda'
     artifactId = rootProject.name
-    publishVersion = '0.8.0'
+    publishVersion = '0.8.1'
     desc = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/novoda/${rootProject.name}"
 }
