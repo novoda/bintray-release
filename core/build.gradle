@@ -6,12 +6,14 @@ plugins {
 }
 
 repositories {
+    google()
     jcenter()
 }
 
 dependencies {
     compile localGroovy()
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    compile 'guru.stefma.androidartifacts:androidartifacts:1.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.9.0'

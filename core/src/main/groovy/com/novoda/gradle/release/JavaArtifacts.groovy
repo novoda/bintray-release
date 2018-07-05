@@ -3,7 +3,7 @@ package com.novoda.gradle.release
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
 
-class JavaArtifacts implements Artifacts {
+class JavaArtifacts {
 
     def all(String publicationName, Project project) {
         [sourcesJar(publicationName, project), javadocJar(publicationName, project)]
