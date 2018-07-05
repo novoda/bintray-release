@@ -17,6 +17,7 @@ class PropertyFinder {
     }
 
     def getBintrayKey() {
+
         getString(project, 'bintrayKey', extension.bintrayKey)
     }
 

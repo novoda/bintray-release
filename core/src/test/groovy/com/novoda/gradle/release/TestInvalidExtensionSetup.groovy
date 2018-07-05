@@ -20,11 +20,11 @@ class TestInvalidExtensionSetup {
                 id 'com.novoda.bintray-release'
             }
             
+            group = "com.novoda"
+            version = "1.0"
             publish {
                 userOrg = 'novoda'
-                groupId = 'com.novoda'
                 artifactId = 'test'
-                // publishVersion = '1.0'
                 // desc = 'description'
             }
                """
@@ -40,6 +40,6 @@ class TestInvalidExtensionSetup {
                 .withPluginClasspath()
                 .buildAndFail()
 
-        assertThat(result.output).contains("Have you created the publish closure? Missing publishVersion. Missing desc. ")
+        assertThat(result.output).contains("Have you created the publish closure? Missing desc. ")
     }
 }

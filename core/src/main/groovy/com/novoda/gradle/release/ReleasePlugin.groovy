@@ -11,33 +11,37 @@ class ReleasePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        PublishExtension extension = project.extensions.create('publish', PublishExtension)
+        PublishExtension extension
+        if (project.plugins.hasPlugin('com.android.library')) {
+            project.plugins.apply(AndroidArtifactsPlugin.class)
+            def artifactsExtension = project.extensions.getByType(AndroidArtifactsExtension.class)
+            extension = project.extensions.create('publish', AndroidPublishExtension, artifactsExtension)
+        }
+        if (project.plugins.hasPlugin("java-library")) {
+            extension = project.extensions.create('publish', PublishExtension)
+        }
 
         project.afterEvaluate {
             extension.validate()
-            attachArtifacts(extension, project)
+            if (project.plugins.hasPlugin("java-library")) {
+                attachJavaArtifacts(extension, project)
+            }
             new BintrayPlugin().apply(project)
             new BintrayConfiguration(extension).configure(project)
         }
     }
 
-    void attachArtifacts(PublishExtension extension, Project project) {
-        if (project.plugins.hasPlugin('com.android.library')) {
-            project.plugins.apply(AndroidArtifactsPlugin.class)
-            def artifactsExtension = project.extensions.getByType(AndroidArtifactsExtension.class)
-            artifactsExtension.artifactId = extension.artifactId
-        } else {
-            project.apply([plugin: 'maven-publish'])
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
-        }
+    void attachJavaArtifacts(PublishExtension extension, Project project) {
+        project.apply([plugin: 'maven-publish'])
+        addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
     }
 
     void addArtifact(Project project, String name, String artifact, JavaArtifacts artifacts) {
         PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
         project.publishing.publications.create(name, MavenPublication) {
-            groupId project.publish.groupId
+            groupId project.group
             artifactId artifact
-            version = propertyFinder.publishVersion
+            version = project.version
 
             artifacts.all(it.name, project).each {
                 delegate.artifact it

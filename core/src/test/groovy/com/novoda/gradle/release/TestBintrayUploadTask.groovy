@@ -4,10 +4,12 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.junit.Ignore
 import org.junit.Test
 
 public class TestBintrayUploadTask {
 
+    @Ignore("Ignored since the 'pase project' don't use *this* plugin as dependency")
     @Test
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")

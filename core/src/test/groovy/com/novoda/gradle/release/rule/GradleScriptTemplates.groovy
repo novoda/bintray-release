@@ -20,11 +20,11 @@ class GradleScriptTemplates {
                 implementation "junit:junit:4.12"
             }
             
+            group = "com.novoda"
+            version = "1.0"
             publish {
                 userOrg = 'novoda'
-                groupId = 'com.novoda'
                 artifactId = 'test'
-                publishVersion = '1.0'
                 desc = 'description'
             }
                """
@@ -52,7 +52,6 @@ class GradleScriptTemplates {
             
             android {
                 compileSdkVersion 26
-                buildToolsVersion "26.0.2"
 
                 defaultConfig {
                     minSdkVersion 16
@@ -67,17 +66,18 @@ class GradleScriptTemplates {
             
             repositories {
                 jcenter()
+                google()
             }
             
             dependencies {
                 implementation "junit:junit:4.12"
             }
             
+            group = "com.novoda"
+            version = "1.0"
             publish {
                 userOrg = 'novoda'
-                groupId = 'com.novoda'
                 artifactId = 'test'
-                publishVersion = '1.0'
                 desc = 'description'
             }
                """

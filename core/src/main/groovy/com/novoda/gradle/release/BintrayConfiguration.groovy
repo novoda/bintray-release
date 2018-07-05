@@ -23,7 +23,7 @@ class BintrayConfiguration {
             dryRun = propertyFinder.dryRun
             override = propertyFinder.override
 
-            publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['release'] : [ 'maven' ]
+            publications = extension.publications ?: project.plugins.hasPlugin('com.android.library') ? ['releaseAar'] : [ 'maven' ]
 
             pkg {
                 repo = extension.repoName
@@ -36,7 +36,7 @@ class BintrayConfiguration {
 
                 licenses = extension.licences
                 version {
-                    name = propertyFinder.publishVersion
+                    name = project.version
                     attributes = extension.versionAttributes
                 }
             }
@@ -64,7 +64,7 @@ class BintrayConfiguration {
             def gradlePluginPropertyFinder = new GradlePluginPropertyFinder(project)
             String bestPluginId = gradlePluginPropertyFinder.findBestGradlePluginId()
             if (bestPluginId != null) {
-                extension.versionAttributes << ['gradle-plugin': "$bestPluginId:$extension.groupId:$extension.artifactId"]
+                extension.versionAttributes << ['gradle-plugin': "$bestPluginId:$project.group:$extension.artifactId"]
                 project.logger.info "Using plugin identifier '" + extension.versionAttributes.get('gradle-plugins') + "' for gradle portal."
             }
         }

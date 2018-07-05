@@ -18,10 +18,15 @@ class PublishExtension {
     String repoName = 'maven'
     String userOrg
 
-    String groupId
-    String artifactId
+    private String artifactId
 
-    String publishVersion
+    void setArtifactId(String newArtifactId) {
+        artifactId = newArtifactId
+    }
+
+    String getArtifactId() {
+        return artifactId
+    }
 
     Map<String, String> versionAttributes = [:]
 
@@ -54,14 +59,8 @@ class PublishExtension {
         if (userOrg == null) {
             extensionError += "Missing userOrg. "
         }
-        if (groupId == null) {
-            extensionError += "Missing groupId. "
-        }
         if (artifactId == null) {
             extensionError += "Missing artifactId. "
-        }
-        if (publishVersion == null) {
-            extensionError += "Missing publishVersion. "
         }
         if (desc == null) {
             extensionError += "Missing desc. "
