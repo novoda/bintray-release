@@ -12,7 +12,7 @@ repositories {
 
 dependencies {
     compile localGroovy()
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     compile 'guru.stefma.androidartifacts:androidartifacts:1.0.0'
 
     testCompile 'junit:junit:4.12'
