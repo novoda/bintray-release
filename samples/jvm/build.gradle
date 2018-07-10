@@ -1,5 +1,5 @@
 apply plugin: 'java-library'
-apply plugin: com.novoda.gradle.release.ReleasePlugin
+apply plugin: guru.stefma.bintrayrelease.ReleasePlugin
 
 repositories {
     jcenter()
@@ -9,11 +9,11 @@ dependencies {
     implementation "junit:junit:4.12"
 }
 
-group = "com.novoda"
+group = "guru.stefma"
 version = "0.0.1"
 publish {
-    userOrg = 'novoda'
+    userOrg = 'stefma'
     artifactId = 'bintray-release.jvm.sample'
     desc = 'Just a simple java lib sample'
-    website = 'https://github.com/novoda/bintray-release'
+    website = 'https://github.com/stefma/bintray-release'
 }

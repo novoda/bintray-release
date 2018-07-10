@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.novoda.gradle.release.sample.android" />
+<manifest package="guru.stefma.bintrayrelease.sample.android"/>
