@@ -9,7 +9,6 @@ import org.junit.Test
 
 public class TestBintrayUploadTask {
 
-    @Ignore("Ignored since the 'pase project' don't use *this* plugin as dependency")
     @Test
     public void testBintrayUploadTask() {
         BuildResult result = runTasksOnBintrayReleasePlugin('-PbintrayUser=U', '-PbintrayKey=K', "bintrayUpload")

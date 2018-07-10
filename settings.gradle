@@ -2,11 +2,16 @@ pluginManagement {
     repositories {
         // TODO: Update later to gradlePluginPortal() if gradle updated
         maven { url 'https://plugins.gradle.org/m2/' }
+        mavenLocal()
+        google()
     }
     resolutionStrategy {
         eachPlugin {
-            if (requested.id.id == "com.novoda.bintray-release") {
-                useModule("com.novoda:bintray-release:${requested.version}")
+            if (requested.id.id == "guru.stefma.bintrayrelease") {
+                useModule("guru.stefma.bintrayrelease:bintrayrelease:${requested.version}")
+            }
+            if(requested.id.id.startsWith("com.android.")) {
+                useModule("com.android.tools.build:gradle:$requested.id.version")
             }
         }
     }

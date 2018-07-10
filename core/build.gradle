@@ -1,9 +1,11 @@
 plugins {
-    id 'com.novoda.bintray-release' version "0.8.0"
     id 'groovy'
     id 'java-gradle-plugin'
+    id 'java-library'
+    id 'guru.stefma.bintrayrelease' version "1.0.0" apply false
     id 'maven'
 }
+apply plugin: "guru.stefma.bintrayrelease"
 
 repositories {
     google()
@@ -33,12 +35,12 @@ gradlePlugin {
     }
 }
 
+version = "1.0.0"
+group = "guru.stefma.bintrayrelease"
 publish {
     userOrg = 'stefma'
-    groupId = 'guru.stefma.bintrayrelease'
     artifactId = "bintrayrelease"
     uploadName = "BintrayRelease"
-    publishVersion = '1.0.0'
     desc = 'Super duper easy way to release your Android and other artifacts to bintray'
     website = "https://github.com/stefma/bintray-release"
 }
