@@ -21,12 +21,12 @@ class ReleasePlugin implements Plugin<Project> {
             extension = project.extensions.create('publish', PublishExtension)
         }
 
+        new BintrayPlugin().apply(project)
         project.afterEvaluate {
             extension.validate()
             if (project.plugins.hasPlugin("java-library")) {
                 attachJavaArtifacts(extension, project)
             }
-            new BintrayPlugin().apply(project)
             new BintrayConfiguration(extension).configure(project)
         }
     }
