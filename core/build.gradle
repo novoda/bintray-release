@@ -1,17 +1,21 @@
 plugins {
-    id 'com.novoda.bintray-release' version "0.8.0"
     id 'groovy'
     id 'java-gradle-plugin'
+    id 'java-library'
+    id 'guru.stefma.bintrayrelease' version "1.0.0" apply false
     id 'maven'
 }
+apply plugin: "guru.stefma.bintrayrelease"
 
 repositories {
+    google()
     jcenter()
 }
 
 dependencies {
     compile localGroovy()
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    compile 'guru.stefma.androidartifacts:androidartifacts:1.0.0'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.9.0'
@@ -25,21 +29,18 @@ compileGroovy {
 gradlePlugin {
     plugins {
         binrayRelease {
-            id = "com.novoda.bintray-release"
-            implementationClass = "com.novoda.gradle.release.ReleasePlugin"
-        }
-        legacy {
-            id = "bintray-release"
-            implementationClass = "com.novoda.gradle.release.ReleasePlugin"
+            id = "guru.stefma.bintrayrelease"
+            implementationClass = "guru.stefma.bintrayrelease.ReleasePlugin"
         }
     }
 }
 
+version = "1.0.0"
+group = "guru.stefma.bintrayrelease"
 publish {
-    userOrg = 'novoda'
-    groupId = 'com.novoda'
-    artifactId = rootProject.name
-    publishVersion = '0.8.1'
+    userOrg = 'stefma'
+    artifactId = "bintrayrelease"
+    uploadName = "BintrayRelease"
     desc = 'Super duper easy way to release your Android and other artifacts to bintray'
-    website = "https://github.com/novoda/${rootProject.name}"
+    website = "https://github.com/stefma/bintray-release"
 }

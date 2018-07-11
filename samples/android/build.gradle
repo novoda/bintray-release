@@ -9,7 +9,7 @@ buildscript {
 }
 
 apply plugin: 'com.android.library'
-apply plugin: com.novoda.gradle.release.ReleasePlugin
+apply plugin: guru.stefma.bintrayrelease.ReleasePlugin
 
 android {
     compileSdkVersion 27
@@ -18,11 +18,12 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0.0"
-        archivesBaseName = "$archivesBaseName-$versionName"
+        //archivesBaseName = "$archivesBaseName-$versionName" // This is not working
     }
 }
 
 repositories {
+    jcenter()
     google()
 }
 
@@ -30,11 +31,11 @@ dependencies {
     implementation "com.android.support:appcompat-v7:27.0.2"
 }
 
+group = "guru.stefma"
+version = "0.0.1"
 publish {
-    userOrg = 'novoda'
-    groupId = 'com.novoda'
+    userOrg = 'stefma'
     artifactId = 'bintray-release.android.sample'
-    publishVersion = '0.0.1'
     desc = 'Just a simple android lib sample'
-    website = 'https://github.com/novoda/bintray-release'
+    website = 'https://github.com/stefma/bintray-release'
 }
