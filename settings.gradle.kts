@@ -1,8 +1,6 @@
 pluginManagement {
     repositories {
-        // TODO: Update later to gradlePluginPortal() if gradle updated
-        maven { url 'https://plugins.gradle.org/m2/' }
-        mavenLocal()
+        gradlePluginPortal()
         google()
     }
     resolutionStrategy {
@@ -17,5 +15,5 @@ pluginManagement {
     }
 }
 
-include ':core'
-rootProject.name = 'bintray-release'
+include(":core")
+rootProject.name = "bintray-release"
