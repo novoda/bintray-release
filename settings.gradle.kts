@@ -15,5 +15,4 @@ pluginManagement {
     }
 }
 
-include(":core")
 rootProject.name = "bintray-release"

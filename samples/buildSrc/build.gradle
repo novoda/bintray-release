@@ -14,10 +14,4 @@ dependencies {
     compile 'guru.stefma.androidartifacts:androidartifacts:1.0.0'
 }
 
-sourceSets {
-    main {
-        groovy {
-            srcDir '../../core/src/main/groovy'
-        }
-    }
-}
+sourceSets.main.groovy.srcDir '../../src/main/groovy'

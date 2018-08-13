@@ -1,0 +1,46 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+    id 'java-library'
+    id 'guru.stefma.bintrayrelease' version "1.0.0" apply false
+    id 'maven'
+}
+apply plugin: "guru.stefma.bintrayrelease"
+
+repositories {
+    google()
+    jcenter()
+}
+
+dependencies {
+    compile localGroovy()
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    compile 'guru.stefma.androidartifacts:androidartifacts:1.0.0'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.9.0'
+}
+
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}
+
+gradlePlugin {
+    plugins {
+        binrayRelease {
+            id = "guru.stefma.bintrayrelease"
+            implementationClass = "guru.stefma.bintrayrelease.ReleasePlugin"
+        }
+    }
+}
+
+version = "1.0.0"
+group = "guru.stefma.bintrayrelease"
+publish {
+    userOrg = 'stefma'
+    artifactId = "bintrayrelease"
+    uploadName = "BintrayRelease"
+    desc = 'Super duper easy way to release your Android and other artifacts to bintray'
+    website = "https://github.com/stefma/bintray-release"
+}
