@@ -1,0 +1,52 @@
+version: 2
+jobs:
+  build:
+    machine:
+      image: circleci/classic:latest
+
+    environment:
+      # Customize the JVM maximum heap limit
+      # Needs to be updated along with gradle jvmargs 👇
+      _JAVA_OPTIONS: "-Xmx2g"
+
+    steps:
+      - checkout
+
+      # Set the JVM heap size to gradle as well
+      - run: echo "org.gradle.jvmargs=-Xmx2G" >> gradle.properties
+
+      # Download/Install Android SDK for testing
+      - run: wget -q https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
+      - run: unzip -q sdk-tools-linux-3859397.zip
+      - run: mkdir $HOME/android-sdk
+      - run: mv tools $HOME/android-sdk/tools
+      - run: mkdir $HOME/android-sdk/licenses
+      - run: echo -e "\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$HOME/android-sdk/licenses/android-sdk-license"
+      - run: echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$HOME/android-sdk/licenses/android-sdk-preview-license"
+
+      # Try to restore cache (see ho to save cache below 👇)
+      - restore_cache:
+          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          environment:
+              ANDROID_HOME: "/home/circleci/android-sdk" # TODO: Try to don't hardcode me and use $HOME env variable
+          command: ./gradlew test --no-daemon
+
+      # Save the gradle folder for caching
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+
+      - run:
+          command: |
+              cd samples
+              echo "sdk.dir=$HOME/android-sdk" >> local.properties
+              ./gradlew clean build bintrayUpload -PbintrayUser=user -PbintrayKey=secret -PdryRun=true --info --no-daemon
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
