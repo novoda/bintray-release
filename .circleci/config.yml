@@ -26,7 +26,7 @@ jobs:
 
       # Try to restore cache (see ho to save cache below 👇)
       - restore_cache:
-          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
       - run:
           environment:
@@ -37,13 +37,13 @@ jobs:
       - save_cache:
           paths:
             - ~/.gradle
-          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "core/build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
+          key: gradle-cache-v0-{{ checksum "build.gradle" }}-{{ checksum "gradle/wrapper/gradle-wrapper.properties" }}
 
       - run:
           command: |
               cd samples
               echo "sdk.dir=$HOME/android-sdk" >> local.properties
-              ./gradlew clean build bintrayUpload -PbintrayUser=user -PbintrayKey=secret -PdryRun=true --info
+              ./gradlew clean build bintrayUpload -PbintrayUser=user -PbintrayKey=secret -PdryRun=true --info --no-daemon
 
 workflows:
   version: 2
