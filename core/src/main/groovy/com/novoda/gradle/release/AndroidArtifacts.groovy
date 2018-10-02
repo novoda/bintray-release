@@ -45,10 +45,4 @@ class AndroidArtifacts implements Artifacts {
         def archiveBaseName = project.hasProperty("archivesBaseName") ? project.getProperty("archivesBaseName") : project.name
         "$project.buildDir/outputs/aar/$archiveBaseName-${variant.baseName}.aar"
     }
-
-    def from(Project project) {
-        project.components.add(new AndroidLibrary(project))
-        project.components.android
-    }
-
 }

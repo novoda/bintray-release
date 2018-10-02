@@ -22,26 +22,53 @@ class ReleasePlugin implements Plugin<Project> {
     void attachArtifacts(PublishExtension extension, Project project) {
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.all { variant ->
-                def artifactId = extension.artifactId;
-                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
+                Artifacts artifacts = new AndroidArtifacts(variant)
+                PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+                project.publishing.publications.create(variant.name, MavenPublication) {
+                    groupId project.publish.groupId
+                    artifactId extension.artifactId
+                    version = propertyFinder.publishVersion
+
+                    artifacts.all(it.name, project).each {
+                        artifact it
+                    }
+
+                    pom.withXml {
+
+                        def dependenciesNode = asNode().appendNode('dependencies')
+
+                        // Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
+                        def configurationContainer = project.configurations
+
+                        def allDependencies = []
+                        allDependencies.addAll(configurationContainer.findByName('compile')?.allDependencies ?: [])
+                        allDependencies.addAll(configurationContainer.findByName('implementation')?.allDependencies ?: [])
+                        allDependencies.addAll(configurationContainer.findByName('api')?.allDependencies ?: [])
+
+                        allDependencies.each {
+                            if (it.name != 'unspecified') {
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+                            }
+                        }
+                    }
+                }
             }
         } else {
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
-        }
-    }
+            Artifacts artifacts = new JavaArtifacts()
+            PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
+            project.publishing.publications.create('maven', MavenPublication) {
+                groupId project.publish.groupId
+                artifactId extension.artifactId
+                version = propertyFinder.publishVersion
 
-
-    void addArtifact(Project project, String name, String artifact, Artifacts artifacts) {
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-        project.publishing.publications.create(name, MavenPublication) {
-            groupId project.publish.groupId
-            artifactId artifact
-            version = propertyFinder.publishVersion
-
-            artifacts.all(it.name, project).each {
-                delegate.artifact it
+                artifacts.all(it.name, project).each {
+                    delegate.artifact it
+                }
+                from artifacts.from(project)
             }
-            from artifacts.from(project)
         }
     }
 }
