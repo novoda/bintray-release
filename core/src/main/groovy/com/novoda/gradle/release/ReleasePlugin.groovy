@@ -3,6 +3,7 @@ package com.novoda.gradle.release
 import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 
 class ReleasePlugin implements Plugin<Project> {
@@ -20,12 +21,14 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     void attachArtifacts(PublishExtension extension, Project project) {
+        PublishingExtension mavenPublishingExtension = project.extensions.findByType(PublishingExtension)
+
         PropertyFinder propertyFinder = new PropertyFinder(project, extension)
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.all { variant ->
-                Artifacts artifacts = new AndroidArtifacts(variant)
                 def name = variant.name
-                project.publishing.publications.create(name, MavenPublication) {
+                Artifacts artifacts = new AndroidArtifacts(variant)
+                MavenPublication mavenPublication = mavenPublishingExtension.publications.create(name, MavenPublication) {
                     groupId extension.groupId
                     artifactId extension.artifactId
                     version = propertyFinder.publishVersion
@@ -56,7 +59,7 @@ class ReleasePlugin implements Plugin<Project> {
         } else {
             Artifacts artifacts = new JavaArtifacts()
             def name = 'maven'
-            project.publishing.publications.create(name, MavenPublication) {
+            MavenPublication mavenPublication = mavenPublishingExtension.publications.create(name, MavenPublication) {
                 groupId extension.groupId
                 artifactId extension.artifactId
                 version = propertyFinder.publishVersion
