@@ -69,7 +69,7 @@ class ReleasePlugin implements Plugin<Project> {
                 artifacts.all(name, project).each {
                     artifact it
                 }
-                from artifacts.from(project)
+                from project.components.java
             }
         }
     }
