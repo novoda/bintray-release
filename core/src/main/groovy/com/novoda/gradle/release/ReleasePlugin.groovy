@@ -20,10 +20,10 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     void attachArtifacts(PublishExtension extension, Project project) {
+        PropertyFinder propertyFinder = new PropertyFinder(project, extension)
         if (project.plugins.hasPlugin('com.android.library')) {
             project.android.libraryVariants.all { variant ->
                 Artifacts artifacts = new AndroidArtifacts(variant)
-                PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
                 def name = variant.name
                 project.publishing.publications.create(name, MavenPublication) {
                     groupId project.publish.groupId
@@ -35,12 +35,8 @@ class ReleasePlugin implements Plugin<Project> {
                     }
 
                     pom.withXml {
-
                         def dependenciesNode = asNode().appendNode('dependencies')
-
-                        // Iterate over the compile dependencies (we don't want the test ones), adding a <dependency> node for each
                         def configurationContainer = project.configurations
-
                         def allDependencies = []
                         allDependencies.addAll(configurationContainer.findByName('compile')?.allDependencies ?: [])
                         allDependencies.addAll(configurationContainer.findByName('implementation')?.allDependencies ?: [])
@@ -59,7 +55,6 @@ class ReleasePlugin implements Plugin<Project> {
             }
         } else {
             Artifacts artifacts = new JavaArtifacts()
-            PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
             def name = 'maven'
             project.publishing.publications.create(name, MavenPublication) {
                 groupId project.publish.groupId
