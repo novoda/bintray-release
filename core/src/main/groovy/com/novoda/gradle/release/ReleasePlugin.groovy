@@ -26,7 +26,7 @@ class ReleasePlugin implements Plugin<Project> {
                 Artifacts artifacts = new AndroidArtifacts(variant)
                 def name = variant.name
                 project.publishing.publications.create(name, MavenPublication) {
-                    groupId project.publish.groupId
+                    groupId extension.groupId
                     artifactId extension.artifactId
                     version = propertyFinder.publishVersion
 
@@ -57,7 +57,7 @@ class ReleasePlugin implements Plugin<Project> {
             Artifacts artifacts = new JavaArtifacts()
             def name = 'maven'
             project.publishing.publications.create(name, MavenPublication) {
-                groupId project.publish.groupId
+                groupId extension.groupId
                 artifactId extension.artifactId
                 version = propertyFinder.publishVersion
 
