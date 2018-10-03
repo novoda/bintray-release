@@ -24,12 +24,13 @@ class ReleasePlugin implements Plugin<Project> {
             project.android.libraryVariants.all { variant ->
                 Artifacts artifacts = new AndroidArtifacts(variant)
                 PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-                project.publishing.publications.create(variant.name, MavenPublication) {
+                def name = variant.name
+                project.publishing.publications.create(name, MavenPublication) {
                     groupId project.publish.groupId
                     artifactId extension.artifactId
                     version = propertyFinder.publishVersion
 
-                    artifacts.all(it.name, project).each {
+                    artifacts.all(name, project).each {
                         artifact it
                     }
 
@@ -59,13 +60,14 @@ class ReleasePlugin implements Plugin<Project> {
         } else {
             Artifacts artifacts = new JavaArtifacts()
             PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-            project.publishing.publications.create('maven', MavenPublication) {
+            def name = 'maven'
+            project.publishing.publications.create(name, MavenPublication) {
                 groupId project.publish.groupId
                 artifactId extension.artifactId
                 version = propertyFinder.publishVersion
 
-                artifacts.all(it.name, project).each {
-                    delegate.artifact it
+                artifacts.all(name, project).each {
+                    artifact it
                 }
                 from artifacts.from(project)
             }
