@@ -25,9 +25,7 @@ class AndroidDifferentGradleVersions {
                 new GradleVerionsParams(gradleVersion: "4.2", expectedTaskOutcome: TaskOutcome.SUCCESS),
                 new GradleVerionsParams(gradleVersion: "4.3", expectedTaskOutcome: TaskOutcome.SUCCESS),
                 new GradleVerionsParams(gradleVersion: "4.4", expectedTaskOutcome: TaskOutcome.SUCCESS),
-                // TODO: Failure on Gradle 4.5. is **not** expected. It's failing because of changes in
-                // the UsageContext in our AndroidLibrary class
-                new GradleVerionsParams(gradleVersion: "4.5", expectedGradleBuildFailure: true),
+                new GradleVerionsParams(gradleVersion: "4.5", expectedTaskOutcome: TaskOutcome.SUCCESS),
         ]
     }
 
