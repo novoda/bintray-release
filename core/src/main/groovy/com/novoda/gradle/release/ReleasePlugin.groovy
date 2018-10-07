@@ -15,11 +15,11 @@ class ReleasePlugin implements Plugin<Project> {
         PublishExtension extension = project.extensions.create('publish', PublishExtension)
         project.afterEvaluate {
             extension.validate()
-            project.apply([plugin: 'maven-publish'])
             attachArtifacts(extension, project)
-            new BintrayPlugin().apply(project)
             new BintrayConfiguration(extension).configure(project)
         }
+        project.apply([plugin: 'maven-publish'])
+        new BintrayPlugin().apply(project)
     }
 
     private void attachArtifacts(PublishExtension extension, Project project) {
