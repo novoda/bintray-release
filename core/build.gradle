@@ -41,7 +41,7 @@ buildProperties {
 
 dependencies {
     compile localGroovy()
-    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.9.0'
