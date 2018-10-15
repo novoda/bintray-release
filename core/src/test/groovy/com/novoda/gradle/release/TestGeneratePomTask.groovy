@@ -80,6 +80,10 @@ class TestGeneratePomTask {
                 id 'bintray-release' apply false
             }
             
+            repositories {
+                google()
+            }
+            
             apply plugin: "com.android.library"
             apply plugin: "bintray-release"
             

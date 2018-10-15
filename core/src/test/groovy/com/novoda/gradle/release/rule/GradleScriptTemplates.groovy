@@ -47,6 +47,10 @@ class GradleScriptTemplates {
                 id 'com.novoda.bintray-release' apply false
             }
             
+            repositories {
+                google()
+            }
+            
             apply plugin: "com.android.library"
             apply plugin: "com.novoda.bintray-release"
             

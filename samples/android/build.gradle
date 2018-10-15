@@ -8,6 +8,10 @@ buildscript {
     }
 }
 
+repositories {
+    google()
+}
+
 apply plugin: 'com.android.library'
 apply plugin: com.novoda.gradle.release.ReleasePlugin
 
