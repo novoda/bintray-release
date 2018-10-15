@@ -51,10 +51,10 @@ class GradleScriptTemplates {
             apply plugin: "com.novoda.bintray-release"
             
             android {
-                compileSdkVersion 26
-                buildToolsVersion "26.0.2"
+                compileSdkVersion 27
 
                 defaultConfig {
+                    targetSdkVersion 27
                     minSdkVersion 16
                     versionCode 1
                     versionName "0.0.1"
