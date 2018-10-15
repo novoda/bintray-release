@@ -3,6 +3,9 @@ package com.novoda.gradle.release
 import com.jfrog.bintray.gradle.BintrayPlugin
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.internal.component.SoftwareComponentInternal
+import org.gradle.api.internal.component.UsageContext
+import org.gradle.api.internal.java.JavaLibraryPlatform
 import org.gradle.api.publish.maven.MavenPublication
 
 class ReleasePlugin implements Plugin<Project> {
