@@ -19,15 +19,18 @@ class AndroidDifferentGradleVersions {
     @Parameterized.Parameters(name = "{index}: test Gradle version {0}")
     static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {
         return [
-                // Gradle 4.0 is not support by the Android Gradle Plugin 3.x
+                // Gradle 4.4 is minimum version supported by the Android Gradle Plugin 3.1.0
                 new GradleVerionsParams(gradleVersion: "4.0", expectedGradleBuildFailure: true),
-                new GradleVerionsParams(gradleVersion: "4.1", expectedTaskOutcome: TaskOutcome.SUCCESS),
-                new GradleVerionsParams(gradleVersion: "4.2", expectedTaskOutcome: TaskOutcome.SUCCESS),
-                new GradleVerionsParams(gradleVersion: "4.3", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.1", expectedGradleBuildFailure: true),
+                new GradleVerionsParams(gradleVersion: "4.2", expectedGradleBuildFailure: true),
+                new GradleVerionsParams(gradleVersion: "4.3", expectedGradleBuildFailure: true),
                 new GradleVerionsParams(gradleVersion: "4.4", expectedTaskOutcome: TaskOutcome.SUCCESS),
-                // TODO: Failure on Gradle 4.5. is **not** expected. It's failing because of changes in
-                // the UsageContext in our AndroidLibrary class
-                new GradleVerionsParams(gradleVersion: "4.5", expectedGradleBuildFailure: true),
+                new GradleVerionsParams(gradleVersion: "4.5", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.6", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.7", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.8", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.9", expectedTaskOutcome: TaskOutcome.SUCCESS),
+                new GradleVerionsParams(gradleVersion: "4.10", expectedTaskOutcome: TaskOutcome.SUCCESS)
         ]
     }
 
