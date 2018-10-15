@@ -1,26 +1,21 @@
 package com.novoda.gradle.release
 
 import org.gradle.testkit.runner.GradleRunner
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
 
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 class TestGeneratePomTask {
 
-    @Rule public TemporaryFolder testProjectDir = new TemporaryFolder()
-    private File buildFile
-
-    @Before
-    void setup() {
-        buildFile = testProjectDir.newFile('build.gradle')
-    }
+    @Rule
+    public BuildFolder buildFolder = new BuildFolder('test-projects/TestGeneratePomTask')
 
     @Test
     void testGeneratePomTaskForJavaLib() {
-        buildFile << """            
+        def projectDir = buildFolder.newFolder('testGeneratePomTaskForJavaLib')
+        buildFolder.newFile(projectDir, 'build.gradle').write('''            
+
             plugins {
                 id 'java-library'
                 id 'bintray-release'
@@ -39,36 +34,38 @@ class TestGeneratePomTask {
                 implementation 'com.xyz:world:2.0.0'
                 api 'com.xxx:haha:3.0.0'
             }
-        """
+        '''.stripMargin())
 
         def result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments("generatePomFileForMavenPublication")
-            .withPluginClasspath()
-            .build()
+                .withProjectDir(projectDir)
+                .withArguments('generatePomFileForMavenPublication', '--stacktrace')
+                .forwardOutput()
+                .withPluginClasspath()
+                .build()
 
-        assert result.task(":generatePomFileForMavenPublication").outcome == SUCCESS
+        assert result.task(':generatePomFileForMavenPublication').outcome == SUCCESS
 
-        File pomFile = new File(testProjectDir.root, '/build/publications/maven/pom-default.xml')
+        File pomFile = new File(projectDir, '/build/publications/maven/pom-default.xml')
         def nodes = new XmlSlurper().parse(pomFile)
         def dependencies = nodes.dependencies.dependency
 
         assert dependencies.size() == 3
-        assert dependencies.find { dep -> dep.artifactId == "hello" && dep.scope == "compile" } != null
-        assert dependencies.find { dep -> dep.artifactId == "haha" && dep.scope == "compile" } != null
-        assert dependencies.find { dep -> dep.artifactId == "world" && dep.scope == "runtime" } != null
+        assert dependencies.find { dep -> dep.artifactId == 'hello' }.scope == 'compile'
+        assert dependencies.find { dep -> dep.artifactId == 'haha' }.scope == 'compile'
+        assert dependencies.find { dep -> dep.artifactId == 'world' }.scope == 'runtime'
     }
 
     @Test
     void testGeneratePomTaskForAndroidLibrary() {
-        File manifestFile = new File(testProjectDir.root, "/src/main/AndroidManifest.xml")
+        def projectDir = buildFolder.newFolder('testGeneratePomTaskForAndroidLibrary')
+        File manifestFile = new File(projectDir, '/src/main/AndroidManifest.xml')
         manifestFile.getParentFile().mkdirs()
         manifestFile.createNewFile()
-        manifestFile << """
+        manifestFile.write('''
             <manifest package="com.novoda.test"/>
-        """
+        '''.stripMargin())
 
-        buildFile << """
+        buildFolder.newFile(projectDir, 'build.gradle').write('''
             buildscript {
                 repositories {
                     jcenter()
@@ -110,23 +107,24 @@ class TestGeneratePomTask {
                 implementation 'com.xyz:world:2.0.0'
                 api 'com.xxx:haha:3.0.0'
             }
-        """
+        '''.stripMargin())
 
         def result = GradleRunner.create()
-            .withProjectDir(testProjectDir.root)
-            .withArguments("generatePomFileForReleasePublication")
-            .withPluginClasspath()
-            .build()
+                .withProjectDir(projectDir)
+                .withArguments('generatePomFileForReleasePublication', '--stacktrace')
+                .forwardOutput()
+                .withPluginClasspath()
+                .build()
 
-        assert result.task(":generatePomFileForReleasePublication").outcome == SUCCESS
+        assert result.task(':generatePomFileForReleasePublication').outcome == SUCCESS
 
-        File pomFile = new File(testProjectDir.root, '/build/publications/release/pom-default.xml')
+        File pomFile = new File(projectDir, '/build/publications/release/pom-default.xml')
         def nodes = new XmlSlurper().parse(pomFile)
         def dependencies = nodes.dependencies.dependency
 
         assert dependencies.size() == 3
-        assert dependencies.find { dep -> dep.artifactId == "hello" && dep.scope == "compile" } != null
-        assert dependencies.find { dep -> dep.artifactId == "haha" && dep.scope == "compile" } != null
-        assert dependencies.find { dep -> dep.artifactId == "world" && dep.scope == "runtime" } != null
+        assert dependencies.find { dep -> dep.artifactId == 'hello' }.scope == 'compile'
+        assert dependencies.find { dep -> dep.artifactId == 'haha' }.scope == 'compile'
+        assert dependencies.find { dep -> dep.artifactId == 'world' }.scope == 'runtime'
     }
 }
