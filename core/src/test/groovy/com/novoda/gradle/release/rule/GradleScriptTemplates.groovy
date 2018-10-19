@@ -39,7 +39,7 @@ class GradleScriptTemplates {
                     google()
                 }
                 dependencies {
-                    classpath 'com.android.tools.build:gradle:3.1.0'
+                    classpath 'com.android.tools.build:gradle:3.0.0'
                 }
             }
             
