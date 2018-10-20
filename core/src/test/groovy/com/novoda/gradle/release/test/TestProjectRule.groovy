@@ -1,6 +1,6 @@
 package com.novoda.gradle.release.test
 
-import com.novoda.gradle.release.BuildFolder
+
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -12,7 +12,7 @@ class TestProjectRule implements TestRule {
     }
 
     private final ProjectType project
-    private BuildFolder tempFolder
+    private BuildFolderRule tempFolder
     private String buildScript
 
     static TestProjectRule newJavaProject(String buildScript = null) {
@@ -30,7 +30,7 @@ class TestProjectRule implements TestRule {
 
     @Override
     Statement apply(Statement base, Description description) {
-        tempFolder = new BuildFolder("test-projects/${description.testClass.canonicalName}/${description.methodName}")
+        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}/${description.methodName}")
         def statement = new Statement() {
             @Override
             void evaluate() throws Throwable {

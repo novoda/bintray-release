@@ -1,5 +1,6 @@
 package com.novoda.gradle.release
 
+import com.novoda.gradle.release.test.BuildFolderRule
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.Test
@@ -9,7 +10,7 @@ import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 class TestGeneratePomTask {
 
     @Rule
-    public BuildFolder buildFolder = new BuildFolder('test-projects/TestGeneratePomTask')
+    public BuildFolderRule buildFolder = new BuildFolderRule('test-projects/TestGeneratePomTask')
 
     @Test
     void testGeneratePomTaskForJavaLib() {
