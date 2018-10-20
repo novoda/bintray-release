@@ -1,10 +1,7 @@
-package com.novoda.gradle.release.rule
-
-import groovy.transform.PackageScope
+package com.novoda.gradle.release.test
 
 class GradleScriptTemplates {
 
-    @PackageScope
     static String java() {
         return """
             plugins { 
@@ -30,7 +27,6 @@ class GradleScriptTemplates {
                """
     }
 
-    @PackageScope
     static String android() {
         return """
             buildscript {
