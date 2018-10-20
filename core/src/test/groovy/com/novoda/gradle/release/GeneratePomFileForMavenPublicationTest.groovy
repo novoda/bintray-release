@@ -8,7 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static org.assertj.core.api.Assertions.assertThat
+import static com.google.common.truth.Truth.assertThat
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 @RunWith(Parameterized.class)

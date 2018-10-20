@@ -44,7 +44,7 @@ dependencies {
     compile 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
     testCompile 'junit:junit:4.12'
-    testCompile 'org.assertj:assertj-core:3.9.0'
+    testCompile 'com.google.truth:truth:0.42'
 }
 
 compileGroovy {
@@ -55,12 +55,12 @@ compileGroovy {
 gradlePlugin {
     plugins {
         binrayRelease {
-            id = "com.novoda.bintray-release"
-            implementationClass = "com.novoda.gradle.release.ReleasePlugin"
+            id = 'com.novoda.bintray-release'
+            implementationClass = 'com.novoda.gradle.release.ReleasePlugin'
         }
         legacy {
-            id = "bintray-release"
-            implementationClass = "com.novoda.gradle.release.ReleasePlugin"
+            id = 'bintray-release'
+            implementationClass = 'com.novoda.gradle.release.ReleasePlugin'
         }
     }
 }
