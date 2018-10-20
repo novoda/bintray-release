@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
+import static org.assertj.core.api.Assertions.assertThat
 import static org.gradle.testkit.runner.TaskOutcome.SUCCESS
 
 @RunWith(Parameterized.class)
@@ -40,15 +41,15 @@ class GeneratePomFileForMavenPublicationTest {
                 .withPluginClasspath()
                 .build()
 
-        assert result.task(generatingTaskName).outcome == SUCCESS
+        assertThat(result.task(generatingTaskName).outcome).isEqualTo(SUCCESS)
 
         File pomFile = new File(projectDir, "/build/publications/$publicationName/pom-default.xml")
         def nodes = new XmlSlurper().parse(pomFile)
         def dependencies = nodes.dependencies.dependency
 
-        assert dependencies.find { dep -> dep.artifactId == 'hello' }.scope == 'compile'
-        assert dependencies.find { dep -> dep.artifactId == 'haha' }.scope == 'compile'
-        assert dependencies.find { dep -> dep.artifactId == 'world' }.scope == 'runtime'
+        assertThat(dependencies.find { dep -> dep.artifactId == 'hello' }.scope).isEqualTo('compile')
+        assertThat(dependencies.find { dep -> dep.artifactId == 'haha' }.scope).isEqualTo('compile')
+        assertThat(dependencies.find { dep -> dep.artifactId == 'world' }.scope).isEqualTo('runtime')
     }
 
     private static class Parameter {
