@@ -40,11 +40,10 @@ class GradleScriptTemplates {
             }
             
             plugins {
-                id 'com.novoda.bintray-release' apply false
+                id 'com.novoda.bintray-release'
             }
             
             apply plugin: "com.android.library"
-            apply plugin: "com.novoda.bintray-release"
             
             android {
                 compileSdkVersion 26

@@ -1,16 +1,13 @@
 plugins {
-    id 'com.novoda.bintray-release' version '0.8.0'
     id 'groovy'
     id 'java-gradle-plugin'
     id 'maven'
     id 'com.novoda.build-properties' version '0.4.1'
 }
 
-repositories {
-    jcenter()
-}
-
 version = '0.8.1'
+
+apply plugin: 'com.novoda.bintray-release'
 
 buildProperties {
     cli {
@@ -45,6 +42,8 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     testCompile 'com.google.truth:truth:0.42'
+
+    testRuntime files(pluginUnderTestMetadata)
 }
 
 compileGroovy {
