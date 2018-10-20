@@ -15,11 +15,11 @@ class TestProjectRule implements TestRule {
     private BuildFolderRule tempFolder
     private String buildScript
 
-    static TestProjectRule newJavaProject(String buildScript = null) {
+    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject()) {
         return new TestProjectRule(ProjectType.JAVA, buildScript)
     }
 
-    static TestProjectRule newAndroidProject(String buildScript = null) {
+    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject()) {
         return new TestProjectRule(ProjectType.ANDROID, buildScript)
     }
 
@@ -64,24 +64,8 @@ class TestProjectRule implements TestRule {
     }
 
     private void createBuildScript() {
-        File gradleScript = new File(tempFolder.root, "build.gradle")
-
-        // If custom buildScript provided. Use it
-        if (buildScript != null) {
-            gradleScript.text = buildScript
-            return
-        }
-
-        // ... otherwise use the Templates
-        switch (project) {
-            case ProjectType.JAVA:
-                gradleScript.text = GradleScriptTemplates.java()
-                break
-            case ProjectType.ANDROID:
-                gradleScript.text = GradleScriptTemplates.android()
-                break
-            default:
-                throw new IllegalArgumentException("$project should be a valid value!")
+        new File(tempFolder.root, "build.gradle").with {
+            text = buildScript
         }
     }
 

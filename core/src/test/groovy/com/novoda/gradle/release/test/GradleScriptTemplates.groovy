@@ -2,7 +2,7 @@ package com.novoda.gradle.release.test
 
 class GradleScriptTemplates {
 
-    static String java() {
+    static String forJavaProject() {
         return """
             plugins { 
                 id 'java-library'
@@ -24,10 +24,10 @@ class GradleScriptTemplates {
                 publishVersion = '1.0'
                 desc = 'description'
             }
-               """
+               """.stripIndent()
     }
 
-    static String android() {
+    static String forAndroidProject() {
         return """
             buildscript {
                 repositories {
@@ -76,6 +76,6 @@ class GradleScriptTemplates {
                 publishVersion = '1.0'
                 desc = 'description'
             }
-               """
+               """.stripIndent()
     }
 }
