@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat
 class AndroidDifferentGradleVersions {
 
     @Rule
-    public TestProjectRule projectRule = new TestProjectRule(TestProjectRule.Project.ANDROID)
+    public TestProjectRule projectRule = TestProjectRule.newAndroidProject()
 
     @Parameterized.Parameters(name = "{index}: test Gradle version {0}")
     static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {

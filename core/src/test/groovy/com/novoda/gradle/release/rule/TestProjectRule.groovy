@@ -1,53 +1,46 @@
 package com.novoda.gradle.release.rule
 
-import org.junit.rules.TemporaryFolder
+import com.novoda.gradle.release.BuildFolder
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
 class TestProjectRule implements TestRule {
 
-    enum Project {
+    private enum ProjectType {
         JAVA, ANDROID
     }
 
-    private def tempFolder = new TemporaryFolder()
-
-    private final Project project
-
+    private final ProjectType project
+    private BuildFolder tempFolder
     private String buildScript
 
-    /**
-     * Creates a new TestProjectRule with a default/valid BuildScript-Template.
-     */
-    TestProjectRule(Project project) {
-        this.project = project
+    static TestProjectRule newJavaProject(String buildScript = null) {
+        return new TestProjectRule(ProjectType.JAVA, buildScript)
     }
 
-    /**
-     * Creates a new TestProjectRule with a given buildScript.
-     */
-    TestProjectRule(Project project, String buildScript) {
+    static TestProjectRule newAndroidProject(String buildScript = null) {
+        return new TestProjectRule(ProjectType.ANDROID, buildScript)
+    }
+
+    private TestProjectRule(ProjectType project, String buildScript) {
         this.project = project
         this.buildScript = buildScript
     }
 
     @Override
     Statement apply(Statement base, Description description) {
-        return new Statement() {
+        tempFolder = new BuildFolder("test-projects/${description.testClass.canonicalName}/${description.methodName}")
+        def statement = new Statement() {
             @Override
             void evaluate() throws Throwable {
-                tempFolder.create()
                 createSourceCode()
                 createAndroidManifest()
                 createBuildScript()
-                try {
-                    base.evaluate()
-                } finally {
-                    tempFolder.delete()
-                }
+                base.evaluate()
             }
         }
+        return tempFolder.apply(statement, description)
     }
 
     File getProjectDir() {
@@ -62,7 +55,7 @@ class TestProjectRule implements TestRule {
     }
 
     private void createAndroidManifest() {
-        if (project == Project.ANDROID) {
+        if (project == ProjectType.ANDROID) {
             new File(tempFolder.root, "/src/main/AndroidManifest.xml").with {
                 getParentFile().mkdirs()
                 text = "<manifest package=\"com.novoda.test\"/>"
@@ -81,15 +74,14 @@ class TestProjectRule implements TestRule {
 
         // ... otherwise use the Templates
         switch (project) {
-            case Project.JAVA:
+            case ProjectType.JAVA:
                 gradleScript.text = GradleScriptTemplates.java()
                 break
-            case Project.ANDROID:
+            case ProjectType.ANDROID:
                 gradleScript.text = GradleScriptTemplates.android()
                 break
             default:
                 throw new IllegalArgumentException("$project should be a valid value!")
         }
     }
-
 }
