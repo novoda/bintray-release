@@ -1,8 +1,11 @@
-package com.novoda.gradle.release;
+package com.novoda.gradle.release
 
-import org.junit.rules.ExternalResource
 
-class BuildFolder extends ExternalResource {
+import org.junit.rules.TestRule
+import org.junit.runner.Description
+import org.junit.runners.model.Statement
+
+class BuildFolder implements TestRule {
 
     private File rootDir
 
@@ -10,7 +13,6 @@ class BuildFolder extends ExternalResource {
         File buildDir = new File(getResource('.').file).parentFile.parentFile.parentFile
         assert buildDir.path.endsWith('core/build')
         rootDir = new File(buildDir, path)
-        rootDir.mkdirs()
     }
 
     private static URL getResource(String resourceName) {
@@ -37,5 +39,21 @@ class BuildFolder extends ExternalResource {
 
     File newFile(String path) {
         return newFile(rootDir, path)
+    }
+
+    File getRoot() {
+        return rootDir
+    }
+
+    @Override
+    Statement apply(Statement base, Description description) {
+        return new Statement() {
+            @Override
+            void evaluate() throws Throwable {
+                rootDir.mkdirs()
+                base.evaluate()
+                rootDir.delete()
+            }
+        }
     }
 }
