@@ -1,4 +1,4 @@
-package com.novoda.gradle.release.rule
+package com.novoda.gradle.release.test
 
 import com.novoda.gradle.release.BuildFolder
 import org.junit.rules.TestRule
@@ -83,5 +83,9 @@ class TestProjectRule implements TestRule {
             default:
                 throw new IllegalArgumentException("$project should be a valid value!")
         }
+    }
+
+    String getProjectType() {
+        return project.name().toLowerCase()
     }
 }
