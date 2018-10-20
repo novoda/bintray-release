@@ -37,6 +37,7 @@ class TestProjectRule implements TestRule {
                 createSourceCode()
                 createAndroidManifest()
                 createBuildScript()
+                createSettingsScript()
                 base.evaluate()
             }
         }
@@ -66,6 +67,12 @@ class TestProjectRule implements TestRule {
     private void createBuildScript() {
         new File(tempFolder.root, "build.gradle").with {
             text = buildScript
+        }
+    }
+
+    private void createSettingsScript() {
+        new File(tempFolder.root, 'settings.gradle').with {
+            text = "rootProject.name = 'test'"
         }
     }
 
