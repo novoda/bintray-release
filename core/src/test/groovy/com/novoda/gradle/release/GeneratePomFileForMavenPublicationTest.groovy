@@ -15,33 +15,34 @@ class GeneratePomFileForMavenPublicationTest {
 
     @Parameterized.Parameters(name = "{index}: test POM descriptor for {0}")
     static Collection<Parameter> gradleVersionExpectedOutcome() {
-        return [
-                new Parameter(TestProjectRule.newJavaProject(templateFrom(GradleScriptTemplates.forJavaProject()))),
-                new Parameter(TestProjectRule.newAndroidProject(templateFrom(GradleScriptTemplates.forAndroidProject())))
-        ]
+        return [Parameter.forJavaProject(), Parameter.forAndroidProject()]
     }
 
     @Rule
-    public TestProjectRule testProject
+    public final TestProjectRule testProject
+
+    private final String publicationName
 
     GeneratePomFileForMavenPublicationTest(Parameter parameter) {
         this.testProject = parameter.rule
+        this.publicationName = parameter.publicationName
     }
 
     @Test
     void shouldContainAllNeededDependenciesInGeneratePomTask() {
         def projectDir = testProject.projectDir
+        def generatingTaskName = ":generatePomFileFor${publicationName.capitalize()}Publication"
 
         def result = GradleRunner.create()
                 .withProjectDir(projectDir)
-                .withArguments('generatePomFileForMavenPublication', '--stacktrace')
+                .withArguments(generatingTaskName, '--stacktrace')
                 .forwardOutput()
                 .withPluginClasspath()
                 .build()
 
-        assert result.task(':generatePomFileForMavenPublication').outcome == SUCCESS
+        assert result.task(generatingTaskName).outcome == SUCCESS
 
-        File pomFile = new File(projectDir, '/build/publications/maven/pom-default.xml')
+        File pomFile = new File(projectDir, "/build/publications/$publicationName/pom-default.xml")
         def nodes = new XmlSlurper().parse(pomFile)
         def dependencies = nodes.dependencies.dependency
 
@@ -50,8 +51,22 @@ class GeneratePomFileForMavenPublicationTest {
         assert dependencies.find { dep -> dep.artifactId == 'world' }.scope == 'runtime'
     }
 
-    private static final String templateFrom(String baseTemplate) {
-        return """
+    private static class Parameter {
+
+        static Parameter forJavaProject() {
+            return new Parameter(
+                    TestProjectRule.newJavaProject(templateFrom(GradleScriptTemplates.forJavaProject())),
+                    'maven')
+        }
+
+        static Parameter forAndroidProject() {
+            return new Parameter(
+                    TestProjectRule.newAndroidProject(templateFrom(GradleScriptTemplates.forAndroidProject())),
+                    'release')
+        }
+
+        private static final String templateFrom(String baseTemplate) {
+            return """
         $baseTemplate
         
         dependencies {
@@ -61,13 +76,14 @@ class GeneratePomFileForMavenPublicationTest {
         }
         """.stripIndent()
 
-    }
+        }
 
-    private static class Parameter {
         final TestProjectRule rule
+        final String publicationName
 
-        Parameter(TestProjectRule rule) {
+        Parameter(TestProjectRule rule, String publicationName) {
             this.rule = rule
+            this.publicationName = publicationName
         }
 
         String toString() {
