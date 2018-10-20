@@ -10,9 +10,14 @@ class BuildFolderRule implements TestRule {
     private File rootDir
 
     BuildFolderRule(String path = '') {
-        File buildDir = new File(getResource('.').file).parentFile.parentFile.parentFile
-        assert buildDir.path.endsWith('core/build')
-        rootDir = new File(buildDir, path)
+        def start = new File(getResource('.').file)
+        if (start.path.endsWith('build/classes/groovy/test')) {
+            rootDir = new File(start.parentFile.parentFile.parentFile, path)
+        } else if (start.path.endsWith('out/test/classes')) {
+            rootDir = new File(start.parentFile.parentFile.parentFile, "build/$path")
+        } else {
+            throw new UnsupportedOperationException("Unable to identify build folder from path: $start")
+        }
     }
 
     private static URL getResource(String resourceName) {
