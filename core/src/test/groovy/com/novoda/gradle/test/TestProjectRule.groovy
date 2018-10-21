@@ -1,6 +1,6 @@
-package com.novoda.gradle.release.test
+package com.novoda.gradle.test
 
-import com.novoda.gradle.test.GradleBuildResult
+
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.rules.TestRule

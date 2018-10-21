@@ -1,6 +1,6 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.release.test.TestProjectRule
+import com.novoda.gradle.test.TestProjectRule
 import com.novoda.gradle.truth.GradleTruth
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule

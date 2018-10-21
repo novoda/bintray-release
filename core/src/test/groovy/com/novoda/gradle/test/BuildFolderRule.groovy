@@ -1,4 +1,4 @@
-package com.novoda.gradle.release.test
+package com.novoda.gradle.test
 
 
 import org.junit.rules.TestRule

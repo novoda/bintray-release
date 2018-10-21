@@ -1,4 +1,4 @@
-package com.novoda.gradle.release
+package com.novoda.gradle.test
 
 import org.gradle.testkit.runner.TaskOutcome
 
