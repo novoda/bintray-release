@@ -4,8 +4,10 @@ import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.BuildTask
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.junit.Ignore
 import org.junit.Test
 
+@Ignore
 public class TestBintrayUploadTask {
 
     @Test
