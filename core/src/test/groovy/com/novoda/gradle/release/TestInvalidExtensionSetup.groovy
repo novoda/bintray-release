@@ -1,15 +1,13 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.release.rule.TestProjectRule
-import org.assertj.core.api.Assertions
-import org.gradle.testkit.runner.BuildResult
+import com.novoda.gradle.release.test.TestProjectRule
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 
-import static org.assertj.core.api.Assertions.*
+import static com.google.common.truth.Truth.assertThat
 
 @RunWith(JUnit4.class)
 class TestInvalidExtensionSetup {
@@ -30,7 +28,7 @@ class TestInvalidExtensionSetup {
                """
 
     @Rule
-    public TestProjectRule projectRule = new TestProjectRule(TestProjectRule.Project.JAVA, buildScript)
+    public TestProjectRule projectRule = TestProjectRule.newJavaProject(buildScript)
 
     @Test
     void testInvalidExtension_versionAndDescMissing_ShouldFailWithCorrectMessage() {

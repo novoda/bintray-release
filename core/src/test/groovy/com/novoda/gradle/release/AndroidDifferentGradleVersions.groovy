@@ -1,6 +1,6 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.release.rule.TestProjectRule
+import com.novoda.gradle.release.test.TestProjectRule
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
@@ -8,13 +8,13 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
-import static org.assertj.core.api.Assertions.assertThat
+import static com.google.common.truth.Truth.assertThat
 
 @RunWith(Parameterized.class)
 class AndroidDifferentGradleVersions {
 
     @Rule
-    public TestProjectRule projectRule = new TestProjectRule(TestProjectRule.Project.ANDROID)
+    public TestProjectRule projectRule = TestProjectRule.newAndroidProject()
 
     @Parameterized.Parameters(name = "{index}: test Gradle version {0}")
     static Collection<GradleVerionsParams> gradleVersionExpectedOutcome() {
