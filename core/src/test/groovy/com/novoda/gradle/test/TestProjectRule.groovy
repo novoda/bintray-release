@@ -1,6 +1,7 @@
 package com.novoda.gradle.test
 
 
+import org.gradle.api.Action
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.rules.TestRule
@@ -82,12 +83,14 @@ class TestProjectRule implements TestRule {
         return project.name().toLowerCase()
     }
 
-    GradleBuildResult execute(String... arguments) {
+    GradleBuildResult execute(Action<GradleRunner> additionalConfig = {}, String... arguments) {
         def runner = GradleRunner.create()
                 .forwardOutput()
                 .withPluginClasspath()
                 .withProjectDir(projectDir)
-                .withArguments(arguments)
+        additionalConfig.execute(runner)
+        runner.withArguments(arguments)
+
         try {
             return new GradleBuildResult(runner.build(), true)
         } catch (UnexpectedBuildFailure e) {
