@@ -1,15 +1,12 @@
 package com.novoda.gradle.release
 
-
 import com.novoda.gradle.release.test.TestProjectRule
-import org.gradle.testkit.runner.GradleRunner
+import com.novoda.gradle.truth.GradleTruth
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-
-import static com.google.common.truth.Truth.assertThat
 
 @RunWith(Parameterized.class)
 class BintrayUploadTest {
@@ -28,17 +25,12 @@ class BintrayUploadTest {
 
     @Test
     void shouldUploadSuccessfullyAsDryRun() {
-        def projectDir = testProject.projectDir
         def uploadTaskName = ":bintrayUpload"
 
-        def result = GradleRunner.create()
-                .withProjectDir(projectDir)
-                .withArguments('build', uploadTaskName, '-PbintrayUser=U', '-PbintrayKey=K', '-PdryRun=true', '--stacktrace')
-                .forwardOutput()
-                .withPluginClasspath()
-                .build()
+        def result = testProject.execute('build', uploadTaskName, '-PbintrayUser=U', '-PbintrayKey=K', '-PdryRun=true', '--stacktrace')
 
-        assertThat(result.task(uploadTaskName).outcome).isEqualTo(TaskOutcome.SUCCESS)
+        GradleTruth.assertThat(result).isSuccess()
+        GradleTruth.assertThat(result.task(uploadTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     private static class Parameter {
