@@ -1,6 +1,8 @@
 package com.novoda.gradle.release.test
 
-
+import com.novoda.gradle.test.GradleBuildResult
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
@@ -78,5 +80,18 @@ class TestProjectRule implements TestRule {
 
     String getProjectType() {
         return project.name().toLowerCase()
+    }
+
+    GradleBuildResult execute(String... arguments) {
+        def runner = GradleRunner.create()
+                .forwardOutput()
+                .withPluginClasspath()
+                .withProjectDir(projectDir)
+                .withArguments(arguments)
+        try {
+            return new GradleBuildResult(runner.build(), true)
+        } catch (UnexpectedBuildFailure e) {
+            return new GradleBuildResult(e.buildResult, false)
+        }
     }
 }
