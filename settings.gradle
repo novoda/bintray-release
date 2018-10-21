@@ -1,2 +1,4 @@
-include ':core'
 rootProject.name = 'bintray-release'
+
+include ':core'
+project(':core').projectDir = file('plugin/core')
