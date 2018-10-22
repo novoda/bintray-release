@@ -1,8 +1,8 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.release.test.GradleScriptTemplates
-import com.novoda.gradle.release.test.TestProjectRule
-import org.gradle.testkit.runner.GradleRunner
+import com.novoda.gradle.test.GradleScriptTemplates
+import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.truth.GradleTruth
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,25 +31,24 @@ class GeneratePomFileForMavenPublicationTest {
 
     @Test
     void shouldContainAllNeededDependenciesInGeneratePomTask() {
-        def projectDir = testProject.projectDir
         def generatingTaskName = ":generatePomFileFor${publicationName.capitalize()}Publication"
 
-        def result = GradleRunner.create()
-                .withProjectDir(projectDir)
-                .withArguments(generatingTaskName, '--stacktrace')
-                .forwardOutput()
-                .withPluginClasspath()
-                .build()
+        def result = testProject.execute(generatingTaskName, '--stacktrace')
 
-        assertThat(result.task(generatingTaskName).outcome).isEqualTo(SUCCESS)
+        GradleTruth.assertThat(result.task(generatingTaskName)).hasOutcome(SUCCESS)
+        assertThat(dependencyScopeFor('hello')).isEqualTo('compile')
+        assertThat(dependencyScopeFor('haha')).isEqualTo('compile')
+        assertThat(dependencyScopeFor('world')).isEqualTo('runtime')
+    }
 
-        File pomFile = new File(projectDir, "/build/publications/$publicationName/pom-default.xml")
+    private def dependencyScopeFor(String artifactId) {
+        return dependenciesFromPOM().find { dep -> dep.artifactId == artifactId }.scope
+    }
+
+    private def dependenciesFromPOM() {
+        File pomFile = new File(testProject.projectDir, "/build/publications/$publicationName/pom-default.xml")
         def nodes = new XmlSlurper().parse(pomFile)
-        def dependencies = nodes.dependencies.dependency
-
-        assertThat(dependencies.find { dep -> dep.artifactId == 'hello' }.scope).isEqualTo('compile')
-        assertThat(dependencies.find { dep -> dep.artifactId == 'haha' }.scope).isEqualTo('compile')
-        assertThat(dependencies.find { dep -> dep.artifactId == 'world' }.scope).isEqualTo('runtime')
+        return nodes.dependencies.dependency
     }
 
     private static class Parameter {
