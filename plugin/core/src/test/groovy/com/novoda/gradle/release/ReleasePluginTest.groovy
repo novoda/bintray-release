@@ -62,28 +62,28 @@ class ReleasePluginTest {
 
     @Test
     void shouldBuildLibrary() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(':build')).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldGeneratePomFile() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(configuration.generatePomTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldGenerateJavadocs() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(configuration.generateJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldPackageAllGeneratedJavadocs() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(configuration.packageJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
 
@@ -95,7 +95,7 @@ class ReleasePluginTest {
 
     @Test
     void shouldPackageAllSources() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(configuration.packageSourcesTaskName)).hasOutcome(TaskOutcome.SUCCESS)
 
@@ -107,42 +107,42 @@ class ReleasePluginTest {
 
     @Test
     void shouldPublishToMavenLocal() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(configuration.publishToMavenLocalTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldRunUploadTask() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         GradleTruth.assertThat(result.task(":bintrayUpload")).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldUploadSourcesJar() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         assertThat(result.output).contains(SOURCES_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadJavadocJar() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         assertThat(result.output).contains(JAVADOC_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadPomFile() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         assertThat(result.output).contains(POM_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadLibraryArtifact() {
-        GradleTruth.assumeThat(result).isSuccess()
+        GradleTruth.assumeThat(configuration.expectedBuildSuccess).isTrue()
 
         assertThat(result.output).contains(configuration.libraryUploadPath)
     }

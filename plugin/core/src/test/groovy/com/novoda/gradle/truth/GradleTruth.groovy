@@ -1,6 +1,6 @@
 package com.novoda.gradle.truth
 
-
+import com.google.common.truth.BooleanSubject
 import com.google.common.truth.TruthJUnit
 import com.novoda.gradle.test.GradleBuildResult
 import org.gradle.testkit.runner.BuildTask
@@ -13,8 +13,8 @@ final class GradleTruth {
         return assertAbout(GradleBuildResultSubject.FACTORY).that(result)
     }
 
-    static GradleBuildResultSubject assumeThat(GradleBuildResult result) {
-        return TruthJUnit.assume().about(GradleBuildResultSubject.FACTORY).that(result)
+    static BooleanSubject assumeThat(boolean flag) {
+        return TruthJUnit.assume().that(flag)
     }
 
     static BuildTaskSubject assertThat(BuildTask actual) {
