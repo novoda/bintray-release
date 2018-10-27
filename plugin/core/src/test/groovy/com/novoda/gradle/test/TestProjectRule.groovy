@@ -22,7 +22,7 @@ class TestProjectRule implements TestRule {
 
     private final ProjectType project
     private final Project utils = ProjectBuilder.newInstance().build()
-    private BuildFolderRule tempFolder
+    private BuildFolder tempFolder
     private String buildScript
     private Action<GradleRunner> additionalRunnerConfig
 
@@ -42,9 +42,9 @@ class TestProjectRule implements TestRule {
 
     @Override
     Statement apply(Statement base, Description description) {
-        def methodName = (description.methodName ? "/$description.methodName": '')
-        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}${methodName}/test")
-        def statement = new Statement() {
+        def methodName = (description.methodName ? "/$description.methodName" : '')
+        tempFolder = new BuildFolder("test-projects/${description.testClass.canonicalName}${methodName}/test")
+        return new Statement() {
             @Override
             void evaluate() throws Throwable {
                 createSourceCode()
@@ -54,7 +54,6 @@ class TestProjectRule implements TestRule {
                 base.evaluate()
             }
         }
-        return tempFolder.apply(statement, description)
     }
 
     File getProjectDir() {
