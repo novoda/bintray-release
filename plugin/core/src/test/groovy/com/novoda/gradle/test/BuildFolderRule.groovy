@@ -57,7 +57,6 @@ class BuildFolderRule implements TestRule {
             void evaluate() throws Throwable {
                 rootDir.mkdirs()
                 base.evaluate()
-                rootDir.deleteDir()
             }
         }
     }
