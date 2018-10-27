@@ -2,7 +2,7 @@ package com.novoda.gradle.release
 
 
 import com.novoda.gradle.test.GradleBuildResult
-import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.test.TestProject
 import com.novoda.gradle.truth.GradleTruth
 import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.file.FileTree
@@ -22,7 +22,7 @@ class BintrayUploadAndroidTest {
     private static final String AAR_UPLOAD_PATH = "${BASE_UPLOAD_PATH}.aar"
 
     @ClassRule
-    public static TestProjectRule testProject = TestProjectRule.newAndroidProject()
+    public static TestProject testProject = TestProject.newAndroidProject()
     private static GradleBuildResult result
 
     @Before

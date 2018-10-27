@@ -1,7 +1,7 @@
 package com.novoda.gradle.release
 
 import com.novoda.gradle.test.GradleScriptTemplates
-import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.test.TestProject
 import com.novoda.gradle.truth.GradleTruth
 import org.junit.Rule
 import org.junit.Test
@@ -20,12 +20,12 @@ class GeneratePomFileForMavenPublicationTest {
     }
 
     @Rule
-    public final TestProjectRule testProject
+    public final TestProject testProject
 
     private final String publicationName
 
     GeneratePomFileForMavenPublicationTest(Parameter parameter) {
-        this.testProject = parameter.rule
+        this.testProject = parameter.testProject
         this.publicationName = parameter.publicationName
     }
 
@@ -55,13 +55,13 @@ class GeneratePomFileForMavenPublicationTest {
 
         static Parameter forJavaProject() {
             return new Parameter(
-                    TestProjectRule.newJavaProject(templateFrom(GradleScriptTemplates.forJavaProject())),
+                    TestProject.newJavaProject(templateFrom(GradleScriptTemplates.forJavaProject())),
                     'maven')
         }
 
         static Parameter forAndroidProject() {
             return new Parameter(
-                    TestProjectRule.newAndroidProject(templateFrom(GradleScriptTemplates.forAndroidProject())),
+                    TestProject.newAndroidProject(templateFrom(GradleScriptTemplates.forAndroidProject())),
                     'release')
         }
 
@@ -78,16 +78,16 @@ class GeneratePomFileForMavenPublicationTest {
 
         }
 
-        final TestProjectRule rule
+        final TestProject testProject
         final String publicationName
 
-        Parameter(TestProjectRule rule, String publicationName) {
-            this.rule = rule
+        Parameter(TestProject testProject, String publicationName) {
+            this.testProject = testProject
             this.publicationName = publicationName
         }
 
         String toString() {
-            return rule.projectType
+            return testProject.projectType
         }
     }
 }

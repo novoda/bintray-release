@@ -1,14 +1,12 @@
 package com.novoda.gradle.release
 
-
 import com.novoda.gradle.test.GradleBuildResult
-import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.test.TestProject
 import com.novoda.gradle.truth.GradleTruth
 import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.file.FileTree
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Before
-import org.junit.ClassRule
 import org.junit.Test
 
 import static com.google.common.truth.Truth.assertThat
@@ -21,13 +19,14 @@ class BintrayUploadJavaTest {
     private static final String POM_UPLOAD_PATH = "${BASE_UPLOAD_PATH}.pom"
     private static final String JAR_UPLOAD_PATH = "${BASE_UPLOAD_PATH}.jar"
 
-    @ClassRule
-    public static TestProjectRule testProject = TestProjectRule.newJavaProject()
+    private static TestProject testProject
     private static GradleBuildResult result
 
     @Before
     void setUp() {
-        if (result == null) {
+        if (testProject == null) {
+            testProject = TestProject.newJavaProject()
+            testProject.init("${this.class.canonicalName}/test")
             result = testProject.execute('clean', 'build', ":bintrayUpload", '-PbintrayUser=U', '-PbintrayKey=K', '-PdryRun=true', '--stacktrace')
         }
     }

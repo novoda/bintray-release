@@ -1,7 +1,7 @@
 package com.novoda.gradle.release
 
 import com.novoda.gradle.test.GradleScriptTemplates
-import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.test.TestProject
 import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.Test
@@ -32,7 +32,7 @@ class GradleVersionsCompatibilityTest {
     }
 
     @Rule
-    public final TestProjectRule testProject
+    public final TestProject testProject
     private final BuildConfiguration configuration
 
     GradleVersionsCompatibilityTest(BuildConfiguration configuration) {
@@ -49,22 +49,22 @@ class GradleVersionsCompatibilityTest {
 
     private static class BuildConfiguration {
         final String gradleVersion
-        final TestProjectRule testProject
+        final TestProject testProject
         final boolean expectedBuildSuccess
 
         static BuildConfiguration forAndroid(String gradleVersion, boolean expectedBuildSuccess) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
-            def projectRule = TestProjectRule.newAndroidProject(GradleScriptTemplates.forAndroidProject(), additionalRunnerConfig)
-            return new BuildConfiguration(gradleVersion, projectRule, expectedBuildSuccess)
+            def testProject = TestProject.newAndroidProject(GradleScriptTemplates.forAndroidProject(), additionalRunnerConfig)
+            return new BuildConfiguration(gradleVersion, testProject, expectedBuildSuccess)
         }
 
         static BuildConfiguration forJava(String gradleVersion, boolean expectedBuildSuccess) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
-            def projectRule = TestProjectRule.newJavaProject(GradleScriptTemplates.forJavaProject(), additionalRunnerConfig)
-            return new BuildConfiguration(gradleVersion, projectRule, expectedBuildSuccess)
+            def testProject = TestProject.newJavaProject(GradleScriptTemplates.forJavaProject(), additionalRunnerConfig)
+            return new BuildConfiguration(gradleVersion, testProject, expectedBuildSuccess)
         }
 
-        private BuildConfiguration(String gradleVersion, TestProjectRule testProject, boolean expectedBuildSuccess) {
+        private BuildConfiguration(String gradleVersion, TestProject testProject, boolean expectedBuildSuccess) {
             this.gradleVersion = gradleVersion
             this.testProject = testProject
             this.expectedBuildSuccess = expectedBuildSuccess
