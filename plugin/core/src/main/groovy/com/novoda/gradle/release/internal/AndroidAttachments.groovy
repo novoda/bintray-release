@@ -4,8 +4,6 @@ import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
-import org.gradle.api.internal.component.SoftwareComponentInternal
-import org.gradle.api.internal.component.UsageContext
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.javadoc.Javadoc
 
@@ -41,8 +39,8 @@ class AndroidAttachments extends MavenPublicationAttachments {
         }
     }
 
-    private void archivePath() {
-        variant.packageLibrary.archivePath
+    private def archivePath() {
+        return variant.packageLibrary.archivePath
     }
 
     @Override
@@ -52,16 +50,6 @@ class AndroidAttachments extends MavenPublicationAttachments {
 
     @Override
     SoftwareComponent getSoftwareComponent() {
-        return new SoftwareComponentInternal() {
-            @Override
-            Set<? extends UsageContext> getUsages() {
-                return Collections.emptySet()
-            }
-
-            @Override
-            String getName() {
-                return 'android'
-            }
-        }
+        return new AndroidSoftwareComponent(project.objects, project.configurations)
     }
 }
