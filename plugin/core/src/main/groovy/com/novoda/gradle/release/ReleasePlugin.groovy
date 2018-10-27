@@ -29,27 +29,31 @@ class ReleasePlugin implements Plugin<Project> {
                 attachArtifacts(project, extension, publicationName, new AndroidArtifacts(variant))
             }
         } else {
-            attachArtifacts(project, extension, 'maven', new JavaArtifacts())
+            String publicationName = 'maven'
+            MavenPublication publication = createPublication(publicationName, project, extension)
+            new JavaAttachments(publicationName, project).attachTo(publication)
         }
     }
 
-
     private static void attachArtifacts(Project project, PublishExtension extension, String publicationName, Artifacts artifacts) {
+        MavenPublication publication = createPublication(publicationName, project, extension)
+        def artifactSources = artifacts.all(publicationName, project)
+        SoftwareComponent softwareComponent = artifacts.from(project)
+        artifactSources.each { publication.artifact it }
+        publication.from softwareComponent
+    }
+
+    private static MavenPublication createPublication(String publicationName, Project project, PublishExtension extension) {
         PropertyFinder propertyFinder = new PropertyFinder(project, extension)
         String groupId = extension.groupId
         String artifactId = extension.artifactId
         String version = propertyFinder.publishVersion
 
-        def artifactSources = artifacts.all(publicationName, project)
-        SoftwareComponent softwareComponent = artifacts.from(project)
-
         PublicationContainer publicationContainer = project.extensions.getByType(PublishingExtension).publications
-        publicationContainer.create(publicationName, MavenPublication) { MavenPublication publication ->
+        return publicationContainer.create(publicationName, MavenPublication) { MavenPublication publication ->
             publication.groupId = groupId
             publication.artifactId = artifactId
             publication.version = version
-            artifactSources.each { publication.artifact it }
-            publication.from softwareComponent
-        }
+        } as MavenPublication
     }
 }
