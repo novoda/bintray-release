@@ -1,9 +1,10 @@
 package com.novoda.gradle.release
 
 import com.jfrog.bintray.gradle.BintrayPlugin
+import com.novoda.gradle.release.internal.AndroidAttachments
+import com.novoda.gradle.release.internal.JavaAttachments
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.publish.PublicationContainer
 import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
@@ -23,24 +24,18 @@ class ReleasePlugin implements Plugin<Project> {
     }
 
     private static void attachArtifacts(PublishExtension extension, Project project) {
-        if (project.plugins.hasPlugin('com.android.library')) {
+        project.plugins.withId('com.android.library') {
             project.android.libraryVariants.all { variant ->
                 String publicationName = variant.name
-                attachArtifacts(project, extension, publicationName, new AndroidArtifacts(variant))
+                MavenPublication publication = createPublication(publicationName, project, extension)
+                new AndroidAttachments(publicationName, project, variant).attachTo(publication)
             }
-        } else {
+        }
+        project.plugins.withId('java') {
             String publicationName = 'maven'
             MavenPublication publication = createPublication(publicationName, project, extension)
             new JavaAttachments(publicationName, project).attachTo(publication)
         }
-    }
-
-    private static void attachArtifacts(Project project, PublishExtension extension, String publicationName, Artifacts artifacts) {
-        MavenPublication publication = createPublication(publicationName, project, extension)
-        def artifactSources = artifacts.all(publicationName, project)
-        SoftwareComponent softwareComponent = artifacts.from(project)
-        artifactSources.each { publication.artifact it }
-        publication.from softwareComponent
     }
 
     private static MavenPublication createPublication(String publicationName, Project project, PublishExtension extension) {
