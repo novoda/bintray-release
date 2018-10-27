@@ -15,7 +15,7 @@ import org.junit.runners.Parameterized
 import static com.google.common.truth.Truth.assertThat
 
 @RunWith(Parameterized.class)
-class GradleVersionsCompatibilityTest {
+class ReleasePluginTest {
 
     private static final String BASE_UPLOAD_PATH = 'https://api.bintray.com/content/novoda/maven/test/1.0/com/novoda/test/1.0/test-1.0'
     private static final String SOURCES_UPLOAD_PATH = "$BASE_UPLOAD_PATH-sources.jar"
@@ -47,7 +47,7 @@ class GradleVersionsCompatibilityTest {
     private final TestProject testProject
     private final BuildConfiguration configuration
 
-    GradleVersionsCompatibilityTest(BuildConfiguration configuration) {
+    ReleasePluginTest(BuildConfiguration configuration) {
         this.configuration = configuration
         this.testProject = configuration.testProject
     }
