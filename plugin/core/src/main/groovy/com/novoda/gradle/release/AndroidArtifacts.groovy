@@ -35,9 +35,9 @@ class AndroidArtifacts implements Artifacts {
             classpath += variant.javaCompile.outputs.files
         }
 
-        project.task(variant.name + 'AndroidJavadocsJar', type: Jar, dependsOn: androidJavadocs) {
+        project.task(variant.name + 'AndroidJavadocsJar', type: Jar) {
             classifier = 'javadoc'
-            from androidJavadocs.destinationDir
+            from project.files(androidJavadocs)
         }
     }
 
