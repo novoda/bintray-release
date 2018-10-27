@@ -1,11 +1,8 @@
-package com.novoda.gradle.release.rule
-
-import groovy.transform.PackageScope
+package com.novoda.gradle.test
 
 class GradleScriptTemplates {
 
-    @PackageScope
-    static String java() {
+    static String forJavaProject() {
         return """
             plugins { 
                 id 'java-library'
@@ -27,11 +24,10 @@ class GradleScriptTemplates {
                 publishVersion = '1.0'
                 desc = 'description'
             }
-               """
+               """.stripIndent()
     }
 
-    @PackageScope
-    static String android() {
+    static String forAndroidProject() {
         return """
             buildscript {
                 repositories {
@@ -44,11 +40,10 @@ class GradleScriptTemplates {
             }
             
             plugins {
-                id 'com.novoda.bintray-release' apply false
+                id 'com.novoda.bintray-release'
             }
             
             apply plugin: "com.android.library"
-            apply plugin: "com.novoda.bintray-release"
             
             android {
                 compileSdkVersion 26
@@ -80,6 +75,6 @@ class GradleScriptTemplates {
                 publishVersion = '1.0'
                 desc = 'description'
             }
-               """
+               """.stripIndent()
     }
 }

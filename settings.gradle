@@ -1,16 +1,4 @@
-pluginManagement {
-    repositories {
-        // TODO: Update later to gradlePluginPortal() if gradle updated
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "com.novoda.bintray-release") {
-                useModule("com.novoda:bintray-release:${requested.version}")
-            }
-        }
-    }
-}
+rootProject.name = 'bintray-release'
 
 include ':core'
-rootProject.name = 'bintray-release'
+project(':core').projectDir = file('plugin/core')

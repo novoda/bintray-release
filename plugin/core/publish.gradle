@@ -1,0 +1,50 @@
+buildProperties {
+    cli {
+        using(project)
+    }
+
+    bintray {
+        using(bintrayCredentials()).or(cli)
+        description = '''This should contain the following properties:
+                       - bintrayRepo: name of the repo of the organisation to deploy the artifacts to
+                       - bintrayUser: name of the account used to deploy the artifacts
+                       - bintrayKey: API key of the account used to deploy the artifacts
+        '''.stripIndent()
+    }
+
+    publish {
+        using(['version': "${generateVersion()}"]).or(buildProperties.bintray)
+    }
+}
+
+publish {
+    userOrg = 'novoda'
+    groupId = 'com.novoda'
+    artifactId = rootProject.name
+    desc = 'Super duper easy way to release your Android and other artifacts to bintray'
+    website = "https://github.com/novoda/${rootProject.name}"
+
+    version = project.buildProperties.publish['version'].string
+    publishVersion = project.buildProperties.publish['version'].string
+    bintrayUser = project.buildProperties.publish['bintrayUser'].string
+    bintrayKey = project.buildProperties.publish['bintrayKey'].string
+    repoName = buildProperties.publish['bintrayRepo'].string
+}
+
+def bintrayCredentials() {
+    return isDryRun() ?
+            ['bintrayRepo': 'n/a', 'bintrayUser': 'n/a', 'bintrayKey': 'n/a'] :
+            new File("${System.getenv('BINTRAY_PROPERTIES')}")
+}
+
+def generateVersion() {
+    return isSnapshot() ? "SNAPSHOT-${System.getenv('BUILD_NUMBER') ?: 'LOCAL'}" : project.version
+}
+
+boolean isDryRun() {
+    buildProperties.cli['dryRun'].or(true).boolean
+}
+
+boolean isSnapshot() {
+    buildProperties.cli['bintraySnapshot'].or(false).boolean
+}

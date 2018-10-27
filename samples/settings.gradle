@@ -1,2 +1,9 @@
-include ':jvm', ':android'
 rootProject.name = 'bintray-release-samples'
+
+include ':jvm', ':android'
+
+includeBuild('../') {
+    dependencySubstitution {
+        substitute module('com.novoda:bintray-release:local') with project(':core')
+    }
+}
