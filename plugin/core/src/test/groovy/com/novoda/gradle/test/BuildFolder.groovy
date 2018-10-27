@@ -1,32 +1,38 @@
 package com.novoda.gradle.test
 
+class BuildFolder {
 
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
+    private Closure<File> rootDirProvider
 
-class BuildFolderRule implements TestRule {
-
-    private File rootDir
-
-    BuildFolderRule(String path = '') {
+    BuildFolder(String path = '') {
         def start = new File(getResource('.').file)
         if (start.path.endsWith('build/classes/groovy/test')) {
-            rootDir = new File(start.parentFile.parentFile.parentFile, path)
+            rootDir(new File(start.parentFile.parentFile.parentFile, path))
         } else if (start.path.endsWith('out/test/classes')) {
-            rootDir = new File(start.parentFile.parentFile.parentFile, "build/$path")
+            rootDir(new File(start.parentFile.parentFile.parentFile, "build/$path"))
         } else {
             throw new UnsupportedOperationException("Unable to identify build folder from path: $start")
         }
     }
 
+    private void rootDir(File file) {
+        rootDirProvider = {
+            file.mkdirs()
+            return file
+        }.memoize()
+    }
+
     private static URL getResource(String resourceName) {
-        ClassLoader loader = Thread.currentThread().getContextClassLoader() ?: BuildFolderRule.class.getClassLoader()
+        ClassLoader loader = Thread.currentThread().getContextClassLoader() ?: BuildFolder.class.getClassLoader()
         URL url = loader.getResource(resourceName)
         if (url == null) {
             throw new IllegalArgumentException("resource ${resourceName} not found.")
         }
         return url
+    }
+
+    private File getRootDir() {
+        rootDirProvider.call()
     }
 
     File newFolder(String path) {
@@ -48,16 +54,5 @@ class BuildFolderRule implements TestRule {
 
     File getRoot() {
         return rootDir
-    }
-
-    @Override
-    Statement apply(Statement base, Description description) {
-        return new Statement() {
-            @Override
-            void evaluate() throws Throwable {
-                rootDir.mkdirs()
-                base.evaluate()
-            }
-        }
     }
 }

@@ -1,9 +1,12 @@
 package com.novoda.gradle.truth
 
+
 import com.google.common.truth.FailureMetadata
 import com.google.common.truth.Subject
 import com.novoda.gradle.test.GradleBuildResult
 import org.checkerframework.checker.nullness.compatqual.NullableDecl
+
+import static com.google.common.truth.Fact.fact
 
 class GradleBuildResultSubject extends Subject<GradleBuildResultSubject, GradleBuildResult> {
 
@@ -16,14 +19,20 @@ class GradleBuildResultSubject extends Subject<GradleBuildResultSubject, GradleB
     }
 
     void isSuccess() {
-        check().that(actual().success).isTrue()
+        if (!actual().success) {
+            failWithoutActual(fact('expected build status to be', 'BUILD SUCCESSFUL'), fact('but was', 'BUILD FAILED'))
+        }
     }
 
     void isFailure() {
-        check().that(actual().success).isFalse()
+        if (actual().success) {
+            failWithoutActual(fact('expected build status to be', 'BUILD FAILED'), fact('but was', 'BUILD SUCCESSFUL'))
+        }
     }
 
     void containsOutput(String output) {
-        check().that(actual().output).contains(output)
+        if (!actual().output.contains(output)) {
+            failWithoutActual(fact('expected build output to contain ', output), fact('but was', actual().output))
+        }
     }
 }

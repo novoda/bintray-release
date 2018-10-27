@@ -12,7 +12,9 @@ import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 
-class TestProjectRule implements TestRule {
+import static com.google.common.base.Preconditions.checkNotNull
+
+class TestProject implements TestRule {
 
     private static final Action<GradleRunner> NONE = {}
 
@@ -22,19 +24,19 @@ class TestProjectRule implements TestRule {
 
     private final ProjectType project
     private final Project utils = ProjectBuilder.newInstance().build()
-    private BuildFolderRule tempFolder
+    private BuildFolder tempFolder
     private String buildScript
     private Action<GradleRunner> additionalRunnerConfig
 
-    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject(), Action<GradleRunner> additionalRunnerConfig = NONE) {
-        return new TestProjectRule(ProjectType.JAVA, buildScript, additionalRunnerConfig)
+    static TestProject newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject(), Action<GradleRunner> additionalRunnerConfig = NONE) {
+        return new TestProject(ProjectType.JAVA, buildScript, additionalRunnerConfig)
     }
 
-    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject(), Action<GradleRunner> additionalConfig = NONE) {
-        return new TestProjectRule(ProjectType.ANDROID, buildScript, additionalConfig)
+    static TestProject newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject(), Action<GradleRunner> additionalConfig = NONE) {
+        return new TestProject(ProjectType.ANDROID, buildScript, additionalConfig)
     }
 
-    private TestProjectRule(ProjectType project, String buildScript, Action<GradleRunner> additionalRunnerConfig) {
+    private TestProject(ProjectType project, String buildScript, Action<GradleRunner> additionalRunnerConfig) {
         this.project = project
         this.buildScript = buildScript
         this.additionalRunnerConfig = additionalRunnerConfig
@@ -42,27 +44,36 @@ class TestProjectRule implements TestRule {
 
     @Override
     Statement apply(Statement base, Description description) {
-        def methodName = (description.methodName ? "/$description.methodName": '')
-        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}${methodName}/test")
-        def statement = new Statement() {
+        return new Statement() {
             @Override
             void evaluate() throws Throwable {
-                createSourceCode()
-                createAndroidManifest()
-                createBuildScript()
-                createSettingsScript()
+                def methodName = (description.methodName ? "/$description.methodName" : '')
+                def projectPath = "${description.testClass.canonicalName}${methodName}/test"
+                init(projectPath)
                 base.evaluate()
             }
+
         }
-        return tempFolder.apply(statement, description)
+    }
+
+    void init(String projectPath) {
+        if (tempFolder != null) {
+            throw new IllegalStateException("The test project has already been initialised: $tempFolder.root.path.")
+        }
+        tempFolder = new BuildFolder("test-projects/$projectPath")
+        createSourceCode()
+        createAndroidManifest()
+        createBuildScript()
+        createSettingsScript()
     }
 
     File getProjectDir() {
+        checkNotNull(tempFolder, 'The test project has not been initialised yet. Call init() or use it as a test rule.')
         tempFolder.root
     }
 
     private String createSourceCode() {
-        new File(tempFolder.root, "src/main/java/HelloWorld.java").with {
+        new File(projectDir, "src/main/java/HelloWorld.java").with {
             getParentFile().mkdirs()
             text = "public class HelloWorld {}"
         }
@@ -70,7 +81,7 @@ class TestProjectRule implements TestRule {
 
     private void createAndroidManifest() {
         if (project == ProjectType.ANDROID) {
-            new File(tempFolder.root, "/src/main/AndroidManifest.xml").with {
+            new File(projectDir, "/src/main/AndroidManifest.xml").with {
                 getParentFile().mkdirs()
                 text = "<manifest package=\"com.novoda.test\"/>"
             }
@@ -78,13 +89,13 @@ class TestProjectRule implements TestRule {
     }
 
     private void createBuildScript() {
-        new File(tempFolder.root, "build.gradle").with {
+        new File(projectDir, 'build.gradle').with {
             text = buildScript
         }
     }
 
     private void createSettingsScript() {
-        new File(tempFolder.root, 'settings.gradle').with {
+        new File(projectDir, 'settings.gradle').with {
             text = "rootProject.name = 'test'"
         }
     }

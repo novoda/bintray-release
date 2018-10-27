@@ -1,6 +1,6 @@
 package com.novoda.gradle.release
 
-import com.novoda.gradle.test.TestProjectRule
+import com.novoda.gradle.test.TestProject
 import com.novoda.gradle.truth.GradleTruth
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +23,7 @@ class InvalidExtensionSetupTest {
                """.stripIndent()
 
     @Rule
-    public TestProjectRule testProject = TestProjectRule.newJavaProject(buildScript)
+    public TestProject testProject = TestProject.newJavaProject(buildScript)
 
     @Test
     void shouldFailWhenMissingMandatoryAttributes() {
