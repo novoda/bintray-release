@@ -190,24 +190,28 @@ class ReleasePluginTest {
             return testProject.projectType == 'android'
         }
 
+        private String getPublicationName() {
+            return isAndroid() ? 'release' : 'maven'
+        }
+
         String getGeneratePomTaskName() {
-            return isAndroid() ? ':generatePomFileForReleasePublication' : ':generatePomFileForMavenPublication'
+            return ":generatePomFileFor${publicationName.capitalize()}Publication"
         }
 
         String getGenerateJavadocsTaskName() {
-            return isAndroid() ? ':releaseAndroidJavadocs' : ':javadoc'
+            return isAndroid() ? ":javadoc${publicationName.capitalize()}" : ':javadoc'
         }
 
         String getPackageJavadocsTaskName() {
-            return isAndroid() ? ':releaseAndroidJavadocsJar' : ':mavenJavadocJar'
+            return ":genereateJavadocsJarFor${publicationName.capitalize()}Publication"
         }
 
         String getPackageSourcesTaskName() {
-            return isAndroid() ? ':releaseAndroidSourcesJar' : ':mavenSourcesJar'
+            return ":genereateSourcesJarFor${publicationName.capitalize()}Publication"
         }
 
         String getPublishToMavenLocalTaskName() {
-            return isAndroid() ? ':publishReleasePublicationToMavenLocal' : ':publishMavenPublicationToMavenLocal'
+            return ":publish${publicationName.capitalize()}PublicationToMavenLocal"
         }
 
         String getLibraryUploadPath() {

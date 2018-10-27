@@ -1,10 +1,11 @@
-package com.novoda.gradle.release
+package com.novoda.gradle.release.internal
 
+import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
-import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
 class JavaAttachments extends MavenPublicationAttachments {
@@ -20,16 +21,16 @@ class JavaAttachments extends MavenPublicationAttachments {
     }
 
     private Task publicationSourcesJar() {
-        SourceSetContainer sourceSets = project.sourceSets
-        return project.task("${publicationName}SourcesJar", type: Jar) { Jar jar ->
+        JavaCompile javaCompile = project.compileJava
+        return project.task("genereateSourcesJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
             jar.classifier = 'sources'
-            jar.from sourceSets.getByName('main').allJava.flatten()
+            jar.from javaCompile.source
         }
     }
 
     private Task publicationJavadocJar() {
         Javadoc javadoc = project.javadoc
-        return project.task("${publicationName}JavadocJar", type: Jar) { Jar jar ->
+        return project.task("genereateJavadocsJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
             jar.classifier = 'javadoc'
             jar.from project.files(javadoc)
         }
