@@ -20,7 +20,7 @@ class AndroidAttachments extends MavenPublicationAttachments {
         this.publicationName = publicationName
         this.variant = variant
         this.project = project
-        this.allArtifactSources = Arrays.asList(publicationSourcesJar(), publicationJavadocJar()).asImmutable()
+        this.allArtifactSources = Arrays.asList(publicationSourcesJar(), publicationJavadocJar(), archivePath()).asImmutable()
     }
 
     private Task publicationSourcesJar() {
@@ -39,6 +39,10 @@ class AndroidAttachments extends MavenPublicationAttachments {
             jar.classifier = 'javadoc'
             jar.from project.files(javadoc)
         }
+    }
+
+    private void archivePath() {
+        variant.packageLibrary.archivePath
     }
 
     @Override
