@@ -2,6 +2,10 @@ package com.novoda.gradle.test
 
 
 import org.gradle.api.Action
+import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileTree
+import org.gradle.api.file.FileTree
+import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.rules.TestRule
@@ -10,30 +14,36 @@ import org.junit.runners.model.Statement
 
 class TestProjectRule implements TestRule {
 
+    private static final Action<GradleRunner> NONE = {}
+
     private enum ProjectType {
         JAVA, ANDROID
     }
 
     private final ProjectType project
+    private final Project utils = ProjectBuilder.newInstance().build()
     private BuildFolderRule tempFolder
     private String buildScript
+    private Action<GradleRunner> additionalRunnerConfig
 
-    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject()) {
-        return new TestProjectRule(ProjectType.JAVA, buildScript)
+    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject(), Action<GradleRunner> additionalRunnerConfig = NONE) {
+        return new TestProjectRule(ProjectType.JAVA, buildScript, additionalRunnerConfig)
     }
 
-    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject()) {
-        return new TestProjectRule(ProjectType.ANDROID, buildScript)
+    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject(), Action<GradleRunner> additionalConfig = NONE) {
+        return new TestProjectRule(ProjectType.ANDROID, buildScript, additionalConfig)
     }
 
-    private TestProjectRule(ProjectType project, String buildScript) {
+    private TestProjectRule(ProjectType project, String buildScript, Action<GradleRunner> additionalRunnerConfig) {
         this.project = project
         this.buildScript = buildScript
+        this.additionalRunnerConfig = additionalRunnerConfig
     }
 
     @Override
     Statement apply(Statement base, Description description) {
-        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}/${description.methodName}")
+        def methodName = (description.methodName ? "/$description.methodName": '')
+        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}${methodName}/test")
         def statement = new Statement() {
             @Override
             void evaluate() throws Throwable {
@@ -83,12 +93,12 @@ class TestProjectRule implements TestRule {
         return project.name().toLowerCase()
     }
 
-    GradleBuildResult execute(Action<GradleRunner> additionalConfig = {}, String... arguments) {
+    GradleBuildResult execute(String... arguments) {
         def runner = GradleRunner.create()
                 .forwardOutput()
                 .withPluginClasspath()
                 .withProjectDir(projectDir)
-        additionalConfig.execute(runner)
+        additionalRunnerConfig.execute(runner)
         runner.withArguments(arguments)
 
         try {
@@ -96,5 +106,21 @@ class TestProjectRule implements TestRule {
         } catch (UnexpectedBuildFailure e) {
             return new GradleBuildResult(e.buildResult, false)
         }
+    }
+
+    File buildDir() {
+        return new File(projectDir, 'build')
+    }
+
+    File buildFile(String path) {
+        return new File(buildDir(), path)
+    }
+
+    ConfigurableFileTree fileTree(String baseDir) {
+        return utils.fileTree(new File(projectDir, baseDir))
+    }
+
+    FileTree zipTree(String zipPath) {
+        return utils.zipTree(new File(projectDir, zipPath))
     }
 }

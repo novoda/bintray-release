@@ -1,7 +1,8 @@
 package com.novoda.gradle.release
 
-
+import com.novoda.gradle.test.GradleScriptTemplates
 import com.novoda.gradle.test.TestProjectRule
+import org.gradle.testkit.runner.GradleRunner
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,7 +13,7 @@ import static com.google.common.truth.Truth.assertThat
 @RunWith(Parameterized.class)
 class GradleVersionsCompatibilityTest {
 
-    @Parameterized.Parameters(name = "{index}: {0}")
+    @Parameterized.Parameters(name = "{0}")
     static Collection<BuildConfiguration> configurations() {
         return [
                 BuildConfiguration.forAndroid('4.0', false),
@@ -41,9 +42,7 @@ class GradleVersionsCompatibilityTest {
 
     @Test
     void shouldMatchExpectedOutcome() {
-        def additionalConfig = { it.withGradleVersion(configuration.gradleVersion) }
-
-        def result = testProject.execute(additionalConfig, "build", "bintrayUpload", "-PbintrayKey=key", "-PbintrayUser=user")
+        def result = testProject.execute("build", "bintrayUpload", "-PbintrayKey=key", "-PbintrayUser=user")
 
         assertThat(result.success).isEqualTo(configuration.expectedBuildSuccess)
     }
@@ -54,11 +53,15 @@ class GradleVersionsCompatibilityTest {
         final boolean expectedBuildSuccess
 
         static BuildConfiguration forAndroid(String gradleVersion, boolean expectedBuildSuccess) {
-            return new BuildConfiguration(gradleVersion, TestProjectRule.newAndroidProject(), expectedBuildSuccess)
+            def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
+            def projectRule = TestProjectRule.newAndroidProject(GradleScriptTemplates.forAndroidProject(), additionalRunnerConfig)
+            return new BuildConfiguration(gradleVersion, projectRule, expectedBuildSuccess)
         }
 
         static BuildConfiguration forJava(String gradleVersion, boolean expectedBuildSuccess) {
-            return new BuildConfiguration(gradleVersion, TestProjectRule.newJavaProject(), expectedBuildSuccess)
+            def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
+            def projectRule = TestProjectRule.newJavaProject(GradleScriptTemplates.forJavaProject(), additionalRunnerConfig)
+            return new BuildConfiguration(gradleVersion, projectRule, expectedBuildSuccess)
         }
 
         private BuildConfiguration(String gradleVersion, TestProjectRule testProject, boolean expectedBuildSuccess) {
@@ -69,7 +72,7 @@ class GradleVersionsCompatibilityTest {
 
         @Override
         String toString() {
-            return "Build ${testProject.projectType} project with Gradle version $gradleVersion"
+            return "${testProject.projectType.capitalize()} project with Gradle $gradleVersion"
         }
     }
 }

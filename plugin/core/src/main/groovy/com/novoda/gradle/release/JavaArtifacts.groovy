@@ -19,7 +19,7 @@ class JavaArtifacts implements Artifacts {
     def javadocJar(String publicationName, Project project) {
         project.task(publicationName + 'JavadocJar', type: Jar) {
             classifier = 'javadoc'
-            from project.javadoc.destinationDir
+            from project.files(project.javadoc)
         }
     }
 
