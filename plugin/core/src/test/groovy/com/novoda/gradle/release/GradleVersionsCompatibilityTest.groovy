@@ -13,7 +13,7 @@ import static com.google.common.truth.Truth.assertThat
 @RunWith(Parameterized.class)
 class GradleVersionsCompatibilityTest {
 
-    @Parameterized.Parameters(name = "{index}: {0}")
+    @Parameterized.Parameters(name = "{0}")
     static Collection<BuildConfiguration> configurations() {
         return [
                 BuildConfiguration.forAndroid('4.0', false),
@@ -72,7 +72,7 @@ class GradleVersionsCompatibilityTest {
 
         @Override
         String toString() {
-            return "Build ${testProject.projectType} project with Gradle version $gradleVersion"
+            return "${testProject.projectType.capitalize()} project with Gradle $gradleVersion"
         }
     }
 }

@@ -37,7 +37,8 @@ class TestProjectRule implements TestRule {
 
     @Override
     Statement apply(Statement base, Description description) {
-        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}/${description.methodName ?: ''}")
+        def methodName = (description.methodName ? "/$description.methodName": '')
+        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}${methodName}/test")
         def statement = new Statement() {
             @Override
             void evaluate() throws Throwable {
