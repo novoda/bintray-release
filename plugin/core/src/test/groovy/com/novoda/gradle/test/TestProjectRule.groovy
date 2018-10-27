@@ -2,6 +2,10 @@ package com.novoda.gradle.test
 
 
 import org.gradle.api.Action
+import org.gradle.api.Project
+import org.gradle.api.file.ConfigurableFileTree
+import org.gradle.api.file.FileTree
+import org.gradle.testfixtures.ProjectBuilder
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.UnexpectedBuildFailure
 import org.junit.rules.TestRule
@@ -17,6 +21,7 @@ class TestProjectRule implements TestRule {
     }
 
     private final ProjectType project
+    private final Project utils = ProjectBuilder.newInstance().build()
     private BuildFolderRule tempFolder
     private String buildScript
     private Action<GradleRunner> additionalRunnerConfig
@@ -105,5 +110,17 @@ class TestProjectRule implements TestRule {
 
     File buildDir() {
         return new File(projectDir, 'build')
+    }
+
+    File buildFile(String path) {
+        return new File(buildDir(), path)
+    }
+
+    ConfigurableFileTree fileTree(String baseDir) {
+        return utils.fileTree(new File(projectDir, baseDir))
+    }
+
+    FileTree zipTree(String zipPath) {
+        return utils.zipTree(new File(projectDir, zipPath))
     }
 }
