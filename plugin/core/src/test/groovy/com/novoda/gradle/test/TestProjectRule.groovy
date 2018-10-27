@@ -10,6 +10,8 @@ import org.junit.runners.model.Statement
 
 class TestProjectRule implements TestRule {
 
+    private static final Action<GradleRunner> NONE = {}
+
     private enum ProjectType {
         JAVA, ANDROID
     }
@@ -17,23 +19,25 @@ class TestProjectRule implements TestRule {
     private final ProjectType project
     private BuildFolderRule tempFolder
     private String buildScript
+    private Action<GradleRunner> additionalRunnerConfig
 
-    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject()) {
-        return new TestProjectRule(ProjectType.JAVA, buildScript)
+    static TestProjectRule newJavaProject(String buildScript = GradleScriptTemplates.forJavaProject(), Action<GradleRunner> additionalRunnerConfig = NONE) {
+        return new TestProjectRule(ProjectType.JAVA, buildScript, additionalRunnerConfig)
     }
 
-    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject()) {
-        return new TestProjectRule(ProjectType.ANDROID, buildScript)
+    static TestProjectRule newAndroidProject(String buildScript = GradleScriptTemplates.forAndroidProject(), Action<GradleRunner> additionalConfig = NONE) {
+        return new TestProjectRule(ProjectType.ANDROID, buildScript, additionalConfig)
     }
 
-    private TestProjectRule(ProjectType project, String buildScript) {
+    private TestProjectRule(ProjectType project, String buildScript, Action<GradleRunner> additionalRunnerConfig) {
         this.project = project
         this.buildScript = buildScript
+        this.additionalRunnerConfig = additionalRunnerConfig
     }
 
     @Override
     Statement apply(Statement base, Description description) {
-        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}/${description.methodName}")
+        tempFolder = new BuildFolderRule("test-projects/${description.testClass.canonicalName}/${description.methodName ?: ''}")
         def statement = new Statement() {
             @Override
             void evaluate() throws Throwable {
@@ -83,12 +87,12 @@ class TestProjectRule implements TestRule {
         return project.name().toLowerCase()
     }
 
-    GradleBuildResult execute(Action<GradleRunner> additionalConfig = {}, String... arguments) {
+    GradleBuildResult execute(String... arguments) {
         def runner = GradleRunner.create()
                 .forwardOutput()
                 .withPluginClasspath()
                 .withProjectDir(projectDir)
-        additionalConfig.execute(runner)
+        additionalRunnerConfig.execute(runner)
         runner.withArguments(arguments)
 
         try {
@@ -96,5 +100,9 @@ class TestProjectRule implements TestRule {
         } catch (UnexpectedBuildFailure e) {
             return new GradleBuildResult(e.buildResult, false)
         }
+    }
+
+    File buildDir() {
+        return new File(projectDir, 'build')
     }
 }
