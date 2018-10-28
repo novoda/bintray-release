@@ -4,45 +4,28 @@ import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
-import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
 class JavaAttachments extends MavenPublicationAttachments {
 
-    private final String publicationName
-    private final Project project
-    private final List<Object> allArtifactSources
-
     JavaAttachments(String publicationName, Project project) {
-        this.publicationName = publicationName
-        this.project = project
-        this.allArtifactSources = Arrays.asList(publicationSourcesJar(), publicationJavadocJar()).asImmutable()
+        super(javaComponentFrom(project),
+                javaSourcesJarTask(project, publicationName),
+                javaJavadocsJarTask(project, publicationName))
     }
 
-    private Task publicationSourcesJar() {
-        JavaCompile javaCompile = project.compileJava
-        return project.task("genereateSourcesJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
-            jar.classifier = 'sources'
-            jar.from javaCompile.source
-        }
-    }
-
-    private Task publicationJavadocJar() {
-        Javadoc javadoc = project.javadoc
-        return project.task("genereateJavadocsJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
-            jar.classifier = 'javadoc'
-            jar.from project.files(javadoc)
-        }
-    }
-
-    @Override
-    List<Object> getAllArtifactSources() {
-        return allArtifactSources
-    }
-
-    @Override
-    SoftwareComponent getSoftwareComponent() {
+    private static SoftwareComponent javaComponentFrom(Project project) {
         return project.components.getByName('java')
+    }
+
+    private static Task javaSourcesJarTask(Project project, String publicationName) {
+        JavaCompile javaCompile = project.compileJava
+        return sourcesJarTask(project, publicationName, javaCompile.source)
+    }
+
+    private static Task javaJavadocsJarTask(Project project, String publicationName) {
+        Javadoc javadoc = project.javadoc
+        return javadocsJarTask(project, publicationName, javadoc)
     }
 }
