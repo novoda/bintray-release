@@ -1,0 +1,56 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
+String gw = Os.isFamily(Os.FAMILY_WINDOWS) ? 'gradlew.bat' : './gradlew'
+String compatClassesDestination = 'build/compat/classes'
+TaskContainer taskContainer = project.tasks
+
+File[] compatModulesDirs = rootProject.file('plugin/compat').listFiles(new FilenameFilter() {
+
+    /**
+     * We want to collect all the folders inside plugin/compat that are also standalone Gradle projects,
+     * hence we look for their settings.gradle
+     */
+    @Override
+    boolean accept(File dir, String name) {
+        return new File(dir, "$name/settings.gradle").exists()
+    }
+})
+
+Task compatClassesTask = taskContainer.create(name: 'releasePluginCompatClasses', type: DefaultTask) {
+    outputs.dir(compatClassesDestination)
+}
+
+compatModulesDirs.each { File moduleDir ->
+
+    def moduleName = moduleDir.name
+
+    def cleanModuleTask = taskContainer.create(name: "clean${moduleName.capitalize()}", type: Delete) {
+        delete new File(moduleDir, 'build')
+    }
+    taskContainer.clean.dependsOn cleanModuleTask
+
+    def compileModuleTask = taskContainer.create(name: "compile${moduleName.capitalize()}Classes", type: Exec) {
+        outputs.dir(new File(moduleDir, 'build'))
+        workingDir moduleDir
+        commandLine gw, 'clean', 'build'
+    }
+
+    def copyClassesTask = taskContainer.create(name: "copy${moduleName.capitalize()}Classes", type: Copy) {
+        from new File(moduleDir, 'build/classes/groovy/main')
+        into compatClassesDestination
+        dependsOn compileModuleTask
+    }
+    compatClassesTask.dependsOn copyClassesTask
+}
+
+sourceSets {
+    main {
+        groovy {
+            output.dir(project.files(compatClassesDestination))
+        }
+    }
+}
+
+dependencies {
+    compileOnly files(compatClassesTask)
+}

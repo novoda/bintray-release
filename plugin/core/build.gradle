@@ -8,6 +8,7 @@ version = '0.8.1'
 
 apply plugin: 'com.novoda.bintray-release'
 apply from: 'publish.gradle'
+apply from: 'compat.gradle'
 
 dependencies {
     implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
