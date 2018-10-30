@@ -1,8 +1,12 @@
 package com.novoda.gradle.release
 
 import com.jfrog.bintray.gradle.BintrayPlugin
+import com.novoda.gradle.release.internal.AndroidAttachments
+import com.novoda.gradle.release.internal.JavaAttachments
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.publish.PublicationContainer
+import org.gradle.api.publish.PublishingExtension
 import org.gradle.api.publish.maven.MavenPublication
 
 class ReleasePlugin implements Plugin<Project> {
@@ -19,29 +23,32 @@ class ReleasePlugin implements Plugin<Project> {
         new BintrayPlugin().apply(project)
     }
 
-    void attachArtifacts(PublishExtension extension, Project project) {
-        if (project.plugins.hasPlugin('com.android.library')) {
+    private static void attachArtifacts(PublishExtension extension, Project project) {
+        project.plugins.withId('com.android.library') {
             project.android.libraryVariants.all { variant ->
-                def artifactId = extension.artifactId;
-                addArtifact(project, variant.name, artifactId, new AndroidArtifacts(variant))
+                String publicationName = variant.name
+                MavenPublication publication = createPublication(publicationName, project, extension)
+                new AndroidAttachments(publicationName, project, variant).attachTo(publication)
             }
-        } else {
-            addArtifact(project, 'maven', project.publish.artifactId, new JavaArtifacts())
+        }
+        project.plugins.withId('java') {
+            String publicationName = 'maven'
+            MavenPublication publication = createPublication(publicationName, project, extension)
+            new JavaAttachments(publicationName, project).attachTo(publication)
         }
     }
 
+    private static MavenPublication createPublication(String publicationName, Project project, PublishExtension extension) {
+        PropertyFinder propertyFinder = new PropertyFinder(project, extension)
+        String groupId = extension.groupId
+        String artifactId = extension.artifactId
+        String version = propertyFinder.publishVersion
 
-    void addArtifact(Project project, String name, String artifact, Artifacts artifacts) {
-        PropertyFinder propertyFinder = new PropertyFinder(project, project.publish)
-        project.publishing.publications.create(name, MavenPublication) {
-            groupId project.publish.groupId
-            artifactId artifact
-            version = propertyFinder.publishVersion
-
-            artifacts.all(it.name, project).each {
-                delegate.artifact it
-            }
-            from artifacts.from(project)
-        }
+        PublicationContainer publicationContainer = project.extensions.getByType(PublishingExtension).publications
+        return publicationContainer.create(publicationName, MavenPublication) { MavenPublication publication ->
+            publication.groupId = groupId
+            publication.artifactId = artifactId
+            publication.version = version
+        } as MavenPublication
     }
 }
