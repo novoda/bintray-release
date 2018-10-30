@@ -10,6 +10,10 @@ import org.gradle.api.internal.component.UsageContext
 import org.gradle.api.model.ObjectFactory
 import org.gradle.util.GradleVersion
 
+/**
+ * This implementation of {@code SoftwareComponentInternal} is heavily inspired by {@code JavaLibrary},
+ * see: https://github.com/gradle/gradle/blob/v4.1.0/subprojects/plugins/src/main/java/org/gradle/api/internal/java/JavaLibrary.java
+ */
 class AndroidSoftwareComponentCompat_Gradle_4_1 implements SoftwareComponentInternal {
 
     private final Set<? extends UsageContext> usageContexts
