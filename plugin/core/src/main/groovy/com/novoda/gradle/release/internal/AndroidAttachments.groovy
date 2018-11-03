@@ -3,9 +3,12 @@ package com.novoda.gradle.release.internal
 import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
+import org.gradle.api.component.SoftwareComponent
 import org.gradle.api.tasks.javadoc.Javadoc
 
 class AndroidAttachments extends MavenPublicationAttachments {
+
+    private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_4_1 = 'com.novoda.release.internal.compat.gradle4_1.AndroidSoftwareComponentCompat_Gradle_4_1'
 
     AndroidAttachments(String publicationName, Project project, def variant) {
         super(androidComponentFrom(project),
@@ -14,8 +17,9 @@ class AndroidAttachments extends MavenPublicationAttachments {
                 androidArchivePath(variant))
     }
 
-    private static AndroidSoftwareComponent androidComponentFrom(Project project) {
-        return new AndroidSoftwareComponent(project.objects, project.configurations)
+    private static SoftwareComponent androidComponentFrom(Project project) {
+        def clazz = this.classLoader.loadClass(ANDROID_SOFTWARE_COMPONENT_COMPAT_4_1)
+        return clazz.newInstance(project.objects, project.configurations) as SoftwareComponent
     }
 
     private static Task androidSourcesJarTask(Project project, String publicationName, def variant) {

@@ -8,12 +8,13 @@ version = '0.8.1'
 
 apply plugin: 'com.novoda.bintray-release'
 apply from: 'publish.gradle'
+apply from: 'compat.gradle'
 
 dependencies {
     implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
 
-    testCompile 'junit:junit:4.12'
-    testCompile 'com.google.truth:truth:0.42'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:0.42'
 
     testRuntime files(pluginUnderTestMetadata)
 }
