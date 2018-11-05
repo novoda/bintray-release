@@ -8,6 +8,7 @@ import org.gradle.api.file.ConfigurableFileTree
 import org.gradle.api.file.FileTree
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
+import org.gradle.util.GradleVersion
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
@@ -17,6 +18,7 @@ import static com.google.common.truth.Truth.assertThat
 @RunWith(Parameterized.class)
 class ReleasePluginTest {
 
+    private static final GradleVersion GRADLE_4_1 = GradleVersion.version('4.1')
     private static final String BASE_UPLOAD_PATH = 'https://api.bintray.com/content/novoda/maven/test/1.0/com/novoda/test/1.0/test-1.0'
     private static final String SOURCES_UPLOAD_PATH = "$BASE_UPLOAD_PATH-sources.jar"
     private static final String JAVADOC_UPLOAD_PATH = "$BASE_UPLOAD_PATH-javadoc.jar"
@@ -153,33 +155,35 @@ class ReleasePluginTest {
     }
 
     private static class BuildConfiguration {
-        final String gradleVersion
+        final GradleVersion gradleVersion
         final TestProject testProject
         final boolean expectedBuildSuccess
 
         static BuildConfiguration forAndroid(String gradleVersion, boolean expectedBuildSuccess) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
+            def buildGradleVersion = GradleVersion.version(gradleVersion)
             def buildScript = GradleScriptTemplates.forAndroidProject()
             def testProject = TestProject.newAndroidProject(buildScript, additionalRunnerConfig)
-            return new BuildConfiguration(gradleVersion, testProject, expectedBuildSuccess)
+            return new BuildConfiguration(buildGradleVersion, testProject, expectedBuildSuccess)
         }
 
         static BuildConfiguration forJava(String gradleVersion, boolean expectedBuildSuccess) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
+            def buildGradleVersion = GradleVersion.version(gradleVersion)
             def buildScript = GradleScriptTemplates.forJavaProject()
             def testProject = TestProject.newJavaProject(buildScript, additionalRunnerConfig)
-            return new BuildConfiguration(gradleVersion, testProject, expectedBuildSuccess)
+            return new BuildConfiguration(buildGradleVersion, testProject, expectedBuildSuccess)
         }
 
-        private BuildConfiguration(String gradleVersion, TestProject testProject, boolean expectedBuildSuccess) {
-            this.gradleVersion = gradleVersion
+        private BuildConfiguration(GradleVersion buildGradleVersion, TestProject testProject, boolean expectedBuildSuccess) {
+            this.gradleVersion = buildGradleVersion
             this.testProject = testProject
             this.expectedBuildSuccess = expectedBuildSuccess
         }
 
         @Override
         String toString() {
-            return "${testProject.projectType.capitalize()} project with Gradle $gradleVersion"
+            return "${testProject.projectType.capitalize()} project with $gradleVersion"
         }
 
         String getKey() {
