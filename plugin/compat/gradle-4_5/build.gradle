@@ -1,0 +1,6 @@
+apply from: '../common.gradle'
+
+task wrapper(type: Wrapper) {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '4.5'
+}
