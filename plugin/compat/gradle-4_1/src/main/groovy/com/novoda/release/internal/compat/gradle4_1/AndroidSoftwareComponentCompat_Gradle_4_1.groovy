@@ -49,7 +49,7 @@ class AndroidSoftwareComponentCompat_Gradle_4_1 implements SoftwareComponentInte
     private class RuntimeUsageContext implements UsageContext {
 
         private final Usage usage
-        private DependencySet dependencies
+        private Set<ModuleDependency> dependencies
 
         RuntimeUsageContext(Usage usage) {
             this.usage = usage
@@ -68,9 +68,14 @@ class AndroidSoftwareComponentCompat_Gradle_4_1 implements SoftwareComponentInte
         @Override
         Set<ModuleDependency> getDependencies() {
             if (dependencies == null) {
-                dependencies = configurations.getByName('implementation').getAllDependencies()
+                def implementation = configurations.findByName('implementation')
+                if (implementation == null) {
+                    dependencies = Collections.emptySet()
+                } else {
+                    dependencies = implementation.getAllDependencies().withType(ModuleDependency)
+                }
             }
-            return dependencies.withType(ModuleDependency.class)
+            return dependencies
         }
     }
 

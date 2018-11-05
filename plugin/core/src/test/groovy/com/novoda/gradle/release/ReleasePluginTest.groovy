@@ -35,18 +35,17 @@ class ReleasePluginTest {
     @Parameterized.Parameters(name = "{0}")
     static Collection<BuildConfiguration> configurations() {
         return [
-                BuildConfiguration.forAndroid('4.0', false),
-                BuildConfiguration.forAndroid('4.1', true),
-                BuildConfiguration.forAndroid('4.2', true),
-                BuildConfiguration.forAndroid('4.3', true),
-                BuildConfiguration.forAndroid('4.4', true),
-                BuildConfiguration.forAndroid('4.5', false),
-                BuildConfiguration.forJava('4.0', true),
-                BuildConfiguration.forJava('4.1', true),
-                BuildConfiguration.forJava('4.2', true),
-                BuildConfiguration.forJava('4.3', true),
-                BuildConfiguration.forJava('4.4', true),
-                BuildConfiguration.forJava('4.5', true)
+                BuildConfiguration.forAndroid('4.0', '2.3.0'),
+                BuildConfiguration.forAndroid('4.1', '3.0.0'),
+                BuildConfiguration.forAndroid('4.2', '3.0.0'),
+                BuildConfiguration.forAndroid('4.3', '3.0.0'),
+                BuildConfiguration.forAndroid('4.4', '3.1.0'),
+                BuildConfiguration.forJava('4.0'),
+                BuildConfiguration.forJava('4.1'),
+                BuildConfiguration.forJava('4.2'),
+                BuildConfiguration.forJava('4.3'),
+                BuildConfiguration.forJava('4.4'),
+                BuildConfiguration.forJava('4.5'),
         ]
     }
 
@@ -65,29 +64,27 @@ class ReleasePluginTest {
     }
 
     @Test
-    void shouldBuildLibrary() {
-        skipTestWhen(configuration.expectedBuildFailure)
+    void shouldBuildSuccessfully() {
+        assertThat(result.success).isTrue()
+    }
 
+    @Test
+    void shouldBuildLibrary() {
         GradleTruth.assertThat(result.task(':build')).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldGeneratePomFile() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(configuration.generatePomTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldProvideCompileScopeDependenciesInGeneratedPomFile() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         assertThat(generatedPom.dependency('rxjava').scope).isEqualTo('compile')
     }
 
     @Test
     void shouldProvideRuntimeScopeDependenciesInGeneratedPomFile() {
-        skipTestWhen(configuration.expectedBuildFailure)
         skipTestWhen(configuration.gradleVersion < GRADLE_4_1)
 
         assertThat(generatedPom.dependency('okio').scope).isEqualTo('runtime')
@@ -95,15 +92,11 @@ class ReleasePluginTest {
 
     @Test
     void shouldGenerateJavadocs() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(configuration.generateJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldPackageAllGeneratedJavadocs() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(configuration.packageJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
 
         ConfigurableFileTree generatedFiles = testProject.fileTree('build/docs/javadoc')
@@ -114,8 +107,6 @@ class ReleasePluginTest {
 
     @Test
     void shouldPackageAllSources() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(configuration.packageSourcesTaskName)).hasOutcome(TaskOutcome.SUCCESS)
 
         ConfigurableFileTree sourceFiles = testProject.fileTree('src/main/java')
@@ -126,49 +117,32 @@ class ReleasePluginTest {
 
     @Test
     void shouldPublishToMavenLocal() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(configuration.publishToMavenLocalTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldRunUploadTask() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         GradleTruth.assertThat(result.task(":bintrayUpload")).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldUploadSourcesJar() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         assertThat(result.output).contains(SOURCES_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadJavadocJar() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         assertThat(result.output).contains(JAVADOC_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadPomFile() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         assertThat(result.output).contains(POM_UPLOAD_PATH)
     }
 
     @Test
     void shouldUploadLibraryArtifact() {
-        skipTestWhen(configuration.expectedBuildFailure)
-
         assertThat(result.output).contains(configuration.libraryUploadPath)
-    }
-
-    @Test
-    void shouldMatchBuildOutcome() {
-        assertThat(result.success).isEqualTo(configuration.expectedBuildSuccess)
     }
 
     private GradleBuildResult getResult() {
@@ -191,22 +165,21 @@ class ReleasePluginTest {
     private static class BuildConfiguration {
         final GradleVersion gradleVersion
         final TestProject testProject
-        final boolean expectedBuildSuccess
 
-        static BuildConfiguration forAndroid(String gradleVersion, boolean expectedBuildSuccess) {
+        static BuildConfiguration forAndroid(String gradleVersion, String androidGradlePluginVersion) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
             def buildGradleVersion = GradleVersion.version(gradleVersion)
-            def buildScript = addDependenciesTo(GradleScriptTemplates.forAndroidProject(), buildGradleVersion)
+            def buildScript = addDependenciesTo(GradleScriptTemplates.forAndroidProject(androidGradlePluginVersion), buildGradleVersion)
             def testProject = TestProject.newAndroidProject(buildScript, additionalRunnerConfig)
-            return new BuildConfiguration(buildGradleVersion, testProject, expectedBuildSuccess)
+            return new BuildConfiguration(buildGradleVersion, testProject)
         }
 
-        static BuildConfiguration forJava(String gradleVersion, boolean expectedBuildSuccess) {
+        static BuildConfiguration forJava(String gradleVersion) {
             def additionalRunnerConfig = { GradleRunner runner -> runner.withGradleVersion(gradleVersion) }
             def buildGradleVersion = GradleVersion.version(gradleVersion)
             def buildScript = addDependenciesTo(GradleScriptTemplates.forJavaProject(), buildGradleVersion)
             def testProject = TestProject.newJavaProject(buildScript, additionalRunnerConfig)
-            return new BuildConfiguration(buildGradleVersion, testProject, expectedBuildSuccess)
+            return new BuildConfiguration(buildGradleVersion, testProject)
         }
 
         private static String addDependenciesTo(String buildscript, GradleVersion gradleVersion) {
@@ -222,10 +195,9 @@ class ReleasePluginTest {
                 """.stripIndent()
         }
 
-        private BuildConfiguration(GradleVersion buildGradleVersion, TestProject testProject, boolean expectedBuildSuccess) {
+        private BuildConfiguration(GradleVersion buildGradleVersion, TestProject testProject) {
             this.gradleVersion = buildGradleVersion
             this.testProject = testProject
-            this.expectedBuildSuccess = expectedBuildSuccess
         }
 
         @Override
@@ -267,10 +239,6 @@ class ReleasePluginTest {
 
         String getLibraryUploadPath() {
             return isAndroid() ? AAR_UPLOAD_PATH : JAR_UPLOAD_PATH
-        }
-
-        boolean getExpectedBuildFailure() {
-            return !expectedBuildSuccess
         }
     }
 }

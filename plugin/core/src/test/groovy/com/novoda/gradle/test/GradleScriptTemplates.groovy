@@ -27,7 +27,7 @@ class GradleScriptTemplates {
                """.stripIndent()
     }
 
-    static String forAndroidProject() {
+    static String forAndroidProject(String androidGradlePluginVersion = '3.0.0') {
         return """
             buildscript {
                 repositories {
@@ -35,7 +35,7 @@ class GradleScriptTemplates {
                     jcenter()
                 }
                 dependencies {
-                    classpath 'com.android.tools.build:gradle:3.0.0'
+                    classpath 'com.android.tools.build:gradle:$androidGradlePluginVersion'
                 }
             }
             
@@ -63,10 +63,6 @@ class GradleScriptTemplates {
             repositories {
                 google()
                 jcenter()
-            }
-            
-            dependencies {
-                implementation "junit:junit:4.12"
             }
             
             publish {
