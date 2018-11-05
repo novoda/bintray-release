@@ -11,6 +11,10 @@ import org.gradle.api.model.ObjectFactory
 
 import javax.inject.Inject
 
+/**
+ * This implementation of {@code SoftwareComponentInternal} is heavily inspired by {@code JavaLibrary},
+ * see: https://github.com/gradle/gradle/blob/v4.5.0/subprojects/plugins/src/main/java/org/gradle/api/internal/java/JavaLibrary.java
+ */
 class AndroidSoftwareComponentCompat_Gradle_4_5 implements SoftwareComponentInternal {
 
     private final UsageContext runtimeUsage
@@ -97,7 +101,7 @@ class AndroidSoftwareComponentCompat_Gradle_4_5 implements SoftwareComponentInte
         private DependencySet dependencies
 
         CompileUsageContext(String usageName) {
-            super(usageName);
+            super(usageName)
         }
 
         @Override
