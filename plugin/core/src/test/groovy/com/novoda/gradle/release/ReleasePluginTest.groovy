@@ -43,6 +43,9 @@ class ReleasePluginTest {
                 BuildConfiguration.forAndroid('4.5', '3.1.0'),
                 BuildConfiguration.forAndroid('4.6', '3.2.0'),
                 BuildConfiguration.forAndroid('4.7', '3.2.0'),
+                BuildConfiguration.forAndroid('4.8', '3.2.0'),
+                BuildConfiguration.forAndroid('4.9', '3.2.0'),
+                BuildConfiguration.forAndroid('4.10', '3.2.0'),
                 BuildConfiguration.forJava('4.0'),
                 BuildConfiguration.forJava('4.1'),
                 BuildConfiguration.forJava('4.2'),
@@ -50,7 +53,10 @@ class ReleasePluginTest {
                 BuildConfiguration.forJava('4.4'),
                 BuildConfiguration.forJava('4.5'),
                 BuildConfiguration.forJava('4.6'),
-                BuildConfiguration.forJava('4.7')
+                BuildConfiguration.forJava('4.7'),
+                BuildConfiguration.forJava('4.8'),
+                BuildConfiguration.forJava('4.9'),
+                BuildConfiguration.forJava('4.10'),
         ]
     }
 
