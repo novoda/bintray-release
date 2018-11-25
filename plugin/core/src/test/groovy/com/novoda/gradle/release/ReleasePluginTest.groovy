@@ -237,11 +237,11 @@ class ReleasePluginTest {
         }
 
         String getPackageJavadocsTaskName() {
-            return ":genereateJavadocsJarFor${publicationName.capitalize()}Publication"
+            return ":generateJavadocsJarFor${publicationName.capitalize()}Publication"
         }
 
         String getPackageSourcesTaskName() {
-            return ":genereateSourcesJarFor${publicationName.capitalize()}Publication"
+            return ":generateSourcesJarFor${publicationName.capitalize()}Publication"
         }
 
         String getPublishToMavenLocalTaskName() {
