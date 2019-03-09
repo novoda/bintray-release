@@ -32,9 +32,12 @@ class ReleasePlugin implements Plugin<Project> {
             }
         }
         project.plugins.withId('java') {
-            String publicationName = 'maven'
-            MavenPublication publication = createPublication(publicationName, project, extension)
-            new JavaAttachments(publicationName, project).attachTo(publication)
+            def mavenPublication = project.publishing.publications.find { it.name == 'maven' }
+            if (mavenPublication == null) {
+                String publicationName = 'maven'
+                MavenPublication publication = createPublication(publicationName, project, extension)
+                new JavaAttachments(publicationName, project).attachTo(publication)
+            }
         }
     }
 
