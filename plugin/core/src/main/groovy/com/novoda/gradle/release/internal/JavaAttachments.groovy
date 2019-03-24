@@ -4,6 +4,7 @@ import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.javadoc.Javadoc
 
@@ -19,13 +20,13 @@ class JavaAttachments extends MavenPublicationAttachments {
         return project.components.getByName('java')
     }
 
-    private static Task javaSourcesJarTask(Project project, String publicationName) {
+    private static Provider<Task> javaSourcesJarTask(Project project, String publicationName) {
         JavaCompile javaCompile = project.compileJava
-        return sourcesJarTask(project, publicationName, javaCompile.source)
+        return sourcesJarTask(project, publicationName, javaCompile.source).get()
     }
 
-    private static Task javaJavadocsJarTask(Project project, String publicationName) {
+    private static Provider<Task> javaJavadocsJarTask(Project project, String publicationName) {
         Javadoc javadoc = project.javadoc
-        return javadocsJarTask(project, publicationName, javadoc)
+        return javadocsJarTask(project, publicationName, javadoc).get()
     }
 }
