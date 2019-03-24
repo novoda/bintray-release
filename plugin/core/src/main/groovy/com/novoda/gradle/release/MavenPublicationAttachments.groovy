@@ -28,14 +28,14 @@ class MavenPublicationAttachments {
     }
 
     protected static Provider<Task> sourcesJarTask(Project project, String publicationName, def ... sourcePaths) {
-        return project.task("genereateSourcesJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
+        return project.tasks.register("genereateSourcesJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
             jar.classifier = 'sources'
             jar.from sourcePaths
         }
     }
 
     protected static Provider<Task> javadocsJarTask(Project project, String publicationName, Javadoc javadoc) {
-        return project.task("genereateJavadocsJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
+        return project.tasks.register("genereateJavadocsJarFor${publicationName.capitalize()}Publication", type: Jar) { Jar jar ->
             jar.classifier = 'javadoc'
             jar.from project.files(javadoc)
         }
