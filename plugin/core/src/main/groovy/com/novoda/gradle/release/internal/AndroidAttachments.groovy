@@ -4,6 +4,7 @@ import com.novoda.gradle.release.MavenPublicationAttachments
 import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.component.SoftwareComponent
+import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.javadoc.Javadoc
 import org.gradle.util.GradleVersion
 
@@ -34,23 +35,17 @@ class AndroidAttachments extends MavenPublicationAttachments {
         return clazz.newInstance(project.objects, project.configurations) as SoftwareComponent
     }
 
-    private static Task androidSourcesJarTask(Project project, String publicationName, def variant) {
+    private static Provider<Task> androidSourcesJarTask(Project project, String publicationName, def variant) {
         def sourcePaths = variant.sourceSets.collect { it.javaDirectories }.flatten()
-        return sourcesJarTask(project, publicationName, sourcePaths)
+        return sourcesJarTask(project, publicationName, sourcePaths).get()
     }
 
-    private static Task androidJavadocsJarTask(Project project, String publicationName, def variant) {
-        Javadoc javadoc = project.task("javadoc${publicationName.capitalize()}", type: Javadoc) { Javadoc javadoc ->
-            if (variant.hasProperty('javaCompileProvider')) {
-                // Gradle 4.10.1+ Android 3.3.0+
-                javadoc.source = variant.javaCompilerProvider().get().source
-                javadoc.classpath = variant.javaCompilerProvider().get().classpath
-            } else {
+    private static Provider<Task> androidJavadocsJarTask(Project project, String publicationName, def variant) {
+        Javadoc javadoc = project.task.register("javadoc${publicationName.capitalize()}", type: Javadoc) { Javadoc javadoc ->
                 javadoc.source = variant.javaCompiler.source
                 javadoc.classpath = variant.javaCompiler.classpath
-            }
-        } as Javadoc
-        return javadocsJarTask(project, publicationName, javadoc)
+        }.provider as Javadoc
+        return javadocsJarTask(project, publicationName, javadoc).get()
     }
 
     private static def androidArchivePath(def variant) {
