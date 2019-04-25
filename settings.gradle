@@ -3,5 +3,5 @@ rootProject.name = 'bintray-release'
 include ':core'
 project(':core').projectDir = file('plugin/core')
 
-include ':tests'
-project(':tests').projectDir = file('plugin/tests')
+include ':functional-tests'
+project(':functional-tests').projectDir = file('plugin/functional-tests')
