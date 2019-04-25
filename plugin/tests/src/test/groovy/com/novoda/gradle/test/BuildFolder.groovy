@@ -31,7 +31,7 @@ class BuildFolder {
         return url
     }
 
-    private File getRootDir() {
+    File getRootDir() {
         rootDirProvider.call()
     }
 
@@ -50,9 +50,5 @@ class BuildFolder {
 
     File newFile(String path) {
         return newFile(rootDir, path)
-    }
-
-    File getRoot() {
-        return rootDir
     }
 }
