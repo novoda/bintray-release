@@ -1,14 +1,10 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.novoda:bintray-release:0.8.0'
-    }
-}
-
 subprojects {
     repositories {
         jcenter()
     }
+}
+
+wrapper {
+    distributionType = Wrapper.DistributionType.ALL
+    gradleVersion = '5.4.1'
 }

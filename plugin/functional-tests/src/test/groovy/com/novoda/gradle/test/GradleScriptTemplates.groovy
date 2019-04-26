@@ -1,12 +1,22 @@
 package com.novoda.gradle.test
 
+import org.gradle.util.GradleVersion
+
 class GradleScriptTemplates {
 
     static String forJavaProject() {
         return """
+            buildscript {
+                repositories {
+                    jcenter()
+                }
+                dependencies {
+                    classpath 'com.novoda:bintray-release:local'
+                }
+            }
+            
             plugins { 
                 id 'java-library'
-                id 'com.novoda.bintray-release'
             }
             
             repositories {
@@ -16,6 +26,8 @@ class GradleScriptTemplates {
             dependencies {
                 implementation "junit:junit:4.12"
             }
+            
+            apply plugin: 'com.novoda.bintray-release'
             
             publish {
                 userOrg = 'novoda'
@@ -36,33 +48,31 @@ class GradleScriptTemplates {
                 }
                 dependencies {
                     classpath 'com.android.tools.build:gradle:$androidGradlePluginVersion'
-                }
-            }
-            
-            plugins {
-                id 'com.novoda.bintray-release'
-            }
-            
-            apply plugin: "com.android.library"
-            
-            android {
-                compileSdkVersion 26
-                buildToolsVersion "26.0.2"
-
-                defaultConfig {
-                    minSdkVersion 16
-                    versionCode 1
-                    versionName "0.0.1"
-                }    
-                
-                lintOptions {
-                   tasks.lint.enabled = false
+                    classpath 'com.novoda:bintray-release:local'
                 }
             }
             
             repositories {
                 google()
                 jcenter()
+            }
+            
+            apply plugin: 'com.android.library'
+            apply plugin: 'com.novoda.bintray-release'
+            
+            android {
+                compileSdkVersion 26
+                ${buildTools(androidGradlePluginVersion)}
+
+                defaultConfig {
+                    minSdkVersion 16
+                    versionCode 1
+                    versionName '0.0.1'
+                }    
+                
+                lintOptions {
+                   tasks.lint.enabled = false
+                }
             }
             
             publish {
@@ -73,5 +83,9 @@ class GradleScriptTemplates {
                 desc = 'description'
             }
                """.stripIndent()
+    }
+
+    private static String buildTools(String androidGradlePluginVersion) {
+        return GradleVersion.version(androidGradlePluginVersion) < GradleVersion.version('3.0.0') ? "buildToolsVersion '26.0.2'" : ''
     }
 }

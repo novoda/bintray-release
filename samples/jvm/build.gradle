@@ -1,10 +1,6 @@
 apply plugin: 'java-library'
 apply plugin: 'com.novoda.bintray-release'
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation "junit:junit:4.12"
 }

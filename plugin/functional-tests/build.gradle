@@ -1,0 +1,22 @@
+repositories {
+    jcenter()
+}
+
+apply plugin: 'groovy'
+
+dependencies {
+    implementation project(':core')
+
+    testImplementation gradleTestKit()
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:0.42'
+}
+
+test {
+    systemProperty 'minGradleTestedVersion', "${project.properties['minGradleTestedVersion'] ?: '5.1'}"
+}
+
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}
