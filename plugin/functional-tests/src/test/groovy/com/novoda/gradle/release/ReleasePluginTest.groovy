@@ -110,6 +110,8 @@ class ReleasePluginTest {
     void shouldGenerateJavadocs() {
         skipTestWhen(configuration.android && configuration.gradleVersion >= GRADLE_4_10_1)
         GradleTruth.assertThat(result.task(configuration.generateJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
+        ConfigurableFileTree generatedFiles = testProject.fileTree('build/docs/javadoc')
+        assertThat(generatedFiles).isNotEmpty()
     }
 
     @Test
@@ -203,14 +205,13 @@ class ReleasePluginTest {
         private static String addDependenciesTo(String buildscript, GradleVersion gradleVersion) {
             String compileScopeDependency = "${gradleVersion < GRADLE_4_1 ? 'compile' : 'api'} 'io.reactivex.rxjava2:rxjava:2.2.0'"
             String runtimeScopeDependency = gradleVersion < GRADLE_4_1 ? '' : 'implementation \'com.squareup.okio:okio:2.1.0\''
-            return """
-                $buildscript
-
+            String dependencies = """
                 dependencies {
                     $compileScopeDependency
                     $runtimeScopeDependency
                 }
                 """.stripIndent()
+            return buildscript + dependencies
         }
 
         private BuildConfiguration(GradleVersion buildGradleVersion, TestProject testProject) {

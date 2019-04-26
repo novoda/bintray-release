@@ -1,5 +1,7 @@
 package com.novoda.gradle.test
 
+import org.gradle.util.GradleVersion
+
 class GradleScriptTemplates {
 
     static String forJavaProject() {
@@ -60,6 +62,7 @@ class GradleScriptTemplates {
             
             android {
                 compileSdkVersion 26
+                ${buildTools(androidGradlePluginVersion)}
 
                 defaultConfig {
                     minSdkVersion 16
@@ -80,5 +83,9 @@ class GradleScriptTemplates {
                 desc = 'description'
             }
                """.stripIndent()
+    }
+
+    private static String buildTools(String androidGradlePluginVersion) {
+        return GradleVersion.version(androidGradlePluginVersion) < GradleVersion.version('3.0.0') ? "buildToolsVersion '26.0.2'" : ''
     }
 }
