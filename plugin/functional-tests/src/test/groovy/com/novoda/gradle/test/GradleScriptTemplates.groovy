@@ -60,12 +60,11 @@ class GradleScriptTemplates {
             
             android {
                 compileSdkVersion 26
-                buildToolsVersion "26.0.2"
 
                 defaultConfig {
                     minSdkVersion 16
                     versionCode 1
-                    versionName "0.0.1"
+                    versionName '0.0.1'
                 }    
                 
                 lintOptions {

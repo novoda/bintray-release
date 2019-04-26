@@ -24,6 +24,7 @@ class ReleasePluginTest {
 
     private static final GradleVersion GRADLE_4_1 = GradleVersion.version('4.1')
     private static final GradleVersion GRADLE_4_10_1 = GradleVersion.version('4.10.1')
+    private static final GradleVersion MIN_GRADLE_VERSION = GradleVersion.version(System.getProperty('minGradleTestedVersion'))
     private static final String BASE_UPLOAD_PATH = 'https://api.bintray.com/content/novoda/maven/test/1.0/com/novoda/test/1.0/test-1.0'
     private static final String SOURCES_UPLOAD_PATH = "$BASE_UPLOAD_PATH-sources.jar"
     private static final String JAVADOC_UPLOAD_PATH = "$BASE_UPLOAD_PATH-javadoc.jar"
@@ -46,7 +47,8 @@ class ReleasePluginTest {
                 BuildConfiguration.forAndroid('4.7', '3.2.0'),
                 BuildConfiguration.forAndroid('4.8', '3.2.0'),
                 BuildConfiguration.forAndroid('4.9', '3.2.0'),
-                BuildConfiguration.forAndroid('4.10', '3.2.0'),
+                BuildConfiguration.forAndroid('4.10.1', '3.3.0'),
+                BuildConfiguration.forAndroid('5.1.1', '3.4.0'),
                 BuildConfiguration.forJava('4.0'),
                 BuildConfiguration.forJava('4.1'),
                 BuildConfiguration.forJava('4.2'),
@@ -57,8 +59,10 @@ class ReleasePluginTest {
                 BuildConfiguration.forJava('4.7'),
                 BuildConfiguration.forJava('4.8'),
                 BuildConfiguration.forJava('4.9'),
-                BuildConfiguration.forJava('4.10'),
+                BuildConfiguration.forJava('4.10.1'),
+                BuildConfiguration.forJava('5.1.1'),
         ]
+                .findAll { it.gradleVersion >= MIN_GRADLE_VERSION }
     }
 
     private final BuildConfiguration configuration
