@@ -35,7 +35,7 @@ buildProperties {
 }
 
 publish {
-    userOrg = 'novoda'
+    userOrg = 'novoda-oss'
     groupId = 'com.novoda'
     artifactId = rootProject.name
     desc = 'Super duper easy way to release your Android and other artifacts to bintray'
