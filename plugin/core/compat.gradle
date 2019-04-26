@@ -25,17 +25,23 @@ compatModulesDirs.each { File moduleDir ->
     def moduleName = moduleDir.name
 
     def cleanModuleTask = taskContainer.create(name: "clean${moduleName.capitalize()}", type: Delete) {
+        group = 'build'
+        description = "Clean compat module $moduleName"
         delete new File(moduleDir, 'build')
     }
     taskContainer.clean.dependsOn cleanModuleTask
 
     def compileModuleTask = taskContainer.create(name: "compile${moduleName.capitalize()}Classes", type: Exec) {
+        group = 'build'
+        description = "Build compat module $moduleName"
         outputs.dir(new File(moduleDir, 'build'))
         workingDir moduleDir
         commandLine gw, 'clean', 'build'
     }
 
     def copyClassesTask = taskContainer.create(name: "copy${moduleName.capitalize()}Classes", type: Copy) {
+        group = 'build'
+        description = "Copy classes from module $moduleName"
         from new File(moduleDir, 'build/classes/groovy/main')
         into compatClassesDestination
         dependsOn compileModuleTask
