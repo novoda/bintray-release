@@ -23,6 +23,7 @@ import static com.google.common.truth.Truth.assertThat
 class ReleasePluginTest {
 
     private static final GradleVersion GRADLE_4_1 = GradleVersion.version('4.1')
+    private static final GradleVersion GRADLE_4_10_1 = GradleVersion.version('4.10.1')
     private static final String BASE_UPLOAD_PATH = 'https://api.bintray.com/content/novoda/maven/test/1.0/com/novoda/test/1.0/test-1.0'
     private static final String SOURCES_UPLOAD_PATH = "$BASE_UPLOAD_PATH-sources.jar"
     private static final String JAVADOC_UPLOAD_PATH = "$BASE_UPLOAD_PATH-javadoc.jar"
@@ -103,11 +104,13 @@ class ReleasePluginTest {
 
     @Test
     void shouldGenerateJavadocs() {
+        skipTestWhen(configuration.android && configuration.gradleVersion >= GRADLE_4_10_1)
         GradleTruth.assertThat(result.task(configuration.generateJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
     }
 
     @Test
     void shouldPackageAllGeneratedJavadocs() {
+        skipTestWhen(configuration.android && configuration.gradleVersion >= GRADLE_4_10_1)
         GradleTruth.assertThat(result.task(configuration.packageJavadocsTaskName)).hasOutcome(TaskOutcome.SUCCESS)
 
         ConfigurableFileTree generatedFiles = testProject.fileTree('build/docs/javadoc')
