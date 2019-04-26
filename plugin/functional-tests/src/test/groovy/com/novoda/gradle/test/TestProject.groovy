@@ -96,7 +96,15 @@ class TestProject implements TestRule {
 
     private void createSettingsScript() {
         new File(projectDir, 'settings.gradle').with {
-            text = "rootProject.name = 'test'"
+            text = """
+                    rootProject.name = 'test'
+                    
+                    includeBuild('$Fixtures.ROOT_DIR/src/test/gradle') {
+                        dependencySubstitution {
+                            substitute module('com.novoda:bintray-release:local') with project(':core')
+                        }
+                    }
+                """.stripIndent()
         }
     }
 
@@ -107,7 +115,6 @@ class TestProject implements TestRule {
     GradleBuildResult execute(String... arguments) {
         def runner = GradleRunner.create()
                 .forwardOutput()
-                .withPluginClasspath()
                 .withProjectDir(projectDir)
         additionalRunnerConfig.execute(runner)
         runner.withArguments(arguments)
