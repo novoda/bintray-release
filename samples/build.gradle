@@ -9,6 +9,14 @@ buildscript {
     }
 }
 
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+    }
+}
+
 wrapper {
     gradleVersion = '5.2'
     distributionType = Wrapper.DistributionType.ALL
