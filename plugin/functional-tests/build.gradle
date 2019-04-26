@@ -1,0 +1,19 @@
+plugins {
+    id 'groovy'
+    id 'java-gradle-plugin'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+
+    testImplementation gradleTestKit()
+    testRuntime files(pluginUnderTestMetadata)
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:0.42'
+}
+
+compileGroovy {
+    sourceCompatibility = '1.6'
+    targetCompatibility = '1.6'
+}

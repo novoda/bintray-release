@@ -58,7 +58,7 @@ class TestProject implements TestRule {
 
     void init(String projectPath) {
         if (tempFolder != null) {
-            throw new IllegalStateException("The test project has already been initialised: $tempFolder.root.path.")
+            throw new IllegalStateException("The test project has already been initialised: $tempFolder.rootDir.path.")
         }
         tempFolder = new BuildFolder("test-projects/$projectPath")
         createSourceCode()
@@ -69,7 +69,7 @@ class TestProject implements TestRule {
 
     File getProjectDir() {
         checkNotNull(tempFolder, 'The test project has not been initialised yet. Call init() or use it as a test rule.')
-        tempFolder.root
+        tempFolder.rootDir
     }
 
     private String createSourceCode() {
