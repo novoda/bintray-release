@@ -4,7 +4,7 @@ String gw = Os.isFamily(Os.FAMILY_WINDOWS) ? 'gradlew.bat' : './gradlew'
 String compatClassesDestination = 'build/compat/classes'
 TaskContainer taskContainer = project.tasks
 
-File[] compatModulesDirs = rootProject.file('plugin/compat').listFiles(new FilenameFilter() {
+File[] compatModulesDirs = project.file('../compat').listFiles(new FilenameFilter() {
 
     /**
      * We want to collect all the folders inside plugin/compat that are also standalone Gradle projects,

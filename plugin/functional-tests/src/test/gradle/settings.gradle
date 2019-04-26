@@ -1,0 +1,4 @@
+rootProject.name = 'bintray-release-local'
+
+include ':core'
+project(':core').projectDir = file('../../../../core')
