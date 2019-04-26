@@ -4,9 +4,17 @@ class GradleScriptTemplates {
 
     static String forJavaProject() {
         return """
+            buildscript {
+                repositories {
+                    jcenter()
+                }
+                dependencies {
+                    classpath 'com.novoda:bintray-release:local'
+                }
+            }
+            
             plugins { 
                 id 'java-library'
-                id 'com.novoda.bintray-release'
             }
             
             repositories {
@@ -16,6 +24,8 @@ class GradleScriptTemplates {
             dependencies {
                 implementation "junit:junit:4.12"
             }
+            
+            apply plugin: 'com.novoda.bintray-release'
             
             publish {
                 userOrg = 'novoda'
@@ -36,14 +46,17 @@ class GradleScriptTemplates {
                 }
                 dependencies {
                     classpath 'com.android.tools.build:gradle:$androidGradlePluginVersion'
+                    classpath 'com.novoda:bintray-release:local'
                 }
             }
             
-            plugins {
-                id 'com.novoda.bintray-release'
+            repositories {
+                google()
+                jcenter()
             }
             
-            apply plugin: "com.android.library"
+            apply plugin: 'com.android.library'
+            apply plugin: 'com.novoda.bintray-release'
             
             android {
                 compileSdkVersion 26
@@ -58,11 +71,6 @@ class GradleScriptTemplates {
                 lintOptions {
                    tasks.lint.enabled = false
                 }
-            }
-            
-            repositories {
-                google()
-                jcenter()
             }
             
             publish {

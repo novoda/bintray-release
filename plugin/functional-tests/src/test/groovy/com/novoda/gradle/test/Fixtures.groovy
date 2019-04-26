@@ -3,6 +3,7 @@ package com.novoda.gradle.test
 final class Fixtures {
 
     public static final File BUILD_DIR = findBuildDir()
+    public static final File ROOT_DIR = BUILD_DIR.parentFile
 
     private static File findBuildDir() {
         def start = new File(getResource('.').file)
