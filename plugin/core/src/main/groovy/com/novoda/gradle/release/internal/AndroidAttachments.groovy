@@ -12,6 +12,7 @@ class AndroidAttachments extends MavenPublicationAttachments {
     private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_4_1 = 'com.novoda.release.internal.compat.gradle4_1.AndroidSoftwareComponentCompat_Gradle_4_1'
     private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_4_5 = 'com.novoda.release.internal.compat.gradle4_5.AndroidSoftwareComponentCompat_Gradle_4_5'
     private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_4_8 = 'com.novoda.release.internal.compat.gradle4_8.AndroidSoftwareComponentCompat_Gradle_4_8'
+    private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_5_2 = 'com.novoda.release.internal.compat.gradle5_2.AndroidSoftwareComponentCompat_Gradle_5_2'
 
     AndroidAttachments(String publicationName, Project project, def variant) {
         super(androidComponentFrom(project),
@@ -22,6 +23,10 @@ class AndroidAttachments extends MavenPublicationAttachments {
 
     private static SoftwareComponent androidComponentFrom(Project project) {
         def currentGradleVersion = GradleVersion.current()
+        if (currentGradleVersion >= GradleVersion.version('5.2')) {
+            def clazz = this.classLoader.loadClass(ANDROID_SOFTWARE_COMPONENT_COMPAT_5_2)
+            return project.objects.newInstance(clazz) as SoftwareComponent
+        }
         if (currentGradleVersion >= GradleVersion.version('4.8')) {
             def clazz = this.classLoader.loadClass(ANDROID_SOFTWARE_COMPONENT_COMPAT_4_8)
             return project.objects.newInstance(clazz) as SoftwareComponent
