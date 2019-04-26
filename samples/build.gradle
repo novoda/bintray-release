@@ -4,7 +4,12 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.novoda:bintray-release:local' // version of the plugin compiled using composite builds
     }
+}
+
+wrapper {
+    gradleVersion = '5.2'
+    distributionType = Wrapper.DistributionType.ALL
 }
