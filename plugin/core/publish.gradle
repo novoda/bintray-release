@@ -1,4 +1,4 @@
-version = '0.9'
+version = '0.9.1'
 
 apply from: 'build.gradle'
 
@@ -23,6 +23,7 @@ buildProperties {
     bintray {
         using(bintrayCredentials()).or(cli)
         description = '''This should contain the following properties:
+                       - bintrayOrg: name of the Bintray organisation to deploy the artifacts to
                        - bintrayRepo: name of the repo of the organisation to deploy the artifacts to
                        - bintrayUser: name of the account used to deploy the artifacts
                        - bintrayKey: API key of the account used to deploy the artifacts
