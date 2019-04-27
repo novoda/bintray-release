@@ -8,10 +8,20 @@ import org.junit.Test
 class InvalidExtensionSetupTest {
 
     private String buildScript = """
+            buildscript {
+                repositories {
+                    jcenter()
+                }
+                dependencies {
+                    classpath 'com.novoda:bintray-release:local'
+                }
+            }
+            
             plugins { 
                 id 'java-library'
-                id 'com.novoda.bintray-release'
             }
+            
+            apply plugin: 'com.novoda.bintray-release'
             
             publish {
                 userOrg = 'novoda'

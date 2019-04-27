@@ -1,22 +1,9 @@
-plugins {
-    id 'groovy'
-    id 'java-gradle-plugin'
-    id 'com.novoda.build-properties' version '0.4.1'
-}
-
-version = '0.9'
-
-apply plugin: 'com.novoda.bintray-release'
-apply from: 'publish.gradle'
+apply plugin: 'groovy'
+apply plugin: 'java-gradle-plugin'
 apply from: 'compat.gradle'
 
 dependencies {
     implementation 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'com.google.truth:truth:0.42'
-
-    testRuntime files(pluginUnderTestMetadata)
 }
 
 compileGroovy {

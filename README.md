@@ -68,19 +68,19 @@ More info on the available properties and other usages in the [Github Wiki](http
 The plugin officially supports only Gradle 4.0+
 
 ## Snapshots
-[![CI status](https://ci.novoda.com/buildStatus/icon?job=bintray-release-snapshot)](https://ci.novoda.com/job/bintray-release-snapshot/lastBuild/console) [![Download from Bintray](https://api.bintray.com/packages/novoda/snapshots/bintray-release/images/download.svg)](https://bintray.com/novoda/snapshots/bintray-release/_latestVersion)
+[![CI status](https://ci.novoda.com/buildStatus/icon?job=bintray-release-snapshot)](https://ci.novoda.com/job/bintray-release-snapshot/lastBuild/console) [![Download from Bintray](https://api.bintray.com/packages/novoda-oss/snapshots/bintray-release/images/download.svg)](https://bintray.com/novoda-oss/snapshots/bintray-release/_latestVersion)
 
-Snapshot builds from [`develop`](https://github.com/novoda/bintray-release/compare/master...develop) are automatically deployed to a [repository](https://bintray.com/novoda/snapshots/bintray-release/_latestVersion) that is not synced with JCenter.
+Snapshot builds from [`develop`](https://github.com/novoda/bintray-release/compare/master...develop) are automatically deployed to a [repository](https://bintray.com/novoda-oss/snapshots/bintray-release/_latestVersion) that is **not** synced with JCenter.
 To consume a snapshot build add an additional maven repo as follows:
 ```
 repositories {
     maven {
-        url 'https://novoda.bintray.com/snapshots'
+        url 'https://dl.bintray.com/novoda-oss/snapshots/'
     }
 }
 ```
 
-You can find the latest snapshot version following this [link](https://bintray.com/novoda/snapshots/bintray-release/_latestVersion).
+You can find the latest snapshot version following this [link](https://bintray.com/novoda-oss/snapshots/bintray-release/_latestVersion).
 
 ## Links
 
