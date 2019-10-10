@@ -51,13 +51,22 @@ class AndroidAttachments extends MavenPublicationAttachments {
 
     private static Task androidJavadocsJarTask(Project project, String publicationName, def variant) {
         Javadoc javadoc = project.task("javadoc${publicationName.capitalize()}", type: Javadoc) { Javadoc javadoc ->
-            javadoc.source = variant.javaCompiler.source
-            javadoc.classpath = variant.javaCompiler.classpath
+            if(variant.hasProperty('javaCompileProvider')) {
+                javadoc.source = variant.javaCompileProvider.get().source
+                javadoc.classpath = variant.javaCompileProvider.get().classpath
+            } else {
+                javadoc.source = variant.javaCompiler.source
+                javadoc.classpath = variant.javaCompiler.classpath
+            }
         } as Javadoc
         return javadocsJarTask(project, publicationName, javadoc)
     }
 
     private static def androidArchivePath(def variant) {
-        return variant.outputs[0].packageLibrary
+        if (variant.hasProperty('packageLibraryProvider')) {
+            return variant.packageLibraryProvider.get()
+        } else {
+            return variant.outputs[0].packageLibrary
+        }
     }
 }
