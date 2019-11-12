@@ -38,6 +38,10 @@ class BintrayConfiguration {
                 version {
                     name = propertyFinder.publishVersion
                     attributes = extension.versionAttributes
+
+                    gpg {
+                        sign = extension.sign
+                    }
                 }
             }
         }
