@@ -55,7 +55,10 @@ configure<PublishExtension> {
 }
 ```
 
-Finally, use the task `bintrayUpload` to publish (make sure you build the project first!):
+Finally, use the task `bintrayUpload` to publish. Make sure:
+ - You build the project first!
+ - If this is your first time; create the package on Bintray first with the 'Add a package' button.
+ - The name of the package on Bintray matches the `artifactId` of the `publish` clojure in `build.gradle.`
 
 ```bash
 $ ./gradlew clean build bintrayUpload -PbintrayUser=BINTRAY_USERNAME -PbintrayKey=BINTRAY_KEY -PdryRun=false
