@@ -42,6 +42,12 @@ class BintrayConfiguration {
                     gpg {
                         sign = extension.sign
                     }
+
+                    mavenCentralSync {
+                        sync = extension.mavenCentralSync
+                        user = propertyFinder.mavenCentralUser
+                        password = propertyFinder.mavenCentralPassword
+                    }
                 }
             }
         }

@@ -40,7 +40,18 @@ class PublishExtension {
     String bintrayKey = ''
     boolean dryRun = true
     boolean override = false
+
+    /**
+     * Optional configuration for GPG signing
+     */
     boolean sign = false
+
+    /**
+     * Optional configuration for Maven Central sync of the version
+     */
+    boolean mavenCentralSync = false
+    String mavenCentralUser = ''
+    String mavenCentralPassword = ''
 
     String[] publications
 
