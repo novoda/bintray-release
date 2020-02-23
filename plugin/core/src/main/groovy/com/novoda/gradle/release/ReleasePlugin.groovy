@@ -39,14 +39,6 @@ class ReleasePlugin implements Plugin<Project> {
                 new JavaAttachments(publicationName, project).attachTo(publication)
             }
         }
-        project.plugins.withId('java-library') {
-            def mavenPublication = project.publishing.publications.find { it.name == 'maven' }
-            if (mavenPublication == null) {
-                String publicationName = 'maven'
-                MavenPublication publication = createPublication(publicationName, project, extension)
-                new JavaAttachments(publicationName, project).attachTo(publication)
-            }
-        }
     }
 
     private static MavenPublication createPublication(String publicationName, Project project, PublishExtension extension) {
