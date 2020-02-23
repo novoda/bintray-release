@@ -2,10 +2,10 @@ apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 21
-        targetSdkVersion 27
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0.0"
         archivesBaseName = "$archivesBaseName-$versionName"
@@ -13,7 +13,7 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:27.0.2"
+    implementation "androidx.appcompat:appcompat:1.1.0"
 }
 
 publish {

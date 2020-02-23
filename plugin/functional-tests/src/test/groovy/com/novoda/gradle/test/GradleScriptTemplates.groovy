@@ -61,7 +61,7 @@ class GradleScriptTemplates {
             apply plugin: 'com.novoda.bintray-release'
             
             android {
-                compileSdkVersion 26
+                compileSdkVersion 29
                 ${buildTools(androidGradlePluginVersion)}
 
                 defaultConfig {
@@ -86,6 +86,6 @@ class GradleScriptTemplates {
     }
 
     private static String buildTools(String androidGradlePluginVersion) {
-        return GradleVersion.version(androidGradlePluginVersion) < GradleVersion.version('3.0.0') ? "buildToolsVersion '26.0.2'" : ''
+        return GradleVersion.version(androidGradlePluginVersion) < GradleVersion.version('3.0.0') ? "buildToolsVersion '29.0.3'" : ''
     }
 }
