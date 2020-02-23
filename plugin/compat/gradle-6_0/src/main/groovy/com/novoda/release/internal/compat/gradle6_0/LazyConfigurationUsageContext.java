@@ -24,7 +24,8 @@ import org.gradle.api.plugins.internal.AbstractConfigurationUsageContext;
 import java.util.Set;
 
 /**
- * LazyConfigurationUsageContext has been deprecated on Gradle 6.x
+ * LazyConfigurationUsageContext has been deprecated on Gradle 6.x.
+ * I've copied this class from the Gradle repo v5.6.4 to make it work without more changes.
  */
 public class LazyConfigurationUsageContext extends AbstractConfigurationUsageContext {
     private final String configurationName;

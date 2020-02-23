@@ -12,8 +12,7 @@ import org.gradle.api.model.ObjectFactory
 import javax.inject.Inject
 
 /**
- * This implementation of {@code SoftwareComponentInternal} is heavily inspired by {@code JavaLibrary},
- * see: https://github.com/gradle/gradle/blob/v5.3.0/subprojects/plugins/src/main/java/org/gradle/api/internal/java/JavaLibrary.java
+ * Same as AndroidSoftwareComponentCompat_Gradle_5_3, but using a builtin LazyConfigurationUsageContext
  */
 class AndroidSoftwareComponentCompat_Gradle_6_0 implements SoftwareComponentInternal {
 
