@@ -32,6 +32,14 @@ class PropertyFinder {
         getString(project, 'publishVersion', extension.publishVersion)
     }
 
+    def getMavenCentralUser() {
+        getString(project, 'mavenCentralUser', extension.mavenCentralUser)
+    }
+
+    def getMavenCentralPassword() {
+        getString(project, 'mavenCentralPassword', extension.mavenCentralPassword)
+    }
+
     private String getString(Project project, String propertyName, String defaultValue) {
         project.hasProperty(propertyName) ? project.getProperty(propertyName) : defaultValue
     }
