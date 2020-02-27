@@ -65,6 +65,8 @@ class TestProject implements TestRule {
         createAndroidManifest()
         createBuildScript()
         createSettingsScript()
+        // if tests fail due missing SDK, set env. properly or create a local.properties pointing to your sdk dir.
+        // createLocalProperties()
     }
 
     File getProjectDir() {
@@ -104,6 +106,14 @@ class TestProject implements TestRule {
                             substitute module('com.novoda:bintray-release:local') with project(':core')
                         }
                     }
+                """.stripIndent()
+        }
+    }
+
+    private void createLocalProperties() {
+        new File(projectDir, 'local.properties').with {
+            text = """
+                    sdk.dir=/Users/your_user/Library/Android/sdk
                 """.stripIndent()
         }
     }

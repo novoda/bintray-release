@@ -24,6 +24,7 @@ class ReleasePluginTest {
 
     private static final GradleVersion GRADLE_4_1 = GradleVersion.version('4.1')
     private static final GradleVersion GRADLE_4_10_1 = GradleVersion.version('4.10.1')
+    // replace System.getProperty('minGradleTestedVersion') to 4.0 if you don't have the env.
     private static final GradleVersion MIN_GRADLE_VERSION = GradleVersion.version(System.getProperty('minGradleTestedVersion'))
     private static final String BASE_UPLOAD_PATH = 'https://api.bintray.com/content/novoda/maven/test/1.0/com/novoda/test/1.0/test-1.0'
     private static final String SOURCES_UPLOAD_PATH = "$BASE_UPLOAD_PATH-sources.jar"
@@ -37,6 +38,8 @@ class ReleasePluginTest {
     @Parameterized.Parameters(name = "{0}")
     static Collection<BuildConfiguration> configurations() {
         return [
+                // 4.0 to 4.3 might fail due missing NDK ABIs that have been deprecated
+                // skip it or download it from archive and extract it to your ndk folder
                 BuildConfiguration.forAndroid('4.0', '2.3.0'),
                 BuildConfiguration.forAndroid('4.1', '3.0.1'),
                 BuildConfiguration.forAndroid('4.2', '3.0.1'),
@@ -56,10 +59,10 @@ class ReleasePluginTest {
                 BuildConfiguration.forAndroid('5.4.1', '3.5.3'),
                 BuildConfiguration.forAndroid('5.5', '3.5.3'),
                 BuildConfiguration.forAndroid('5.6', '3.5.3'),
-                // TODO: replace '3.5.3' to '3.6.0' when it's not RC anymore.
-                BuildConfiguration.forAndroid('6.0', '3.5.3'),
-                BuildConfiguration.forAndroid('6.1', '3.5.3'),
-                BuildConfiguration.forAndroid('6.2', '3.5.3'),
+                BuildConfiguration.forAndroid('5.6.4', '3.6.0'),
+                BuildConfiguration.forAndroid('6.0', '3.6.0'),
+                BuildConfiguration.forAndroid('6.1', '3.6.0'),
+                BuildConfiguration.forAndroid('6.2', '3.6.0'),
 
                 BuildConfiguration.forJava('4.0'),
                 BuildConfiguration.forJava('4.1'),
@@ -77,7 +80,7 @@ class ReleasePluginTest {
                 BuildConfiguration.forJava('5.3'),
                 BuildConfiguration.forJava('5.4.1'),
                 BuildConfiguration.forJava('5.5'),
-                BuildConfiguration.forJava('5.6'),
+                BuildConfiguration.forJava('5.6.4'),
                 BuildConfiguration.forJava('6.0'),
                 BuildConfiguration.forJava('6.1'),
                 BuildConfiguration.forJava('6.2'),
