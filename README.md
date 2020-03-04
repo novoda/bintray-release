@@ -25,6 +25,23 @@ buildscript {
 }
 ```
 
+If you use [Kotlin DSL](https://github.com/gradle/kotlin-dsl) use:
+
+```kotlin
+plugins {
+    id("com.novoda.bintray-release") // must be applied after your artifact generating plugin (eg. java / com.android.library)
+} 
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath("com.novoda:bintray-release:<latest-version>")
+    }
+}
+```
+
 ## Simple usage
 
 Use the `publish` closure to set the info of your package:
