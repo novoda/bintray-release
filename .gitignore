@@ -4,3 +4,4 @@
 build
 out
 local.properties
+/plugin/core/bintray.properties
