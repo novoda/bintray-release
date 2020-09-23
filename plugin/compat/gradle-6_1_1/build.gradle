@@ -1,8 +1,4 @@
-subprojects {
-    repositories {
-        jcenter()
-    }
-}
+apply from: '../common.gradle'
 
 wrapper {
     distributionType = Wrapper.DistributionType.ALL
