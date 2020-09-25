@@ -7,6 +7,7 @@ Super duper easy way to release your Android and other artifacts to bintray.
 
 Support gradle 6.1.1
 
+已知问题：publishToMavenLocal 上传的lib在项目引用后无法正确导入lib中包含的class
 
 
 ```groovy

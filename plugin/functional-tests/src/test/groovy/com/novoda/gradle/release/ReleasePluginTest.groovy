@@ -52,6 +52,8 @@ class ReleasePluginTest {
                 BuildConfiguration.forAndroid('5.2.1', '3.4.0'),
                 BuildConfiguration.forAndroid('5.3.1', '3.4.0'),
                 BuildConfiguration.forAndroid('5.4.1', '3.4.0'),
+                BuildConfiguration.forAndroid('6.1.0', '4.0.1'),
+                BuildConfiguration.forAndroid('6.1.1', '4.0.1'),
                 BuildConfiguration.forJava('4.0'),
                 BuildConfiguration.forJava('4.1'),
                 BuildConfiguration.forJava('4.2'),
@@ -67,6 +69,7 @@ class ReleasePluginTest {
                 BuildConfiguration.forJava('5.2.1'),
                 BuildConfiguration.forJava('5.3.1'),
                 BuildConfiguration.forJava('5.4.1'),
+                BuildConfiguration.forJava('6.1.1'),
         ]
                 .findAll { it.gradleVersion >= MIN_GRADLE_VERSION }
     }
