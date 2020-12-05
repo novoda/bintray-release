@@ -15,11 +15,18 @@ class AndroidAttachments extends MavenPublicationAttachments {
     private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_5_2 = 'com.novoda.release.internal.compat.gradle5_2.AndroidSoftwareComponentCompat_Gradle_5_2'
     private static final String ANDROID_SOFTWARE_COMPONENT_COMPAT_5_3 = 'com.novoda.release.internal.compat.gradle5_3.AndroidSoftwareComponentCompat_Gradle_5_3'
 
-    AndroidAttachments(String publicationName, Project project, def variant) {
-        super(androidComponentFrom(project),
-                androidSourcesJarTask(project, publicationName, variant),
-                androidJavadocsJarTask(project, publicationName, variant),
-                androidArchivePath(variant))
+    AndroidAttachments(String publicationName, Project project, def variant, boolean uploadSourceAndDoc) {
+        super(androidComponentFrom(project), getAllArtifactSources(publicationName, project, variant, uploadSourceAndDoc))
+    }
+
+    private static List<Object> getAllArtifactSources(String publicationName, Project project, def variant, boolean uploadSourceAndDoc) {
+        List<Object> allArtifactSources = new ArrayList<>()
+        if (uploadSourceAndDoc) {
+            allArtifactSources.add(androidSourcesJarTask(project, publicationName, variant))
+            allArtifactSources.add(androidJavadocsJarTask(project, publicationName, variant))
+        }
+        allArtifactSources.add(androidArchivePath(variant))
+        return allArtifactSources
     }
 
     private static SoftwareComponent androidComponentFrom(Project project) {

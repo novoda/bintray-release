@@ -12,10 +12,6 @@ class MavenPublicationAttachments {
     private final SoftwareComponent softwareComponent
     private final List<Object> allArtifactSources
 
-    MavenPublicationAttachments(SoftwareComponent softwareComponent, def ... allArtifactSources) {
-        this(softwareComponent, Arrays.asList(allArtifactSources).asImmutable())
-    }
-
     MavenPublicationAttachments(SoftwareComponent softwareComponent, List<Object> allArtifactSources) {
         this.softwareComponent = softwareComponent
         this.allArtifactSources = allArtifactSources

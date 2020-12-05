@@ -10,9 +10,16 @@ import org.gradle.api.tasks.javadoc.Javadoc
 class JavaAttachments extends MavenPublicationAttachments {
 
     JavaAttachments(String publicationName, Project project) {
-        super(javaComponentFrom(project),
-                javaSourcesJarTask(project, publicationName),
-                javaJavadocsJarTask(project, publicationName))
+        super(javaComponentFrom(project), getAllArtifactSources(publicationName, project))
+    }
+
+    private static List<Object> getAllArtifactSources(String publicationName, Project project, boolean uploadSourceAndDoc) {
+        List<Object> allArtifactSources = new ArrayList<>()
+        if (uploadSourceAndDoc) {
+            allArtifactSources.add(javaSourcesJarTask(project, publicationName))
+            allArtifactSources.add(javaJavadocsJarTask(project, publicationName))
+        }
+        return allArtifactSources
     }
 
     private static SoftwareComponent javaComponentFrom(Project project) {

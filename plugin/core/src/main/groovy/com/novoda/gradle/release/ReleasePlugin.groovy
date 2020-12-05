@@ -28,7 +28,7 @@ class ReleasePlugin implements Plugin<Project> {
             project.android.libraryVariants.all { variant ->
                 String publicationName = variant.name
                 MavenPublication publication = createPublication(publicationName, project, extension)
-                new AndroidAttachments(publicationName, project, variant).attachTo(publication)
+                new AndroidAttachments(publicationName, project, variant, extension.uploadSourceAndDoc).attachTo(publication)
             }
         }
         project.plugins.withId('java') {
@@ -36,7 +36,7 @@ class ReleasePlugin implements Plugin<Project> {
             if (mavenPublication == null) {
                 String publicationName = 'maven'
                 MavenPublication publication = createPublication(publicationName, project, extension)
-                new JavaAttachments(publicationName, project).attachTo(publication)
+                new JavaAttachments(publicationName, project, extension.uploadSourceAndDoc).attachTo(publication)
             }
         }
     }

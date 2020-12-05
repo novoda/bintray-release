@@ -41,6 +41,7 @@ class PublishExtension {
     boolean dryRun = true
     boolean override = false
     boolean sign = false
+    boolean uploadSourceAndDoc = true
 
     String[] publications
 
